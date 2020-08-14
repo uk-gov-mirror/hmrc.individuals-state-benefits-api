@@ -1,0 +1,1 @@
+You can find the changelog in the [individuals-state-benefits-api](https://github.com/hmrc/individuals-state-benefits-api/wiki/Changelog) GitHub wiki.
