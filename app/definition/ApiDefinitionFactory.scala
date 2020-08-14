@@ -69,6 +69,6 @@ class ApiDefinitionFactory @Inject()(appConfig: AppConfig) {
 
   private[definition] def buildWhiteListingAccess(): Option[Access] = {
     val featureSwitch = FeatureSwitch(appConfig.featureSwitch)
-    if (featureSwitch.isWhiteListingEnabled) Some(Access("PRIVATE", featureSwitch.whiteListedApplicationIds)) else None
+    if (featureSwitch.isAllowListingEnabled) Some(Access("PRIVATE", featureSwitch.allowListedApplicationIds)) else None
   }
 }

@@ -38,9 +38,9 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
     |      }
     |   ],
     |   "api":{
-    |      "name":"#mtd-api# (MTD)",
-    |      "description":"#desc#",
-    |      "context":"mtd/template",
+    |      "name":"Individuals State Benefits (MTD)",
+    |      "description":"An API for providing individual state benefit data",
+    |      "context":"individuals/state-benefits",
     |      "categories":[
     |         "INCOME_TAX_MTD"
     |      ],

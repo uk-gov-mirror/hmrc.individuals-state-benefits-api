@@ -28,7 +28,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
     val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
-    MockedAppConfig.apiGatewayContext returns "mtd/template"
+    MockedAppConfig.apiGatewayContext returns "individuals/state-benefits"
   }
 
   "definition" when {
@@ -56,9 +56,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               )
             ),
             api = APIDefinition(
-              name = "#mtd-api# (MTD)",
-              description = "#desc#",
-              context = "mtd/template",
+              name = "Individuals State Benefits (MTD)",
+              description = "An API for providing individual state benefit data",
+              context = "individuals/state-benefits",
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
                 APIVersion(

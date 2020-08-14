@@ -84,26 +84,25 @@ class AmendSampleControllerSpec
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
-    MockedAppConfig.apiGatewayContext.returns("baseUrl").anyNumberOfTimes()
+    MockedAppConfig.apiGatewayContext.returns("individuals/state-benefits").anyNumberOfTimes()
   }
-
 
   val responseBody: JsValue = Json.parse(
     """
       |{
       |  "links": [
       |    {
-      |      "href": "/baseUrl/sample/AA123456A/2017-18",
+      |      "href": "/individuals/state-benefits/sample/AA123456A/2017-18",
       |      "method": "PUT",
       |      "rel": "amend-sample-rel"
       |    },
       |    {
-      |      "href": "/baseUrl/sample/AA123456A/2017-18",
+      |      "href": "/individuals/state-benefits/sample/AA123456A/2017-18",
       |      "method": "GET",
       |      "rel": "self"
       |    },
       |    {
-      |      "href": "/baseUrl/sample/AA123456A/2017-18",
+      |      "href": "/individuals/state-benefits/sample/AA123456A/2017-18",
       |      "method": "DELETE",
       |      "rel": "delete-sample-rel"
       |    }
