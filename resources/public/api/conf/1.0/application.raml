@@ -42,3 +42,8 @@ uses:
         put: !include endpoints/sample_post.raml
         delete: !include endpoints/sample_delete.raml
         get: !include endpoints/sample_retrieve.raml
+      /{benefitId}:
+        uriParameters:
+          benefitId: !include pathParameters/benefitId.raml
+        /amounts:
+          delete: !include endpoints/deleteAmounts.raml
