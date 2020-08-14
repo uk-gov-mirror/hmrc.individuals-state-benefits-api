@@ -55,7 +55,7 @@ traits:
             type: types.errorResponse
             examples:
               formatBenefitId:
-                description: 'The format of the supplied benefitId field is not valid.'
+                description: 'The format of the supplied benefit ID field is not valid.'
                 value:
                   code: FORMAT_BENEFIT_ID
   incorrectOrEmptyBody:
@@ -99,6 +99,6 @@ traits:
             type: types.errorResponse
             examples:
               ruleTaxYearNotEnded:
-                description: A brought forward loss is entered before the end of the tax year in which it was generated.
+                description: 'The submission has been made before the tax year it relates to has ended.'
                 value:
                   code: RULE_TAX_YEAR_NOT_ENDED
