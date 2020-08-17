@@ -20,22 +20,17 @@ import config.AppConfig
 import mocks.MockAppConfig
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
-import play.api.libs.json.Json
 import support.UnitSpec
 import utils.CurrentDateTime
 import v1.mocks.MockCurrentDateTime
 import v1.models.errors._
-import v1.models.request.amendSample.AmendSampleRawData
+import v1.models.request.deleteStateBenefits.DeleteStateBenefitsRawData
 
-class AmendSampleValidatorSpec extends UnitSpec {
+class DeleteStateBenefitsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
   private val validTaxYear = "2020-21"
-  private val requestBodyJson = Json.parse(
-    """{
-      |  "data" : "someData"
-      |}
-    """.stripMargin)
+  private val validBenefitId = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   class Test extends MockCurrentDateTime with MockAppConfig {
 
@@ -44,7 +39,7 @@ class AmendSampleValidatorSpec extends UnitSpec {
 
     implicit val appConfig: AppConfig = mockAppConfig
 
-    val validator = new AmendSampleValidator()
+    val validator = new DeleteStateBenefitsValidator()
 
     MockCurrentDateTime.getCurrentDate
       .returns(DateTime.parse("2022-07-11", dateTimeFormatter))
@@ -57,36 +52,56 @@ class AmendSampleValidatorSpec extends UnitSpec {
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in new Test {
-        validator.validate(AmendSampleRawData(validNino, validTaxYear, requestBodyJson)) shouldBe Nil
+        validator.validate(DeleteStateBenefitsRawData(validNino, validTaxYear, validBenefitId)) shouldBe Nil
       }
     }
 
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in new Test {
-        validator.validate(AmendSampleRawData("A12344A", validTaxYear, requestBodyJson)) shouldBe
+        validator.validate(DeleteStateBenefitsRawData("A12344A", validTaxYear, validBenefitId)) shouldBe
           List(NinoFormatError)
       }
     }
 
     "return TaxYearFormatError error" when {
       "an invalid tax year is supplied" in new Test {
-        validator.validate(AmendSampleRawData(validNino, "20178", requestBodyJson)) shouldBe
+        validator.validate(DeleteStateBenefitsRawData(validNino, "20178", validBenefitId)) shouldBe
           List(TaxYearFormatError)
       }
     }
 
+    "return BenefitIdFormatError error" when {
+      "an invalid benefit ID is supplied" in new Test {
+        validator.validate(DeleteStateBenefitsRawData(validNino, validTaxYear, "ABCDE12345FG")) shouldBe
+          List(BenefitIdFormatError)
+      }
+    }
+
     "return RuleTaxYearNotSupportedError error" when {
-      "an out of range tax year is supplied" in new Test {
-        validator.validate(
-          AmendSampleRawData(validNino, "2016-17", requestBodyJson)) shouldBe
+      "a tax year that is not supported is supplied" in new Test {
+        validator.validate(DeleteStateBenefitsRawData(validNino, "2018-19", validBenefitId)) shouldBe
           List(RuleTaxYearNotSupportedError)
       }
     }
 
-    "return multiple errors" when {
-      "request supplied has multiple errors" in new Test {
-        validator.validate(AmendSampleRawData("A12344A", "20178", requestBodyJson)) shouldBe
+    "return RuleTaxYearRangeInvalidError error" when {
+      "an out of range tax year is supplied" in new Test {
+        validator.validate(DeleteStateBenefitsRawData(validNino, "2020-22", validBenefitId)) shouldBe
+          List(RuleTaxYearRangeInvalidError)
+      }
+    }
+
+    "return NinoFormatError and TaxYearFormatError errors" when {
+      "request supplied has invalid nino and tax year" in new Test {
+        validator.validate(DeleteStateBenefitsRawData("A12344A", "20199", validBenefitId)) shouldBe
           List(NinoFormatError, TaxYearFormatError)
+      }
+    }
+
+    "return NinoFormatError, TaxYearFormatError and BenefitIdFormatError errors" when {
+      "request supplied has invalid nino, tax year and benefit ID" in new Test {
+        validator.validate(DeleteStateBenefitsRawData("A12344A", "20178", "ABCDE12345FG")) shouldBe
+          List(NinoFormatError, TaxYearFormatError, BenefitIdFormatError)
       }
     }
   }

@@ -20,28 +20,28 @@ import config.AppConfig
 import javax.inject.Inject
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
-import v1.models.request.amendSample.{AmendSampleRawData, AmendSampleRequestBody}
+import v1.models.request.deleteStateBenefits.DeleteStateBenefitsRawData
 
-class AmendSampleValidator @Inject()(implicit appConfig: AppConfig)
-  extends Validator[AmendSampleRawData] {
+class DeleteStateBenefitsValidator @Inject()(implicit appConfig: AppConfig)
+  extends Validator[DeleteStateBenefitsRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 
-  private def parameterFormatValidation: AmendSampleRawData => List[List[MtdError]] = (data: AmendSampleRawData) => {
+  override def validate(data: DeleteStateBenefitsRawData): List[MtdError] = {
+    run(validationSet, data).distinct
+  }
+
+  private def parameterFormatValidation: DeleteStateBenefitsRawData => List[List[MtdError]] = (data: DeleteStateBenefitsRawData) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear),
-      JsonFormatValidation.validate[AmendSampleRequestBody](data.body)
+      BenefitIdValidation.validate(data.benefitId)
     )
   }
 
-  private def parameterRuleValidation: AmendSampleRawData => List[List[MtdError]] = { data =>
+  private def parameterRuleValidation: DeleteStateBenefitsRawData => List[List[MtdError]] = (data: DeleteStateBenefitsRawData) => {
     List(
       TaxYearNotSupportedValidation.validate(data.taxYear)
     )
-  }
-
-  override def validate(data: AmendSampleRawData): List[MtdError] = {
-    run(validationSet, data).distinct
   }
 }

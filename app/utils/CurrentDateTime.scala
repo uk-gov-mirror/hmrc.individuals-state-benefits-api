@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators.validations
+package utils
 
-import config.AppConfig
-import v1.models.domain.DesTaxYear
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import javax.inject.{Inject, Singleton}
+import org.joda.time.{DateTime, DateTimeZone}
 
-object TaxYearNotSupportedValidation {
+@Singleton
+class CurrentDateTime @Inject()() {
 
-  // @param taxYear In format YYYY-YY
-  def validate(taxYear: String)(implicit appConfig: AppConfig): List[MtdError] = {
-    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
-
-    if (desTaxYear < appConfig.minimumPermittedTaxYear) List(RuleTaxYearNotSupportedError) else NoValidationErrors
-  }
+  def getDateTime: DateTime = DateTime.now(DateTimeZone.UTC)
 }

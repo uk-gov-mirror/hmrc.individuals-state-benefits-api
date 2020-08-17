@@ -16,16 +16,20 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import config.AppConfig
-import v1.models.domain.DesTaxYear
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import support.UnitSpec
+import v1.models.errors.BenefitIdFormatError
 
-object TaxYearNotSupportedValidation {
+class BenefitIdValidationSpec extends UnitSpec {
 
-  // @param taxYear In format YYYY-YY
-  def validate(taxYear: String)(implicit appConfig: AppConfig): List[MtdError] = {
-    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
+  "BenefitIdValidation" when {
+    "validate" should {
+      "return an empty list for a valid benefit ID" in {
+        BenefitIdValidation.validate("b1e8057e-fbbc-47a8-a8b4-78d9f015c253") shouldBe NoValidationErrors
+      }
 
-    if (desTaxYear < appConfig.minimumPermittedTaxYear) List(RuleTaxYearNotSupportedError) else NoValidationErrors
+      "return an BenefitIdFormatError error for an invalid benefit ID" in {
+        BenefitIdValidation.validate("") shouldBe List(BenefitIdFormatError)
+      }
+    }
   }
 }
