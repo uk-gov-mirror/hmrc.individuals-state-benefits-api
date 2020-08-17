@@ -17,6 +17,5 @@
 package v1.models.request.amend
 
 import uk.gov.hmrc.domain.Nino
-import v1.models.domain.DesTaxYear
 
-case class AmendStateBenefitsRequest(nino: Nino, desTaxYear: DesTaxYear, body: AmendStateBenefitsRequestBody)
+case class AmendStateBenefitsRequest(nino: Nino, desTaxYear: String, body: AmendStateBenefitsRequestBody)

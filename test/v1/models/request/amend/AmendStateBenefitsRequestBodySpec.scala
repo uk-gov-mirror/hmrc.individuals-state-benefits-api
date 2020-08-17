@@ -21,7 +21,7 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class AmendStateBenefitsRequestBodySpec extends UnitSpec with JsonErrorValidators {
-  
+
   "reads" when {
     "passed valid JSON" should {
       val inputJson = Json.parse(
