@@ -42,6 +42,12 @@ uses:
         put: !include endpoints/sample_post.raml
         delete: !include endpoints/sample_delete.raml
         get: !include endpoints/sample_retrieve.raml
+  /{nino}:
+    uriParameters:
+      nino: !include pathParameters/nino.raml
+    /{taxYear}:
+      uriParameters:
+        taxYear: !include pathParameters/taxYearMinimum2021.raml
       /{benefitId}:
         uriParameters:
           benefitId: !include pathParameters/benefitId.raml
