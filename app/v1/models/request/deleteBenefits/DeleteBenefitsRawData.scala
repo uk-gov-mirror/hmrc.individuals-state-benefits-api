@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteStateBenefits
+package v1.models.request.deleteBenefits
 
 import v1.models.request.RawData
 
-case class DeleteStateBenefitsRawData(nino: String, taxYear: String, benefitId: String) extends RawData
+case class DeleteBenefitsRawData(nino: String, taxYear: String, benefitId: String) extends RawData

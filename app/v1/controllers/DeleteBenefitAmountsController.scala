@@ -24,31 +24,31 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import play.mvc.Http.MimeTypes
 import utils.Logging
 import v1.connectors.DesUri
-import v1.controllers.requestParsers.DeleteStateBenefitsRequestParser
+import v1.controllers.requestParsers.DeleteBenefitsRequestParser
 import v1.models.errors._
-import v1.models.request.deleteStateBenefits.DeleteStateBenefitsRawData
+import v1.models.request.deleteBenefits.DeleteBenefitsRawData
 import v1.services.{DeleteRetrieveService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteStateBenefitAmountsController @Inject()(val authService: EnrolmentsAuthService,
-                                                    val lookupService: MtdIdLookupService,
-                                                    requestParser: DeleteStateBenefitsRequestParser,
-                                                    service: DeleteRetrieveService,
-                                                    cc: ControllerComponents)(implicit ec: ExecutionContext)
+class DeleteBenefitAmountsController @Inject()(val authService: EnrolmentsAuthService,
+                                               val lookupService: MtdIdLookupService,
+                                               requestParser: DeleteBenefitsRequestParser,
+                                               service: DeleteRetrieveService,
+                                               cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
-      controllerName = "DeleteStateBenefitAmountsController",
-      endpointName = "deleteStateBenefitAmounts"
+      controllerName = "DeleteBenefitAmountsController",
+      endpointName = "deleteBenefitAmounts"
     )
 
-  def deleteStateBenefitAmounts(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
+  def deleteBenefitAmounts(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
 
-      val rawData: DeleteStateBenefitsRawData = DeleteStateBenefitsRawData(
+      val rawData: DeleteBenefitsRawData = DeleteBenefitsRawData(
         nino = nino,
         taxYear = taxYear,
         benefitId = benefitId

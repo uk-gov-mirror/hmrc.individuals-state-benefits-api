@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteStateBenefits
+package v1.models.request.deleteBenefits
 
 import uk.gov.hmrc.domain.Nino
 
-case class DeleteStateBenefitsRequest(nino: Nino, taxYear: String, benefitId: String)
+case class DeleteBenefitsRequest(nino: Nino, taxYear: String, benefitId: String)

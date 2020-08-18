@@ -18,12 +18,12 @@ package v1.controllers.requestParsers
 
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
-import v1.controllers.requestParsers.validators.DeleteStateBenefitsValidator
-import v1.models.request.deleteStateBenefits.{DeleteStateBenefitsRawData, DeleteStateBenefitsRequest}
+import v1.controllers.requestParsers.validators.DeleteBenefitsValidator
+import v1.models.request.deleteBenefits.{DeleteBenefitsRawData, DeleteBenefitsRequest}
 
-class DeleteStateBenefitsRequestParser @Inject()(val validator: DeleteStateBenefitsValidator)
-  extends RequestParser[DeleteStateBenefitsRawData, DeleteStateBenefitsRequest] {
+class DeleteBenefitsRequestParser @Inject()(val validator: DeleteBenefitsValidator)
+  extends RequestParser[DeleteBenefitsRawData, DeleteBenefitsRequest] {
 
-  override protected def requestFor(data: DeleteStateBenefitsRawData): DeleteStateBenefitsRequest =
-    DeleteStateBenefitsRequest(Nino(data.nino), data.taxYear, data.benefitId)
+  override protected def requestFor(data: DeleteBenefitsRawData): DeleteBenefitsRequest =
+    DeleteBenefitsRequest(Nino(data.nino), data.taxYear, data.benefitId)
 }

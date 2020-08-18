@@ -25,7 +25,7 @@ import support.IntegrationBaseSpec
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
-class DeleteStateBenefitAmountsControllerISpec extends IntegrationBaseSpec {
+class DeleteBenefitAmountsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 

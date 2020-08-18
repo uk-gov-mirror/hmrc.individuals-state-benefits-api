@@ -18,60 +18,60 @@ package v1.controllers.requestParsers
 
 import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
-import v1.mocks.validators.MockDeleteStateBenefitsValidator
+import v1.mocks.validators.MockDeleteBenefitsValidator
 import v1.models.errors._
-import v1.models.request.deleteStateBenefits.{DeleteStateBenefitsRawData, DeleteStateBenefitsRequest}
+import v1.models.request.deleteBenefits.{DeleteBenefitsRawData, DeleteBenefitsRequest}
 
-class DeleteStateBenefitsRequestParserSpec extends UnitSpec {
+class DeleteBenefitsRequestParserSpec extends UnitSpec {
 
   val nino: String = "AA123456B"
   val taxYear: String = "2021-22"
   val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  val deleteStateBenefitsRawData: DeleteStateBenefitsRawData = DeleteStateBenefitsRawData(
+  val deleteBenefitsRawData: DeleteBenefitsRawData = DeleteBenefitsRawData(
     nino = nino,
     taxYear = taxYear,
     benefitId = benefitId
   )
 
-  trait Test extends MockDeleteStateBenefitsValidator {
-    lazy val parser: DeleteStateBenefitsRequestParser = new DeleteStateBenefitsRequestParser(
-      validator = mockDeleteStateBenefitsValidator
+  trait Test extends MockDeleteBenefitsValidator {
+    lazy val parser: DeleteBenefitsRequestParser = new DeleteBenefitsRequestParser(
+      validator = mockDeleteBenefitsValidator
     )
   }
 
   "parse" should {
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockDeleteStateBenefitsValidator.validate(deleteStateBenefitsRawData).returns(Nil)
+        MockDeleteBenefitsValidator.validate(deleteBenefitsRawData).returns(Nil)
 
-        parser.parseRequest(deleteStateBenefitsRawData) shouldBe
-          Right(DeleteStateBenefitsRequest(Nino(nino), taxYear, benefitId))
+        parser.parseRequest(deleteBenefitsRawData) shouldBe
+          Right(DeleteBenefitsRequest(Nino(nino), taxYear, benefitId))
       }
     }
 
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockDeleteStateBenefitsValidator.validate(deleteStateBenefitsRawData)
+        MockDeleteBenefitsValidator.validate(deleteBenefitsRawData)
           .returns(List(NinoFormatError))
 
-        parser.parseRequest(deleteStateBenefitsRawData) shouldBe
+        parser.parseRequest(deleteBenefitsRawData) shouldBe
           Left(ErrorWrapper(None, NinoFormatError, None))
       }
 
       "multiple validation errors occur (NinoFormatError and TaxYearFormatError errors)" in new Test {
-        MockDeleteStateBenefitsValidator.validate(deleteStateBenefitsRawData)
+        MockDeleteBenefitsValidator.validate(deleteBenefitsRawData)
           .returns(List(NinoFormatError, TaxYearFormatError))
 
-        parser.parseRequest(deleteStateBenefitsRawData) shouldBe
+        parser.parseRequest(deleteBenefitsRawData) shouldBe
           Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
 
       "multiple validation errors occur (NinoFormatError, TaxYearFormatError and BenefitIdFormatError errors)" in new Test {
-        MockDeleteStateBenefitsValidator.validate(deleteStateBenefitsRawData)
+        MockDeleteBenefitsValidator.validate(deleteBenefitsRawData)
           .returns(List(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))
 
-        parser.parseRequest(deleteStateBenefitsRawData) shouldBe
+        parser.parseRequest(deleteBenefitsRawData) shouldBe
           Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
       }
     }

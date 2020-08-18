@@ -20,34 +20,34 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.requestParsers.MockDeleteStateBenefitsRequestParser
+import v1.mocks.requestParsers.MockDeleteBenefitsRequestParser
 import v1.mocks.services.{MockDeleteRetrieveService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.deleteStateBenefits.{DeleteStateBenefitsRawData, DeleteStateBenefitsRequest}
+import v1.models.request.deleteBenefits.{DeleteBenefitsRawData, DeleteBenefitsRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteStateBenefitAmountsControllerSpec
+class DeleteBenefitAmountsControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockDeleteRetrieveService
-    with MockDeleteStateBenefitsRequestParser {
+    with MockDeleteBenefitsRequestParser {
 
   val nino: String = "AA123456A"
   val taxYear: String = "2019-20"
   val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
   val correlationId: String = "X-123"
 
-  val rawData: DeleteStateBenefitsRawData = DeleteStateBenefitsRawData(
+  val rawData: DeleteBenefitsRawData = DeleteBenefitsRawData(
     nino = nino,
     taxYear = taxYear,
     benefitId = benefitId
   )
 
-  val requestData: DeleteStateBenefitsRequest = DeleteStateBenefitsRequest(
+  val requestData: DeleteBenefitsRequest = DeleteBenefitsRequest(
     nino = Nino(nino),
     taxYear = taxYear,
     benefitId = benefitId
@@ -56,10 +56,10 @@ class DeleteStateBenefitAmountsControllerSpec
   trait Test {
     val hc = HeaderCarrier()
 
-    val controller = new DeleteStateBenefitAmountsController(
+    val controller = new DeleteBenefitAmountsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      requestParser = mockDeleteStateBenefitsRequestParser,
+      requestParser = mockDeleteBenefitsRequestParser,
       service = mockDeleteRetrieveService,
       cc = cc
     )
@@ -68,11 +68,11 @@ class DeleteStateBenefitAmountsControllerSpec
     MockedEnrolmentsAuthService.authoriseUser()
   }
 
-  "DeleteStateBenefitAmountsController" should {
+  "DeleteBenefitAmountsController" should {
     "return NO_content" when {
       "happy path" in new Test {
 
-        MockDeleteStateBenefitsRequestParser
+        MockDeleteBenefitsRequestParser
           .parse(rawData)
           .returns(Right(requestData))
 
@@ -80,7 +80,7 @@ class DeleteStateBenefitAmountsControllerSpec
           .delete()
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        val result: Future[Result] = controller.deleteStateBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
+        val result: Future[Result] = controller.deleteBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
 
         status(result) shouldBe NO_CONTENT
         contentAsString(result) shouldBe ""
@@ -93,11 +93,11 @@ class DeleteStateBenefitAmountsControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockDeleteStateBenefitsRequestParser
+            MockDeleteBenefitsRequestParser
               .parse(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
-            val result: Future[Result] = controller.deleteStateBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
+            val result: Future[Result] = controller.deleteBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -121,7 +121,7 @@ class DeleteStateBenefitAmountsControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockDeleteStateBenefitsRequestParser
+            MockDeleteBenefitsRequestParser
               .parse(rawData)
               .returns(Right(requestData))
 
@@ -129,7 +129,7 @@ class DeleteStateBenefitAmountsControllerSpec
               .delete()
               .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
 
-            val result: Future[Result] = controller.deleteStateBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
+            val result: Future[Result] = controller.deleteBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

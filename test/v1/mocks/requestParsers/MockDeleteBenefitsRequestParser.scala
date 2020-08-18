@@ -18,17 +18,17 @@ package v1.mocks.requestParsers
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.controllers.requestParsers.DeleteStateBenefitsRequestParser
+import v1.controllers.requestParsers.DeleteBenefitsRequestParser
 import v1.models.errors.ErrorWrapper
-import v1.models.request.deleteStateBenefits.{DeleteStateBenefitsRawData, DeleteStateBenefitsRequest}
+import v1.models.request.deleteBenefits.{DeleteBenefitsRawData, DeleteBenefitsRequest}
 
-trait MockDeleteStateBenefitsRequestParser extends MockFactory {
+trait MockDeleteBenefitsRequestParser extends MockFactory {
 
-  val mockDeleteStateBenefitsRequestParser: DeleteStateBenefitsRequestParser = mock[DeleteStateBenefitsRequestParser]
+  val mockDeleteBenefitsRequestParser: DeleteBenefitsRequestParser = mock[DeleteBenefitsRequestParser]
 
-  object MockDeleteStateBenefitsRequestParser {
-    def parse(data: DeleteStateBenefitsRawData): CallHandler[Either[ErrorWrapper, DeleteStateBenefitsRequest]] = {
-      (mockDeleteStateBenefitsRequestParser.parseRequest(_: DeleteStateBenefitsRawData)).expects(data)
+  object MockDeleteBenefitsRequestParser {
+    def parse(data: DeleteBenefitsRawData): CallHandler[Either[ErrorWrapper, DeleteBenefitsRequest]] = {
+      (mockDeleteBenefitsRequestParser.parseRequest(_: DeleteBenefitsRawData)).expects(data)
     }
   }
 
