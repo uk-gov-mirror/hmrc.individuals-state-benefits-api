@@ -32,18 +32,24 @@ uses:
   /sample:
     /{nino}:
       uriParameters:
-        nino:
-          description: National Insurance number, in the format AA999999A.
-          type: string
-          example: TC663795B
+        nino: !include pathParameters/nino.raml
       /{taxYear}:
         uriParameters:
-          taxYear:
-            description: 'The tax year the data applies to, for example, 2019-20. The start year and end year must not span two tax years. No gaps are allowed, for example, 2019-21 is not valid.'
-            example: "2017-18"
+          taxYear: !include pathParameters/taxYearMinimum2021.raml
         (annotations.group):
           name: Sample Endpoint
           description: This is a sample endpoint
         put: !include endpoints/sample_post.raml
         delete: !include endpoints/sample_delete.raml
         get: !include endpoints/sample_retrieve.raml
+  /{nino}:
+    uriParameters:
+      nino: !include pathParameters/nino.raml
+    /{taxYear}:
+      uriParameters:
+        taxYear: !include pathParameters/taxYearMinimum2021.raml
+      /{benefitId}:
+        uriParameters:
+          benefitId: !include pathParameters/benefitId.raml
+        /amounts:
+          delete: !include endpoints/deleteBenefitAmounts.raml
