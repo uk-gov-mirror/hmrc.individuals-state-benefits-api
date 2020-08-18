@@ -22,19 +22,19 @@ import v1.models.utils.JsonErrorValidators
 
 class AmendStateBenefitsRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
+  val inputJson = Json.parse(
+    """
+      |{
+      |   "startDate": "2019-04-06",
+      |   "endDate": "2020-01-01"
+      |}
+        """.stripMargin
+  )
+
   "reads" when {
     "passed valid JSON" should {
-      val inputJson = Json.parse(
-        """
-          |{
-          |   "startDate": "2019-04-06",
-          |   "endDate": "2020-01-01"
-          |}
-        """.stripMargin
-      )
-
       "return a valid model" in {
-        inputJson.as[AmendStateBenefitsRequestBody] shouldBe AmendStateBenefitsRequestBody("2019-04-06", "2020-01-01")
+        inputJson.as[AmendStateBenefitsRequestBody] shouldBe AmendStateBenefitsRequestBody("2019-04-06", Some("2020-01-01"))
       }
 
       testMandatoryProperty[AmendStateBenefitsRequestBody](inputJson)("/startDate")
@@ -50,6 +50,14 @@ class AmendStateBenefitsRequestBodySpec extends UnitSpec with JsonErrorValidator
         replacement = 12344.toJson,
         expectedError = JsonError.STRING_FORMAT_EXCEPTION
       )
+    }
+  }
+
+  "writes" should {
+    "return a json" when {
+      "a valid object is supplied" in {
+        Json.toJson(AmendStateBenefitsRequestBody("2019-04-06", Some("2020-01-01"))) shouldBe inputJson
+      }
     }
   }
 }

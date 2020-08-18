@@ -18,7 +18,7 @@ package v1.models.request.amend
 
 import play.api.libs.json.{Json, OFormat}
 
-case class AmendStateBenefitsRequestBody(startDate: String, endDate: String)
+case class AmendStateBenefitsRequestBody(startDate: String, endDate: Option[String])
 
 object AmendStateBenefitsRequestBody {
   implicit val format: OFormat[AmendStateBenefitsRequestBody] = Json.format[AmendStateBenefitsRequestBody]
