@@ -34,7 +34,7 @@ class AmendSampleValidator extends Validator[AmendSampleRawData] {
 
   private def parameterRuleValidation: AmendSampleRawData => List[List[MtdError]] = { data =>
     List(
-      TaxYearNotSupportedValidation.validate(data.taxYear)
+      TaxYearNotSupportedValidation.validateSample(data.taxYear)
     )
   }
 

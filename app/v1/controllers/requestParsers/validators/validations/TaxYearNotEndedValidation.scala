@@ -16,29 +16,35 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import config.{AppConfig, FixedConfig}
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import utils.CurrentDateTime
 import v1.models.domain.DesTaxYear
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import v1.models.errors.{MtdError, RuleTaxYearNotEndedError}
 
-object TaxYearNotSupportedValidation extends FixedConfig{
+object TaxYearNotEndedValidation {
 
   // @param taxYear In format YYYY-YY
-  def validate(taxYear: String)(implicit appConfig: AppConfig): List[MtdError] = {
-    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
+  def validate(taxYear: String)(implicit dateTimeProvider: CurrentDateTime): List[MtdError] = {
 
-    if (desTaxYear < appConfig.minimumPermittedTaxYear) {
-      List(RuleTaxYearNotSupportedError)
+    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
+    val currentDate: DateTime = dateTimeProvider.getDateTime
+
+    if(desTaxYear >= getCurrentTaxYear(currentDate)) {
+       List(RuleTaxYearNotEndedError)
     }
     else {
       NoValidationErrors
     }
   }
 
-  // @param taxYear In format YYYY-YY
-  def validateSample(taxYear: String): List[MtdError] = {
+  private def getCurrentTaxYear(date: DateTime): Int = {
 
-    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
+    lazy val taxYearStartDate: DateTime = DateTime.parse(
+      date.getYear + "-04-06",
+      DateTimeFormat.forPattern("yyyy-MM-dd")
+    )
 
-    if (desTaxYear >= minimumTaxYear) NoValidationErrors else List(RuleTaxYearNotSupportedError)
+    if (date.isBefore(taxYearStartDate)) date.getYear else date.getYear + 1
   }
 }

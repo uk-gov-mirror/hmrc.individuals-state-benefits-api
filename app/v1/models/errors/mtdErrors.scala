@@ -26,7 +26,9 @@ object MtdError {
 
 object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is invalid")
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
-
+object StartDateFormatError extends MtdError("FORMAT_START_DATE", "The provided start date is invalid")
+object EndDateFormatError extends MtdError("FORMAT_END_DATE", "The provided end date is invalid")
+object BenefitIdFormatError extends MtdError("FORMAT_BENEFIT_ID", "The provided benefit ID is invalid")
 // Rule Errors
 object RuleTaxYearNotSupportedError extends MtdError(
   code = "RULE_TAX_YEAR_NOT_SUPPORTED",
@@ -37,6 +39,16 @@ object RuleTaxYearRangeInvalidError extends MtdError(
   code = "RULE_TAX_YEAR_RANGE_INVALID",
   message = "Tax year range invalid. A tax year range of one year is required"
 )
+
+object RuleTaxYearNotEndedError extends MtdError( code = "RULE_TAX_YEAR_NOT_ENDED", "Tax year not ended")
+
+object RuleEndDateBeforeStartDateError extends
+  MtdError("RULE_END_DATE_BEFORE_START_DATE", "The end date cannot be earlier than the start date")
+
+object RuleStartDateAfterTaxYearEndError extends MtdError("RULE_START_DATE_AFTER_TAX_YEAR_END", "The start date cannot be later than the tax year end")
+
+object RuleEndDateBeforeTaxYearStartError extends
+  MtdError("RULE_END_DATE_BEFORE_TAX_YEAR_START", "The end date cannot be before the tax year starts")
 
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
 

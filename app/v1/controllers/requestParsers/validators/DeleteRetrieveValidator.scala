@@ -37,7 +37,7 @@ class DeleteRetrieveValidator extends Validator[DeleteRetrieveRawData] {
 
   private def parameterRuleValidation: DeleteRetrieveRawData => List[List[MtdError]] = (data: DeleteRetrieveRawData) => {
     List(
-      TaxYearNotSupportedValidation.validate(data.taxYear)
+      TaxYearNotSupportedValidation.validateSample(data.taxYear)
     )
   }
 }

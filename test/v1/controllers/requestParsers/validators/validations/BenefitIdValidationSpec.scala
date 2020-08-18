@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.requestParsers.validators.validations
 
-import java.time.format.DateTimeFormatter
+import support.UnitSpec
+import v1.models.errors.BenefitIdFormatError
 
-package object validations {
+class BenefitIdValidationSpec extends UnitSpec {
 
-  val NoValidationErrors = List()
-  val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  "BenefitIdValidation" when {
+    "validate" should {
+      "return an empty list for a valid Benefit ID" in {
+        BenefitIdValidation.validate("4557ecb5-fd32-48cc-81f5-e6acd1099f3c") shouldBe NoValidationErrors
+      }
+
+      "return an BenefitIdFormatError error for an invalid Benefit ID" in {
+        BenefitIdValidation.validate("") shouldBe List(BenefitIdFormatError)
+      }
+    }
+  }
 }
