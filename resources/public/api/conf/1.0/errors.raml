@@ -70,6 +70,17 @@ traits:
                 description: 'The format of the supplied benefit ID field is not valid.'
                 value:
                   code: FORMAT_BENEFIT_ID
+  formatBenefitType:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatBenefitType:
+                description: 'The format or value of benefit type is not valid.'
+                value:
+                  code: FORMAT_BENEFIT_TYPE
   formatStartDate:
     responses:
       400:
