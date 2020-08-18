@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators.validations
+package v1.models.request.deleteBenefits
 
-import config.AppConfig
-import v1.models.domain.DesTaxYear
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
+import v1.models.request.RawData
 
-object TaxYearNotSupportedValidation {
-
-  // @param taxYear In format YYYY-YY
-  def validate(taxYear: String)(implicit appConfig: AppConfig): List[MtdError] = {
-    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
-
-    if (desTaxYear < appConfig.minimumPermittedTaxYear) List(RuleTaxYearNotSupportedError) else NoValidationErrors
-  }
-}
+case class DeleteBenefitsRawData(nino: String, taxYear: String, benefitId: String) extends RawData
