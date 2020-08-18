@@ -1,0 +1,9 @@
+{
+  "links": [
+    {
+      "href": "/individuals/state-benefits/{nino}/{taxYear}/{benefitId}",
+      "rel": "self",
+      "method": "GET"
+    }
+  ]
+}
