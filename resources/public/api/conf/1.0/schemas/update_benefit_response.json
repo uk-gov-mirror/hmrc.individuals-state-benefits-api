@@ -1,6 +1,10 @@
 {
-  "definitions": {
-    "hateoasLinks": {
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Update State Benefit Response",
+  "description": "Update State Benefit Response",
+  "type": "object",
+  "properties": {
+    "links": {
       "type": "array",
       "items": {
         "type": "object",
@@ -9,14 +13,17 @@
           "href": {
             "description": "The relative url of the endpoint",
             "type": "string",
-            "example": "/sample-context/AA123456A"
+            "example": "/individuals/state-benefits/{nino}/{taxYear}/{benefitId}"
           },
           "rel": {
             "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
             "type": "string",
             "enum": [
               "self",
-              "sample-rel"
+              "list-state-benefits",
+              "add-state-benefit",
+              "delete-state-benefit",
+              "ignore-state-benefit"
             ]
           },
           "method": {
@@ -24,8 +31,9 @@
             "type": "string",
             "enum": [
               "GET",
-              "POST",
-              "DELETE"
+              "PUT",
+              "DELETE",
+              "POST"
             ]
           }
         },
@@ -35,22 +43,9 @@
           "method"
         ]
       }
-    },
-    "uid": {
-      "description": "A unique identifier",
-      "type": "string",
-      "pattern": "^[A-Za-z0-9]{15}$",
-      "example": "123456879012345"
-    },
-    "startDate": {
-      "description": "The date the benefit started in the format YYYY-MM-DD",
-      "type": "string",
-      "example": "2029-04-06"
-    },
-    "endDate": {
-      "description": "The date the benefit ended in the format YYYY-MM-DD",
-      "type": "string",
-      "example": "2020-01-01"
     }
-  }
+  },
+  "required": [
+    "links"
+  ]
 }

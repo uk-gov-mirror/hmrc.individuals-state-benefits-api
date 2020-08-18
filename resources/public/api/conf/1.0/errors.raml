@@ -10,10 +10,11 @@ traits:
         body:
           application/json:
             type: types.errorResponse
-            example:
-              description: 'The supplied income source could not be found.'
-              value:
-                code: MATCHING_RESOURCE_NOT_FOUND
+            examples:
+              notFound:
+                description: 'The supplied income source could not be found.'
+                value:
+                  code: MATCHING_RESOURCE_NOT_FOUND
   clientOrAgentNotAuthorised:
     responses:
       403:
@@ -25,6 +26,17 @@ traits:
                 description: 'The client or agent is not authorised. This is because: the client is not subscribed to MTD, the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.'
                 value:
                   code: CLIENT_OR_AGENT_NOT_AUTHORISED
+  ruleIncorrectOrEmptyBody:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleIncorrectOrEmptyBody:
+                description: 'An empty or non-matching body was submitted.'
+                value:
+                  code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
   formatNino:
     responses:
       400:
@@ -58,17 +70,28 @@ traits:
                 description: 'The format of the supplied benefit ID field is not valid.'
                 value:
                   code: FORMAT_BENEFIT_ID
-  incorrectOrEmptyBody:
+  formatStartDate:
     responses:
       400:
         body:
           application/json:
             type: types.errorResponse
             examples:
-              incorrectOrEmptyBody:
-                description: 'An empty or non-matching body was submitted.'
+              formatStartDate:
+                description: 'The format of the supplied start date is not valid.'
                 value:
-                  code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
+                  code: FORMAT_START_DATE
+  formatEndDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatEndDate:
+                description: 'The format of the supplied end date is not valid.'
+                value:
+                 code: FORMAT_END_DATE
   ruleTaxYearNotSupported:
     responses:
       400:
@@ -102,3 +125,47 @@ traits:
                 description: 'The submission has been made before the tax year it relates to has ended.'
                 value:
                   code: RULE_TAX_YEAR_NOT_ENDED
+  ruleEndDateBeforeStartDate:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleEndDateBeforeStartDate:
+                description: 'The end date is earlier than the start date.'
+                value:
+                  code: RULE_END_DATE_BEFORE_START_DATE
+  ruleStartDateAfterTaxYearEnd:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleStartDateAfterTaxYearEnd:
+                description: 'The benefit is listed as starting after the tax year ended.'
+                value:
+                  code: RULE_START_DATE_AFTER_TAX_YEAR_END
+  ruleEndDateBeforeTaxYearStart:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleEndDateBeforeTaxYearStart:
+                description: 'The benefit is listed as ending before the tax year began.'
+                value:
+                  code: RULE_END_DATE_BEFORE_TAX_YEAR_START
+  ruleUpdateForbidden:
+    responses:
+      403:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleUpdateForbidden:
+                description: 'An update for a HMRC held benefit is not permitted.'
+                value:
+                  code: RULE_UPDATE_FORBIDDEN

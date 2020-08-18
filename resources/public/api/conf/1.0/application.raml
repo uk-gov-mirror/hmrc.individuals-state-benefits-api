@@ -51,5 +51,6 @@ uses:
       /{benefitId}:
         uriParameters:
           benefitId: !include pathParameters/benefitId.raml
+        put: !include endpoints/updateBenefit.raml
         /amounts:
           delete: !include endpoints/deleteBenefitAmounts.raml
