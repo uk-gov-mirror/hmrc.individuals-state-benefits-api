@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.update
 
 import play.api.libs.json._
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class AmendStateBenefitsRequestBodySpec extends UnitSpec with JsonErrorValidators {
+class UpdateStateBenefitsRequestBodySpec extends UnitSpec with JsonErrorValidators {
 
   val inputJson = Json.parse(
     """
@@ -34,18 +34,18 @@ class AmendStateBenefitsRequestBodySpec extends UnitSpec with JsonErrorValidator
   "reads" when {
     "passed valid JSON" should {
       "return a valid model" in {
-        inputJson.as[AmendStateBenefitsRequestBody] shouldBe AmendStateBenefitsRequestBody("2019-04-06", Some("2020-01-01"))
+        inputJson.as[UpdateStateBenefitsRequestBody] shouldBe UpdateStateBenefitsRequestBody("2019-04-06", Some("2020-01-01"))
       }
 
-      testMandatoryProperty[AmendStateBenefitsRequestBody](inputJson)("/startDate")
+      testMandatoryProperty[UpdateStateBenefitsRequestBody](inputJson)("/startDate")
 
-      testPropertyType[AmendStateBenefitsRequestBody](inputJson)(
+      testPropertyType[UpdateStateBenefitsRequestBody](inputJson)(
         path = "/startDate",
         replacement = 12344.toJson,
         expectedError = JsonError.STRING_FORMAT_EXCEPTION
       )
 
-      testPropertyType[AmendStateBenefitsRequestBody](inputJson)(
+      testPropertyType[UpdateStateBenefitsRequestBody](inputJson)(
         path = "/endDate",
         replacement = 12344.toJson,
         expectedError = JsonError.STRING_FORMAT_EXCEPTION
@@ -56,7 +56,7 @@ class AmendStateBenefitsRequestBodySpec extends UnitSpec with JsonErrorValidator
   "writes" should {
     "return a json" when {
       "a valid object is supplied" in {
-        Json.toJson(AmendStateBenefitsRequestBody("2019-04-06", Some("2020-01-01"))) shouldBe inputJson
+        Json.toJson(UpdateStateBenefitsRequestBody("2019-04-06", Some("2020-01-01"))) shouldBe inputJson
       }
     }
   }

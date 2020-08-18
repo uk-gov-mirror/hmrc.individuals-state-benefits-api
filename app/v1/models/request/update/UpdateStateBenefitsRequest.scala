@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.amend
+package v1.models.request.update
 
 import uk.gov.hmrc.domain.Nino
 
-case class AmendStateBenefitsRequest(nino: Nino, desTaxYear: String, benefitId: String, body: AmendStateBenefitsRequestBody)
+case class UpdateStateBenefitsRequest(nino: Nino, desTaxYear: String, benefitId: String, body: UpdateStateBenefitsRequestBody)
