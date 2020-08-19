@@ -31,7 +31,7 @@ class AmendSampleControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear = "2017-18"
+    val taxYear = "2019-20"
     val correlationId = "X-123"
 
     def uri: String = s"/sample/$nino/$taxYear"
@@ -60,17 +60,17 @@ class AmendSampleControllerISpec extends IntegrationBaseSpec {
       |{
       |  "links": [
       |    {
-      |      "href": "/individuals/state-benefits/sample/AA123456A/2017-18",
+      |      "href": "/individuals/state-benefits/sample/AA123456A/2019-20",
       |      "method": "PUT",
       |      "rel": "amend-sample-rel"
       |    },
       |    {
-      |      "href": "/individuals/state-benefits/sample/AA123456A/2017-18",
+      |      "href": "/individuals/state-benefits/sample/AA123456A/2019-20",
       |      "method": "GET",
       |      "rel": "self"
       |    },
       |    {
-      |      "href": "/individuals/state-benefits/sample/AA123456A/2017-18",
+      |      "href": "/individuals/state-benefits/sample/AA123456A/2019-20",
       |      "method": "DELETE",
       |      "rel": "delete-sample-rel"
       |    }
@@ -119,10 +119,10 @@ class AmendSampleControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("AA1123A", "2017-18", BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2015-16", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "2015-17", BAD_REQUEST, RuleTaxYearRangeInvalidError)
+          ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "20199", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))

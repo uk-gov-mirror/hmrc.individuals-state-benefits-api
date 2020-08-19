@@ -31,7 +31,7 @@ class DeleteSampleControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino: String = "AA123456A"
-    val taxYear: String = "2017-18"
+    val taxYear: String = "2019-20"
     val correlationId: String = "X-123"
 
     def uri: String = s"/sample/$nino/$taxYear"
@@ -87,10 +87,10 @@ class DeleteSampleControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("AA1123A", "2017-18", BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2015-17", BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2015-16", BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "20199", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))

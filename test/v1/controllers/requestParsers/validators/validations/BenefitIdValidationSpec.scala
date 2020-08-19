@@ -23,11 +23,11 @@ class BenefitIdValidationSpec extends UnitSpec {
 
   "BenefitIdValidation" when {
     "validate" should {
-      "return an empty list for a valid Benefit ID" in {
-        BenefitIdValidation.validate("4557ecb5-fd32-48cc-81f5-e6acd1099f3c") shouldBe NoValidationErrors
+      "return an empty list for a valid benefit ID" in {
+        BenefitIdValidation.validate("b1e8057e-fbbc-47a8-a8b4-78d9f015c253") shouldBe NoValidationErrors
       }
 
-      "return an BenefitIdFormatError error for an invalid Benefit ID" in {
+      "return an BenefitIdFormatError error for an invalid benefit ID" in {
         BenefitIdValidation.validate("") shouldBe List(BenefitIdFormatError)
       }
     }

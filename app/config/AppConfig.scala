@@ -22,9 +22,9 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
 
-  def desBaseUrl: String
-
   def mtdIdBaseUrl: String
+
+  def desBaseUrl: String
 
   def desEnv: String
 
@@ -32,13 +32,13 @@ trait AppConfig {
 
   def apiGatewayContext: String
 
+  def minimumPermittedTaxYear: Int
+
   def apiStatus(version: String): String
 
   def featureSwitch: Option[Configuration]
 
   def endpointsEnabled(version: String): Boolean
-
-  def minimumPermittedTaxYear: Int
 }
 
 @Singleton
@@ -56,9 +56,4 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   def featureSwitch: Option[Configuration] = configuration.getOptional[Configuration](s"feature-switch")
 
   def endpointsEnabled(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
-}
-
-trait FixedConfig {
-  // Minimum tax year for MTD
-  val minimumTaxYear = 2018
 }
