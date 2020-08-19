@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package v1.mocks
+package v1.controllers.requestParsers.validators.validations
 
-import org.joda.time.DateTime
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import utils.CurrentDateTime
+import java.time.LocalDate
 
+import v1.models.errors.MtdError
 
-trait MockCurrentDateTime extends MockFactory {
+import scala.util.{Failure, Success, Try}
 
-  val mockCurrentDateTime: CurrentDateTime = mock[CurrentDateTime]
+object DateFormatValidation {
 
-  object MockCurrentDateTime {
-    def getCurrentDate: CallHandler[DateTime] = (mockCurrentDateTime.getDateTime _).expects()
+  def validate(date: String, error: MtdError): List[MtdError] = Try {
+    LocalDate.parse(date, dateFormat)
+  } match {
+    case Success(_) => NoValidationErrors
+    case Failure(_) => List(error)
   }
 }
+
