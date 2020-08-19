@@ -21,5 +21,8 @@ object RelType {
   val RETRIEVE_SAMPLE_REL = "retrieve-sample-rel"
   val DELETE_SAMPLE_REL = "delete-sample-rel"
 
+  val UPDATE_STATE_BENEFITS_URL = "update-state-benefits-rel"
+  val DELETE_STATE_BENEFITS_URL = "delete-state-benefits-rel"
+
   val SELF = "self"
 }
