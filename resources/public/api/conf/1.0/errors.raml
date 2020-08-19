@@ -180,3 +180,14 @@ traits:
                 description: 'An update for a HMRC held benefit is not permitted.'
                 value:
                   code: RULE_UPDATE_FORBIDDEN
+  ruleDeleteForbidden:
+    responses:
+      403:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleUpdateForbidden:
+                description: 'A deletion for a HMRC held state benefit is not permitted.'
+                value:
+                  code: RULE_DELETE_FORBIDDEN
