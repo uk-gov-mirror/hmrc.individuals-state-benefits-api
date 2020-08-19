@@ -30,7 +30,12 @@ object TaxYearNotEndedValidation {
     val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
     val currentDate: DateTime = dateTimeProvider.getDateTime
 
-    if (desTaxYear >= getCurrentTaxYear(currentDate)) List(RuleTaxYearNotEndedError) else NoValidationErrors
+    if (desTaxYear >= getCurrentTaxYear(currentDate)) {
+      List(RuleTaxYearNotEndedError)
+    }
+    else {
+      NoValidationErrors
+    }
   }
 
   private def getCurrentTaxYear(date: DateTime): Int = {

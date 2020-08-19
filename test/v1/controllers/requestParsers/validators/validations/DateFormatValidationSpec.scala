@@ -16,12 +16,28 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{BenefitIdFormatError, MtdError}
+import support.UnitSpec
+import v1.models.errors.MtdError
 
-object BenefitIdValidation {
+class DateFormatValidationSpec extends UnitSpec {
 
-  def validate(benefitId: String): List[MtdError] = {
-    val regex = "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-    if (benefitId.matches(regex)) NoValidationErrors else List(BenefitIdFormatError)
+  "DateFormatValidation.validate" should {
+    "return an empty list for a valid date" when {
+      object DateError extends MtdError("FORMAT_DATE", "Invalid Date format")
+      "valid params are supplied" in {
+
+        DateFormatValidation.validate(
+          date = "2019-04-20",
+          error = DateError
+        ) shouldBe NoValidationErrors
+      }
+
+      "return a DateFormatError for an invalid date" in {
+        DateFormatValidation.validate(
+          date = "2019-04-40",
+          error = DateError
+        ) shouldBe List(DateError)
+      }
+    }
   }
 }

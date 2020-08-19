@@ -24,3 +24,4 @@ class CurrentDateTime @Inject()() {
 
   def getDateTime: DateTime = DateTime.now(DateTimeZone.UTC)
 }
+
