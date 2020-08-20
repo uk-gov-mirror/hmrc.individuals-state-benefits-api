@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request
+package v1.models.request.addStateBenefit
+
 import uk.gov.hmrc.domain.Nino
 
-case class AddStateBenefitRequest(nino: Nino, taxYear: String, body: AddStateBenefitBody) extends RawData
+case class AddStateBenefitRequest(nino: Nino, taxYear: String, body: AddStateBenefitBody)
