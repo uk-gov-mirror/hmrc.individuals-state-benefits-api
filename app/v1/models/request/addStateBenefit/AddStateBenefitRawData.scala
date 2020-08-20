@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.request
+package v1.models.request.addStateBenefit
+
 import play.api.mvc.AnyContentAsJson
+import v1.models.request.RawData
 
 case class AddStateBenefitRawData(nino: String, taxYear: String, body: AnyContentAsJson) extends RawData
