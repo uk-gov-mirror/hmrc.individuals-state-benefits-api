@@ -8,7 +8,7 @@ is:
   - errors.ruleTaxYearRangeInvalid
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Delete customer added benefits [test only]
+displayName: Delete State Benefit Amounts [test only]
 description: "This endpoint allows a developer to delete customer added benefits. A National Insurance number, tax year and benefit ID must be provided. A customer can (logically) delete a previously added benefit if they so choose, this will also (logically) delete any financial information related to the state benefit. If the customer attempts to delete a pre-populated state benefit then the operation will fail with a forbidden response."
 (annotations.sandboxData): !include ../scenarios/common.md
 (annotations.scope): "write:self-assessment"

@@ -103,6 +103,17 @@ traits:
                 description: 'The format of the supplied end date is not valid.'
                 value:
                  code: FORMAT_END_DATE
+  formatValue:
+    responses:
+      400:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              formatValue:
+                description: 'One or more values have been added with the incorrect format.'
+                value:
+                  code: FORMAT_VALUE
   ruleTaxYearNotSupported:
     responses:
       400:
