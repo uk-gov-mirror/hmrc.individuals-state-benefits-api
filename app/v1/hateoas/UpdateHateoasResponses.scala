@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.hateoas
+package v1.hateoas
 
-object RelType {
-  val AMEND_SAMPLE_REL = "amend-sample-rel"
-  val RETRIEVE_SAMPLE_REL = "retrieve-sample-rel"
-  val DELETE_SAMPLE_REL = "delete-sample-rel"
+import config.AppConfig
+import play.api.libs.json.{JsValue, Json}
 
-  val ADD_STATE_BENEFIT = "add-state-benefit"
-  val LIST_STATE_BENEFITS = "list-state-benefits"
-  val UPDATE_STATE_BENEFIT = "update-state-benefit"
-  val DELETE_STATE_BENEFIT = "delete-state-benefit"
-  val UPDATE_STATE_BENEFIT_AMOUNTS = "update-state-benefit-amounts"
-  val DELETE_STATE_BENEFIT_AMOUNTS = "delete-state-benefit-amounts"
-  val IGORNE_STATE_BENEFIT = "ignore-state-benefit"
+trait UpdateHateoasResponses extends HateoasLinks {
 
-  val SELF = "self"
+  def updateStateBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
+
+    val links = Seq(
+      updateStateBenefit(appConfig, nino, taxYear, benefitId),
+      listStateBenefits(appConfig, nino, taxYear),
+      deleteStateBenefit(appConfig, nino, taxYear, benefitId),
+      updateStateBenefitAmounts(appConfig, nino, taxYear, benefitId)
+    )
+
+    Json.obj("links" -> links)
+  }
 }

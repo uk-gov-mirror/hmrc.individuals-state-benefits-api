@@ -32,8 +32,8 @@ object AddStateBenefitsResponse extends HateoasLinks {
       import data._
       Seq(
         listStateBenefits(appConfig, nino, taxYear),
-        updateStateBenefits(appConfig, nino, taxYear, benefitId),
-        deleteStateBenefits(appConfig, nino, taxYear, benefitId)
+        updateStateBenefit(appConfig, nino, taxYear, benefitId),
+        deleteStateBenefit(appConfig, nino, taxYear, benefitId)
       )
     }
   }
