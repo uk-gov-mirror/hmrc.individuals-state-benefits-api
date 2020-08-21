@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Ignore State Benefit Request",
+  "description": "Ignore State Benefit Request",
+  "type": "object",
+  "properties": {
+    "ignoreBenefit": {
+      "$ref": "definitions.json#/definitions/ignoreBenefit"
+    }
+  },
+  "required": [
+    "ignoreBenefit"
+  ]
+}
