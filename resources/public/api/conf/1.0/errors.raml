@@ -202,3 +202,14 @@ traits:
                 description: 'A deletion for a HMRC held state benefit is not permitted.'
                 value:
                   code: RULE_DELETE_FORBIDDEN
+  ruleIgnoreForbidden:
+    responses:
+      403:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleIgnoreForbidden:
+                description: 'The remote endpoint has indicated that State Benefit cannot be ignored.'
+                value:
+                  code: RULE_IGNORE_FORBIDDEN

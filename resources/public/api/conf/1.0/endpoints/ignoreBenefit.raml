@@ -1,0 +1,39 @@
+is:
+  - headers.acceptJson
+  - headers.contentTypeJson
+  - headers.testScenarioHeader
+  - errors.formatNino
+  - errors.formatTaxYear
+  - errors.formatBenefitId
+  - errors.ruleTaxYearRangeInvalid
+  - errors.ruleTaxYearNotSupported
+  - errors.ruleTaxYearNotEnded
+  - errors.ruleIncorrectOrEmptyBody
+  - errors.ruleIgnoreForbidden
+  - errors.clientOrAgentNotAuthorised
+  - errors.notFound
+displayName: Ignore State Benefit [test only]
+description: 'This endpoint allows a customer to mark a State Benefit as ignored, customer added benefits can’t be ignored they can only be deleted. A National Insurance number, tax year and benefit ID must be provided.'
+(annotations.sandboxData): !include ../scenarios/ignoreBenefit.md
+(annotations.scope): "write:self-assessment"
+securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
+body:
+  application/json:
+    type: !include ../schemas/ignore_benefit_request.json
+    examples:
+      example-1:
+        description: Ignore Benefit
+        value: !include ../examples/ignoreStateBenefit/request_true.json
+      example-2:
+        description: Use Benefit
+        value: !include ../examples/ignoreStateBenefit/request_false.json
+responses:
+  200:
+    body:
+      application/json:
+        type: !include ../schemas/ignore_benefit_response.json
+        example: !include ../examples/ignoreStateBenefit/response.json
+    headers:
+      X-CorrelationId:
+        example: a1e8057e-fbbc-47a8-a8b4-78d9f015c253
+        description: Unique ID for operation tracking <br> String, 36 characters.

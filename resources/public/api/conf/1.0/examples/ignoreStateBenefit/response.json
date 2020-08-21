@@ -1,0 +1,14 @@
+{
+  "links": [
+    {
+      "href": "/individuals/state-benefits/{nino}/{taxYear}",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "/individuals/state-benefits/{nino}/{taxYear}/{benefitId}/ignore",
+      "rel": "ignore-state-benefit",
+      "method": "PUT"
+    }
+  ]
+}
