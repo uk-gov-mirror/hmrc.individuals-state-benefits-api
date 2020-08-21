@@ -3,3 +3,5 @@ GET        /sample/:nino/:taxYear                  v1.controllers.RetrieveSample
 DELETE     /sample/:nino/:taxYear                  v1.controllers.DeleteSampleController.deleteSample(nino: String, taxYear: String)
 
 DELETE     /:nino/:taxYear/:benefitId/amounts      v1.controllers.DeleteBenefitAmountsController.deleteBenefitAmounts(nino: String, taxYear: String, benefitId: String)
+
+DELETE     /:nino/:taxYear/:benefitId              v1.controllers.DeleteStateBenefitController.deleteStateBenefit(nino: String, taxYear: String, benefitId: String)
