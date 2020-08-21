@@ -13,7 +13,7 @@
         </tr>
         <tr>
             <td><p>HMRC_HELD</p></td>
-            <td><p>Simulates the scenario in which a benefit is HMRC held and therefore cannot be ignored.</p></td>
+            <td><p>Simulates the scenario in which a benefit is customer added and therefore cannot be ignored.</p></td>
         </tr>
         <tr>
             <td><p>NOT_FOUND</p></td>
