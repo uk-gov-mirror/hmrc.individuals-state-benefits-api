@@ -29,7 +29,7 @@ import v1.models.request.deleteBenefits.{DeleteBenefitsRawData, DeleteBenefitsRe
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteStateBenefitControllerSpec
+class DeleteBenefitControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -56,7 +56,7 @@ class DeleteStateBenefitControllerSpec
   trait Test {
     val hc = HeaderCarrier()
 
-    val controller = new DeleteStateBenefitController(
+    val controller = new DeleteBenefitController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       requestParser = mockDeleteBenefitsRequestParser,
@@ -68,7 +68,7 @@ class DeleteStateBenefitControllerSpec
     MockedEnrolmentsAuthService.authoriseUser()
   }
 
-  "DeleteStateBenefitController" should {
+  "DeleteBenefitController" should {
     "return NO_content" when {
       "happy path" in new Test {
 
@@ -80,7 +80,7 @@ class DeleteStateBenefitControllerSpec
           .delete()
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        val result: Future[Result] = controller.deleteStateBenefit(nino, taxYear, benefitId)(fakeDeleteRequest)
+        val result: Future[Result] = controller.deleteBenefit(nino, taxYear, benefitId)(fakeDeleteRequest)
 
         status(result) shouldBe NO_CONTENT
         contentAsString(result) shouldBe ""
@@ -97,7 +97,7 @@ class DeleteStateBenefitControllerSpec
               .parse(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
-            val result: Future[Result] = controller.deleteStateBenefit(nino, taxYear, benefitId)(fakeDeleteRequest)
+            val result: Future[Result] = controller.deleteBenefit(nino, taxYear, benefitId)(fakeDeleteRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -129,7 +129,7 @@ class DeleteStateBenefitControllerSpec
               .delete()
               .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
 
-            val result: Future[Result] = controller.deleteStateBenefit(nino, taxYear, benefitId)(fakeDeleteRequest)
+            val result: Future[Result] = controller.deleteBenefit(nino, taxYear, benefitId)(fakeDeleteRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)

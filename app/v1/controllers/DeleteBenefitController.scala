@@ -32,20 +32,20 @@ import v1.services.{DeleteRetrieveService, EnrolmentsAuthService, MtdIdLookupSer
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteStateBenefitController @Inject()(val authService: EnrolmentsAuthService,
-                                             val lookupService: MtdIdLookupService,
-                                             requestParser: DeleteBenefitsRequestParser,
-                                             service: DeleteRetrieveService,
-                                             cc: ControllerComponents)(implicit ec: ExecutionContext)
+class DeleteBenefitController @Inject()(val authService: EnrolmentsAuthService,
+                                        val lookupService: MtdIdLookupService,
+                                        requestParser: DeleteBenefitsRequestParser,
+                                        service: DeleteRetrieveService,
+                                        cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
-      controllerName = "DeleteStateBenefitController",
-      endpointName = "deleteStateBenefit"
+      controllerName = "DeleteBenefitController",
+      endpointName = "deleteBenefit"
     )
 
-  def deleteStateBenefit(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
+  def deleteBenefit(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
 
       val rawData: DeleteBenefitsRawData = DeleteBenefitsRawData(
