@@ -34,7 +34,7 @@ class AddBenefitServiceSpec extends ServiceSpec {
   private val correlationId = "X-corr"
 
   val addBenefitRequestBody: AddBenefitRequestBody = AddBenefitRequestBody(
-    benefitType = BenefitType.incapacityBenefit,
+    benefitType = BenefitType.incapacityBenefit.toString,
     startDate = "2020-08-03",
     endDate = Some("2020-12-03")
   )

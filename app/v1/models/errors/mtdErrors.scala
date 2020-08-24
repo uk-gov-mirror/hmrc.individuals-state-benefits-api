@@ -29,10 +29,16 @@ object CustomMtdError {
 }
 
 object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is invalid")
+
 object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
-object StartDateFormatError extends MtdError("FORMAT_START_DATE", "The provided start date is invalid")
-object EndDateFormatError extends MtdError("FORMAT_END_DATE", "The provided end date is invalid")
+
 object BenefitIdFormatError extends MtdError("FORMAT_BENEFIT_ID", "The provided benefit ID is invalid")
+
+object StartDateFormatError extends MtdError("FORMAT_START_DATE", "The provided start date is invalid")
+
+object EndDateFormatError extends MtdError("FORMAT_END_DATE", "The provided end date is invalid")
+
+object BenefitTypeFormatError extends MtdError("FORMAT_BENEFIT_TYPE", "The provided benefit type is invalid")
 
 // Rule Errors
 object RuleTaxYearNotSupportedError extends
@@ -69,11 +75,12 @@ object ServiceUnavailableError extends MtdError("SERVICE_UNAVAILABLE", "Internal
 
 //Authorisation Errors
 object UnauthorisedError extends MtdError("CLIENT_OR_AGENT_NOT_AUTHORISED", "The client and/or agent is not authorised")
+
 object InvalidBearerTokenError extends MtdError("UNAUTHORIZED", "Bearer token is missing or not authorized")
 
 // Accept header Errors
-object  InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
+object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid")
 
-object  UnsupportedVersionError extends MtdError("NOT_FOUND", "The requested resource could not be found")
+object UnsupportedVersionError extends MtdError("NOT_FOUND", "The requested resource could not be found")
 
 object InvalidBodyTypeError extends MtdError("INVALID_BODY_TYPE", "Expecting text/json or application/json body")

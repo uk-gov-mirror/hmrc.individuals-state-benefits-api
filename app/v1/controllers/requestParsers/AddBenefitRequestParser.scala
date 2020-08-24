@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package v1.models.request.addBenefit
+package v1.controllers.requestParsers
 
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.domain.Nino
+import v1.controllers.requestParsers.validators.AddBenefitValidator
+import v1.models.request.addBenefit.{AddBenefitRawData, AddBenefitRequest, AddBenefitRequestBody}
 
-case class AddBenefitRequestBody(benefitType: String, startDate: String, endDate: Option[String])
+@Singleton
+class AddBenefitRequestParser @Inject()(val validator: AddBenefitValidator)
+  extends RequestParser[AddBenefitRawData, AddBenefitRequest] {
 
-object AddBenefitRequestBody {
+  override protected def requestFor(data: AddBenefitRawData): AddBenefitRequest =
+    AddBenefitRequest(Nino(data.nino), data.taxYear, data.body.json.as[AddBenefitRequestBody])
 
-  implicit val reads: Reads[AddBenefitRequestBody] = (
-    (JsPath \ "benefitType").read[String] and
-      (JsPath \ "startDate").read[String] and
-      (JsPath \ "endDate").readNullable[String]
-    ) (AddBenefitRequestBody.apply _)
-
-  implicit val writes: OWrites[AddBenefitRequestBody] = Json.writes[AddBenefitRequestBody]
 }
