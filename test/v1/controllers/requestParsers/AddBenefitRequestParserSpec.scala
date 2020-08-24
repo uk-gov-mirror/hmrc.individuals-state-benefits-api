@@ -20,11 +20,11 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.AnyContentAsJson
 import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
-import v1.mocks.validators.MockAddStateBenefitValidator
+import v1.mocks.validators.MockAddBenefitValidator
 import v1.models.errors._
 import v1.models.request.addStateBenefit.{AddStateBenefitBody, AddStateBenefitRawData, AddStateBenefitRequest}
 
-class AddStateBenefitRequestParserSpec extends UnitSpec {
+class AddBenefitRequestParserSpec extends UnitSpec {
 
   private val nino: String = "AA123456B"
   private val taxYear: String = "2017-18"
@@ -45,48 +45,48 @@ class AddStateBenefitRequestParserSpec extends UnitSpec {
 
   private val validRawBody = AnyContentAsJson(validRequestBodyJson)
 
-  private val addStateBenefitRawData = AddStateBenefitRawData(
+  private val addBenefitRawData = AddStateBenefitRawData(
     nino = nino,
     taxYear = taxYear,
     body = validRawBody
   )
 
-  private val addStateBenefitBody = AddStateBenefitBody("otherStateBenefits", startDate, Some(endDate))
+  private val addBenefitBody = AddStateBenefitBody("otherStateBenefits", startDate, Some(endDate))
 
-  private val addStateBenefitRequest = AddStateBenefitRequest(
+  private val addBenefitRequest = AddStateBenefitRequest(
     nino = Nino(nino),
     taxYear = taxYear,
-    body = addStateBenefitBody
+    body = addBenefitBody
   )
 
-  trait Test extends MockAddStateBenefitValidator {
-    lazy val parser: AddStateBenefitRequestParser = new AddStateBenefitRequestParser(
-      validator = mockAddStateBenefitValidator
+  trait Test extends MockAddBenefitValidator {
+    lazy val parser: AddBenefitRequestParser = new AddBenefitRequestParser(
+      validator = mockAddBenefitValidator
     )
   }
 
-  "AddStateBenefitRequestParser" should {
+  "AddBenefitRequestParser" should {
     "return a request object" when {
       "valid request data is supplied" in new Test {
-        MockAddStateBenefitValidator.validate(addStateBenefitRawData).returns(Nil)
-        parser.parseRequest(addStateBenefitRawData) shouldBe Right(addStateBenefitRequest)
+        MockAddBenefitValidator.validate(addBenefitRawData).returns(Nil)
+        parser.parseRequest(addBenefitRawData) shouldBe Right(addBenefitRequest)
       }
     }
 
     "return an ErrorWrapper" when {
       "a single validation error occurs" in new Test {
-        MockAddStateBenefitValidator.validate(addStateBenefitRawData.copy(nino = "notANino"))
+        MockAddBenefitValidator.validate(addBenefitRawData.copy(nino = "notANino"))
           .returns(List(NinoFormatError))
 
-        parser.parseRequest(addStateBenefitRawData.copy(nino = "notANino")) shouldBe
+        parser.parseRequest(addBenefitRawData.copy(nino = "notANino")) shouldBe
           Left(ErrorWrapper(None, NinoFormatError, None))
       }
 
       "multiple path parameter validation errors occur" in new Test {
-        MockAddStateBenefitValidator.validate(addStateBenefitRawData.copy(nino = "notANino", taxYear = "notATaxYear"))
+        MockAddBenefitValidator.validate(addBenefitRawData.copy(nino = "notANino", taxYear = "notATaxYear"))
           .returns(List(NinoFormatError, TaxYearFormatError))
 
-        parser.parseRequest(addStateBenefitRawData.copy(nino = "notANino", taxYear = "notATaxYear")) shouldBe
+        parser.parseRequest(addBenefitRawData.copy(nino = "notANino", taxYear = "notATaxYear")) shouldBe
           Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
 
@@ -110,10 +110,10 @@ class AddStateBenefitRequestParserSpec extends UnitSpec {
           BenefitTypeFormatError
         )
 
-        MockAddStateBenefitValidator.validate(addStateBenefitRawData.copy(body = invalidValueRawBody))
+        MockAddBenefitValidator.validate(addBenefitRawData.copy(body = invalidValueRawBody))
           .returns(errors)
 
-        parser.parseRequest(addStateBenefitRawData.copy(body = invalidValueRawBody)) shouldBe
+        parser.parseRequest(addBenefitRawData.copy(body = invalidValueRawBody)) shouldBe
           Left(ErrorWrapper(None, BadRequestError, Some(errors)))
       }
     }

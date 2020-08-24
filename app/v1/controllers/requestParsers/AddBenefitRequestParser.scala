@@ -18,11 +18,11 @@ package v1.controllers.requestParsers
 
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.domain.Nino
-import v1.controllers.requestParsers.validators.AddStateBenefitValidator
+import v1.controllers.requestParsers.validators.AddBenefitValidator
 import v1.models.request.addStateBenefit.{AddStateBenefitBody, AddStateBenefitRawData, AddStateBenefitRequest}
 
 @Singleton
-class AddStateBenefitRequestParser @Inject()(val validator: AddStateBenefitValidator)
+class AddBenefitRequestParser @Inject()(val validator: AddBenefitValidator)
   extends RequestParser[AddStateBenefitRawData, AddStateBenefitRequest] {
 
   override protected def requestFor(data: AddStateBenefitRawData): AddStateBenefitRequest =

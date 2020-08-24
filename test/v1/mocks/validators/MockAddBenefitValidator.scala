@@ -18,19 +18,19 @@ package v1.mocks.validators
 
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import v1.controllers.requestParsers.validators.AddStateBenefitValidator
+import v1.controllers.requestParsers.validators.AddBenefitValidator
 import v1.models.errors.MtdError
 import v1.models.request.addStateBenefit.AddStateBenefitRawData
 
 
-trait MockAddStateBenefitValidator extends MockFactory {
+trait MockAddBenefitValidator extends MockFactory {
 
-  val mockAddStateBenefitValidator: AddStateBenefitValidator = mock[AddStateBenefitValidator]
+  val mockAddBenefitValidator: AddBenefitValidator = mock[AddBenefitValidator]
 
-  object MockAddStateBenefitValidator {
+  object MockAddBenefitValidator {
 
     def validate(data: AddStateBenefitRawData): CallHandler1[AddStateBenefitRawData, List[MtdError]] = {
-      (mockAddStateBenefitValidator
+      (mockAddBenefitValidator
         .validate(_: AddStateBenefitRawData))
         .expects(data)
     }

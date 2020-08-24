@@ -23,7 +23,7 @@ import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.addStateBenefit.{AddStateBenefitBody, AddStateBenefitRawData}
 
-class AddStateBenefitValidator @Inject()(implicit currentDateTime: CurrentDateTime, appConfig: AppConfig) extends Validator[AddStateBenefitRawData] {
+class AddBenefitValidator @Inject()(implicit currentDateTime: CurrentDateTime, appConfig: AppConfig) extends Validator[AddStateBenefitRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyParameterValidation)
 

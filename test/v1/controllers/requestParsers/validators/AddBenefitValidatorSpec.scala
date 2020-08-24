@@ -28,7 +28,7 @@ import v1.mocks.MockCurrentDateTime
 import v1.models.errors._
 import v1.models.request.addStateBenefit.AddStateBenefitRawData
 
-class AddStateBenefitValidatorSpec extends UnitSpec {
+class AddBenefitValidatorSpec extends UnitSpec {
   private val validNino = "AA123456A"
   private val validTaxYear = "2020-21"
 
@@ -97,7 +97,7 @@ class AddStateBenefitValidatorSpec extends UnitSpec {
 
     implicit val appConfig: AppConfig = mockAppConfig
 
-    val validator: AddStateBenefitValidator = new AddStateBenefitValidator()
+    val validator: AddBenefitValidator = new AddBenefitValidator()
 
     MockCurrentDateTime.getCurrentDate
       .returns(DateTime.parse("2022-07-11", dateTimeFormatter))
@@ -107,7 +107,7 @@ class AddStateBenefitValidatorSpec extends UnitSpec {
       .returns(2021)
   }
 
-  "AddStateBenefitValidator" when {
+  "AddBenefitValidator" when {
     "running a validation" should {
       "return no errors for a valid request" in new Test {
         validator.validate(AddStateBenefitRawData(validNino, validTaxYear, validRawBody)) shouldBe Nil
