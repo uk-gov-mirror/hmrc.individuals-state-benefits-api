@@ -19,26 +19,24 @@ package v1.connectors
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.amendSample.AmendSampleRequest
+import v1.models.request.addBenefit.AddBenefitRequest
+import v1.models.response.AddBenefitResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AmendSampleConnector @Inject()(val http: HttpClient,
-                                     val appConfig: AppConfig) extends BaseDesConnector {
+class AddBenefitConnector @Inject()(val http: HttpClient,
+                                    val appConfig: AppConfig) extends BaseDesConnector {
 
-  def amendSample(request: AmendSampleRequest)(
+  def addBenefit(request: AddBenefitRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext): Future[DesOutcome[AddBenefitResponse]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
 
-    val nino = request.nino.nino
+    val nino = request.nino
     val taxYear = request.taxYear
 
-    put(
-      body = request.body,
-      DesUri[Unit](s"some-placeholder/template/$nino/$taxYear")
-    )
+    post(request.body, DesUri[AddBenefitResponse](s"income-tax/income/state-benefits/$nino/$taxYear/custom"))
   }
 }

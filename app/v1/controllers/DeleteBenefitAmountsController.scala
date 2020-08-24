@@ -24,9 +24,9 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import play.mvc.Http.MimeTypes
 import utils.Logging
 import v1.connectors.DesUri
-import v1.controllers.requestParsers.DeleteBenefitsRequestParser
+import v1.controllers.requestParsers.DeleteBenefitRequestParser
 import v1.models.errors._
-import v1.models.request.deleteBenefits.DeleteBenefitsRawData
+import v1.models.request.deleteBenefit.DeleteBenefitRawData
 import v1.services.{DeleteRetrieveService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteBenefitAmountsController @Inject()(val authService: EnrolmentsAuthService,
                                                val lookupService: MtdIdLookupService,
-                                               requestParser: DeleteBenefitsRequestParser,
+                                               requestParser: DeleteBenefitRequestParser,
                                                service: DeleteRetrieveService,
                                                cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
@@ -48,7 +48,7 @@ class DeleteBenefitAmountsController @Inject()(val authService: EnrolmentsAuthSe
   def deleteBenefitAmounts(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
 
-      val rawData: DeleteBenefitsRawData = DeleteBenefitsRawData(
+      val rawData: DeleteBenefitRawData = DeleteBenefitRawData(
         nino = nino,
         taxYear = taxYear,
         benefitId = benefitId

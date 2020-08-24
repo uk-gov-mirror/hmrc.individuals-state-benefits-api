@@ -19,26 +19,32 @@ package v1.connectors
 import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
-import v1.models.domain.DesTaxYear
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendSample.{AmendSampleRequest, AmendSampleRequestBody}
+import v1.models.request.updateBenefit.{UpdateBenefitRequest, UpdateBenefitRequestBody}
 
 import scala.concurrent.Future
 
-class AmendSampleConnectorSpec extends ConnectorSpec {
+class UpdateBenefitConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA123456A"
-  val desTaxYear: DesTaxYear = DesTaxYear.fromMtd(taxYear = "2018-19")
+  val taxYear: String = "2021-22"
+  val benefitId: String = "123e4567-e89b-12d3-a456-426614174000"
 
-  val request: AmendSampleRequest = AmendSampleRequest(
+  val updateBenefitRequestBody: UpdateBenefitRequestBody = UpdateBenefitRequestBody(
+    startDate = "2020-08-03",
+    endDate = Some("2020-12-03")
+  )
+
+  val request: UpdateBenefitRequest = UpdateBenefitRequest(
     nino = Nino(nino),
-    taxYear = desTaxYear,
-    body = AmendSampleRequestBody("someData")
+    taxYear = taxYear,
+    benefitId = benefitId,
+    body = updateBenefitRequestBody
   )
 
   class Test extends MockHttpClient with MockAppConfig {
 
-    val connector: AmendSampleConnector = new AmendSampleConnector(
+    val connector: UpdateBenefitConnector = new UpdateBenefitConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -53,19 +59,19 @@ class AmendSampleConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desEnvironment returns "des-environment"
   }
 
-  "AmendSampleConnector" when {
-    "amendSample" must {
-      "return a 204 status for a success scenario" in new Test {
+  "UpdateBenefitConnector" when {
+    "updateBenefit" must {
+      "return a 201 status for a success scenario" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         MockedHttpClient
           .put(
-            url = s"$baseUrl/some-placeholder/template/$nino/$desTaxYear",
+            url = s"$baseUrl/income-tax/income/state-benefits/$nino/$taxYear/custom/$benefitId",
             body = request.body,
             requiredHeaders = desRequestHeaders: _*
           ).returns(Future.successful(outcome))
 
-        await(connector.amendSample(request)) shouldBe outcome
+        await(connector.updateBenefit(request)) shouldBe outcome
       }
     }
   }

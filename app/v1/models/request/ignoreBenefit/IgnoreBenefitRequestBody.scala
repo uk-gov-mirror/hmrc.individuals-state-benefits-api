@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package v1.hateoas
+package v1.models.request.ignoreBenefit
 
-import config.AppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{Json, OFormat}
 
-trait UpdateHateoasResponses extends HateoasLinks {
+case class IgnoreBenefitRequestBody(ignoreBenefit: Boolean)
 
-  def updateBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
-
-    val links = Seq(
-      updateBenefit(appConfig, nino, taxYear, benefitId),
-      listBenefits(appConfig, nino, taxYear),
-      deleteBenefit(appConfig, nino, taxYear, benefitId),
-      updateBenefitAmounts(appConfig, nino, taxYear, benefitId)
-    )
-
-    Json.obj("links" -> links)
-  }
+object IgnoreBenefitRequestBody {
+  implicit val format: OFormat[IgnoreBenefitRequestBody] = Json.format[IgnoreBenefitRequestBody]
 }

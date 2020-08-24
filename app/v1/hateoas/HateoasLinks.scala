@@ -69,53 +69,52 @@ trait HateoasLinks {
     )
 
   // State benefits Hateoas
-  def addStateBenefits(appConfig: AppConfig, nino: String, taxYear: String): Link =
+  def addBenefit(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(
       href = baseUri(appConfig, nino, taxYear),
       method = POST,
       rel = ADD_STATE_BENEFIT
     )
 
-  def updateStateBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
+  def updateBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
       href = uriWithId(appConfig, nino, taxYear, benefitId),
       method = PUT,
       rel = UPDATE_STATE_BENEFIT
     )
 
-  def deleteStateBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
+  def deleteBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
       href = uriWithId(appConfig, nino, taxYear, benefitId),
       method = DELETE,
       rel = DELETE_STATE_BENEFIT
     )
 
-  def listStateBenefits(appConfig: AppConfig, nino: String, taxYear: String): Link =
+  def listBenefits(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(
       href = baseUri(appConfig, nino, taxYear),
       method = GET,
       rel = SELF
     )
 
-  def updateStateBenefitAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
+  def updateBenefitAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
       href = uriWithAmounts(appConfig, nino, taxYear, benefitId),
       method = PUT,
       rel = UPDATE_STATE_BENEFIT_AMOUNTS
     )
 
-  def deleteStateBenefitAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
+  def deleteBenefitAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
       href = uriWithAmounts(appConfig, nino, taxYear, benefitId),
       method = DELETE,
       rel = DELETE_STATE_BENEFIT_AMOUNTS
     )
 
-  def ignoreStateBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
+  def ignoreBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
       href = s"${uriWithId(appConfig, nino, taxYear, benefitId)}/ignore",
       method = PUT,
       rel = IGNORE_STATE_BENEFIT
     )
-
 }

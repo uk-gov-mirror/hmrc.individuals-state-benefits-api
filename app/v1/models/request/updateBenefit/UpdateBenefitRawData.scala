@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package v1.hateoas
+package v1.models.request.updateBenefit
 
-import config.AppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.AnyContentAsJson
+import v1.models.request.RawData
 
-trait UpdateHateoasResponses extends HateoasLinks {
-
-  def updateBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
-
-    val links = Seq(
-      updateBenefit(appConfig, nino, taxYear, benefitId),
-      listBenefits(appConfig, nino, taxYear),
-      deleteBenefit(appConfig, nino, taxYear, benefitId),
-      updateBenefitAmounts(appConfig, nino, taxYear, benefitId)
-    )
-
-    Json.obj("links" -> links)
-  }
-}
+case class UpdateBenefitRawData(nino: String, taxYear: String, benefitId: String, body: AnyContentAsJson) extends RawData

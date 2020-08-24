@@ -31,6 +31,7 @@ trait MockAuditService extends MockFactory {
   val mockAuditService: AuditService = stub[AuditService]
 
   object MockedAuditService {
+
     def verifyAuditEvent[T](event: AuditEvent[T]): CallHandler[Future[AuditResult]] = {
       (mockAuditService.auditEvent(_: AuditEvent[T])(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
         .verify(event, *, *, *)

@@ -22,7 +22,7 @@ import mocks.MockAppConfig
 import support.UnitSpec
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.hateoas.{HateoasData, HateoasWrapper, Link}
-import v1.models.response.{AddStateBenefitsHateoasData, AddStateBenefitsResponse}
+import v1.models.response.{AddBenefitHateoasData, AddBenefitResponse}
 
 class HateoasFactorySpec extends UnitSpec with MockAppConfig {
 
@@ -40,8 +40,8 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
   val taxYear: String = "2020-21"
   val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  val addStateBenefitResponse: AddStateBenefitsResponse = AddStateBenefitsResponse(benefitId)
-  val addStateBenefitsHateoasData: AddStateBenefitsHateoasData = AddStateBenefitsHateoasData(nino, taxYear, benefitId)
+  val addStateBenefitResponse: AddBenefitResponse = AddBenefitResponse(benefitId)
+  val addStateBenefitsHateoasData: AddBenefitHateoasData = AddBenefitHateoasData(nino, taxYear, benefitId)
 
   class Test {
     MockedAppConfig.apiGatewayContext.returns("context").anyNumberOfTimes
@@ -67,7 +67,7 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
 
     "use the add state benefits HateoasData specific links" in new Test {
       hateoasFactory.wrap(addStateBenefitResponse, addStateBenefitsHateoasData) shouldBe
-        HateoasWrapper(AddStateBenefitsResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253"),List(Link("/context/state-benefits/AA123456A/2020-21",GET,"self"),
+        HateoasWrapper(AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253"),List(Link("/context/state-benefits/AA123456A/2020-21",GET,"self"),
           Link("/context/state-benefits/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",PUT,"update-state-benefit"),
           Link("/context/state-benefits/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",DELETE,"delete-state-benefit")))
     }

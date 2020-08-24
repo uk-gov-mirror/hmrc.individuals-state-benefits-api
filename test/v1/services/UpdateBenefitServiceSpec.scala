@@ -18,47 +18,49 @@ package v1.services
 
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.EndpointLogContext
-import v1.mocks.connectors.MockAmendSampleConnector
-import v1.models.domain.DesTaxYear
+import v1.mocks.connectors.MockUpdateBenefitConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.amendSample.{AmendSampleRequest, AmendSampleRequestBody}
+import v1.models.request.updateBenefit.{UpdateBenefitRequest, UpdateBenefitRequestBody}
 
 import scala.concurrent.Future
 
-class AmendSampleServiceSpec extends ServiceSpec {
+class UpdateBenefitServiceSpec extends ServiceSpec {
 
   private val nino = "AA123456A"
-  private val taxYear = "2017-18"
+  private val taxYear = "2021-22"
+  private val benefitId = "123e4567-e89b-12d3-a456-426614174000"
   private val correlationId = "X-123"
 
-  private val requestBody = AmendSampleRequestBody(
-    data = "someData"
+  val updateBenefitRequestBody: UpdateBenefitRequestBody = UpdateBenefitRequestBody(
+    startDate = "2020-08-03",
+    endDate = Some("2020-12-03")
   )
 
-  private val requestData = AmendSampleRequest(
+  val requestData: UpdateBenefitRequest = UpdateBenefitRequest(
     nino = Nino(nino),
-    taxYear = DesTaxYear.fromMtd(taxYear),
-    body = requestBody
+    taxYear = taxYear,
+    benefitId = benefitId,
+    body = updateBenefitRequestBody
   )
 
-  trait Test extends MockAmendSampleConnector {
+  trait Test extends MockUpdateBenefitConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service = new AmendSampleService(
-      connector = mockAmendSampleConnector
+    val service: UpdateBenefitService = new UpdateBenefitService(
+      connector = mockUpdateBenefitConnector
     )
   }
 
-  "AmendSampleService" when {
-    "amendSample" must {
+  "UpdateBenefitService" when {
+    "updateBenefit" must {
       "return correct result for a success" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockAmendSampleConnector.amendSample(requestData)
+        MockUpdateBenefitConnector.updateBenefit(requestData)
           .returns(Future.successful(outcome))
 
-        await(service.amendSample(requestData)) shouldBe outcome
+        await(service.updateBenefit(requestData)) shouldBe outcome
       }
     }
 
@@ -67,16 +69,23 @@ class AmendSampleServiceSpec extends ServiceSpec {
       def serviceError(desErrorCode: String, error: MtdError): Unit =
         s"a $desErrorCode error is returned from the service" in new Test {
 
-          MockAmendSampleConnector.amendSample(requestData)
+          MockUpdateBenefitConnector.updateBenefit(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.amendSample(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.updateBenefit(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
         }
 
       val input = Seq(
-        ("INVALID_NINO", NinoFormatError),
+        ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
         ("INVALID_TAX_YEAR", TaxYearFormatError),
-        ("NOT_FOUND", NotFoundError),
+        ("INVALID_BENEFIT_ID", BenefitIdFormatError),
+        ("INVALID_CORRELATIONID", DownstreamError),
+        ("INVALID_PAYLOAD", DownstreamError),
+        ("UPDATE_FORBIDDEN", RuleUpdateForbiddenError),
+        ("NO_DATA_FOUND", NotFoundError),
+        ("INVALID_REQUEST_TAX_YEAR", RuleTaxYearNotEndedError),
+        ("INVALID_START_DATE", RuleStartDateAfterTaxYearEndError),
+        ("INVALID_CESSATION_DATE", RuleEndDateBeforeTaxYearStartError),
         ("SERVER_ERROR", DownstreamError),
         ("SERVICE_UNAVAILABLE", DownstreamError)
       )

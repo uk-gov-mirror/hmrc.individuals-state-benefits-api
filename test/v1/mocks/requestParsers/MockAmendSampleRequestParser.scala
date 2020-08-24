@@ -27,6 +27,7 @@ trait MockAmendSampleRequestParser extends MockFactory {
   val mockAmendSampleRequestParser: AmendSampleRequestParser = mock[AmendSampleRequestParser]
 
   object MockAmendSampleRequestParser {
+
     def parse(data: AmendSampleRawData): CallHandler[Either[ErrorWrapper, AmendSampleRequest]] = {
       (mockAmendSampleRequestParser.parseRequest(_: AmendSampleRawData)).expects(data)
     }

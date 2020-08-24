@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package v1.mocks.services
+package v1.mocks.connectors
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.MtdIdLookupOutcome
-import v1.services.MtdIdLookupService
+import v1.connectors.{AddBenefitConnector, DesOutcome}
+import v1.models.request.addBenefit.AddBenefitRequest
+import v1.models.response.AddBenefitResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockMtdIdLookupService extends MockFactory {
+trait MockAddBenefitConnector extends MockFactory {
 
-  val mockMtdIdLookupService: MtdIdLookupService = mock[MtdIdLookupService]
+  val mockAddBenefitConnector: AddBenefitConnector = mock[AddBenefitConnector]
 
-  object MockedMtdIdLookupService {
+  object MockAddBenefitConnector {
 
-    def lookup(nino: String): CallHandler[Future[MtdIdLookupOutcome]] = {
-      (mockMtdIdLookupService.lookup(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(nino, *, *)
+    def addBenefit(request: AddBenefitRequest): CallHandler[Future[DesOutcome[AddBenefitResponse]]] = {
+      (mockAddBenefitConnector
+        .addBenefit(_: AddBenefitRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(request, *, *)
     }
   }
 

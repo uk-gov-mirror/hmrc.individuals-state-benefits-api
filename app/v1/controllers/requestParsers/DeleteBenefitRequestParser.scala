@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package v1.hateoas
+package v1.controllers.requestParsers
 
-import config.AppConfig
-import play.api.libs.json.{JsValue, Json}
+import javax.inject.Inject
+import uk.gov.hmrc.domain.Nino
+import v1.controllers.requestParsers.validators.DeleteBenefitValidator
+import v1.models.request.deleteBenefit.{DeleteBenefitRawData, DeleteBenefitRequest}
 
-trait UpdateHateoasResponses extends HateoasLinks {
+class DeleteBenefitRequestParser @Inject()(val validator: DeleteBenefitValidator)
+  extends RequestParser[DeleteBenefitRawData, DeleteBenefitRequest] {
 
-  def updateBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
-
-    val links = Seq(
-      updateBenefit(appConfig, nino, taxYear, benefitId),
-      listBenefits(appConfig, nino, taxYear),
-      deleteBenefit(appConfig, nino, taxYear, benefitId),
-      updateBenefitAmounts(appConfig, nino, taxYear, benefitId)
-    )
-
-    Json.obj("links" -> links)
-  }
+  override protected def requestFor(data: DeleteBenefitRawData): DeleteBenefitRequest =
+    DeleteBenefitRequest(Nino(data.nino), data.taxYear, data.benefitId)
 }

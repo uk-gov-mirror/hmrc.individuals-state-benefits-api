@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package v1.mocks.validators
+package v1.mocks.requestParsers
 
-import org.scalamock.handlers.CallHandler1
+import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.controllers.requestParsers.validators.AmendSampleValidator
-import v1.models.errors.MtdError
-import v1.models.request.amendSample.AmendSampleRawData
+import v1.controllers.requestParsers.DeleteBenefitRequestParser
+import v1.models.errors.ErrorWrapper
+import v1.models.request.deleteBenefit.{DeleteBenefitRawData, DeleteBenefitRequest}
 
-trait MockAmendSampleValidator extends MockFactory {
+trait MockDeleteBenefitRequestParser extends MockFactory {
 
-  val mockAmendSampleValidator: AmendSampleValidator = mock[AmendSampleValidator]
+  val mockDeleteBenefitRequestParser: DeleteBenefitRequestParser = mock[DeleteBenefitRequestParser]
 
-  object MockAmendSampleValidator {
+  object MockDeleteBenefitRequestParser {
 
-    def validate(data: AmendSampleRawData): CallHandler1[AmendSampleRawData, List[MtdError]] = {
-      (mockAmendSampleValidator
-        .validate(_: AmendSampleRawData))
-        .expects(data)
+    def parse(data: DeleteBenefitRawData): CallHandler[Either[ErrorWrapper, DeleteBenefitRequest]] = {
+      (mockDeleteBenefitRequestParser.parseRequest(_: DeleteBenefitRawData)).expects(data)
     }
   }
 

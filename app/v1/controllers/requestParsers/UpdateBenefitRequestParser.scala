@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package v1.models.request.amendSample
+package v1.controllers.requestParsers
 
+import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
-import v1.models.domain.DesTaxYear
+import v1.controllers.requestParsers.validators.UpdateBenefitValidator
+import v1.models.request.updateBenefit.{UpdateBenefitRawData, UpdateBenefitRequest, UpdateBenefitRequestBody}
 
-case class AmendSampleRequest(nino: Nino, taxYear: DesTaxYear, body: AmendSampleRequestBody)
+class UpdateBenefitRequestParser @Inject()(val validator: UpdateBenefitValidator)
+  extends RequestParser[UpdateBenefitRawData, UpdateBenefitRequest] {
+
+  override protected def requestFor(data: UpdateBenefitRawData): UpdateBenefitRequest =
+    UpdateBenefitRequest(Nino(data.nino), data.taxYear, data.benefitId, data.body.json.as[UpdateBenefitRequestBody])
+}

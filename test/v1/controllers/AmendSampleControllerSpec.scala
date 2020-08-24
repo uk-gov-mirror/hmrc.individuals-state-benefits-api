@@ -65,7 +65,7 @@ class AmendSampleControllerSpec
 
   val requestData = AmendSampleRequest(
     nino = Nino(nino),
-    desTaxYear = DesTaxYear.fromMtd(taxYear),
+    taxYear = DesTaxYear.fromMtd(taxYear),
     body = requestBody
   )
 
