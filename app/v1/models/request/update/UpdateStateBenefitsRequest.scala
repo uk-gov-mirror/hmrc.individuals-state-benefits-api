@@ -18,4 +18,4 @@ package v1.models.request.update
 
 import uk.gov.hmrc.domain.Nino
 
-case class UpdateStateBenefitsRequest(nino: Nino, desTaxYear: String, benefitId: String, body: UpdateStateBenefitsRequestBody)
+case class UpdateStateBenefitsRequest(nino: Nino, taxYear: String, benefitId: String, body: UpdateStateBenefitsRequestBody)

@@ -55,7 +55,7 @@ class UpdateStateBenefitsRequestParserSpec extends UnitSpec {
 
   private val updateStateBenefitsRequest = UpdateStateBenefitsRequest(
     nino = Nino(nino),
-    desTaxYear = taxYear,
+    taxYear = taxYear,
     benefitId = benefitId,
     body = updateStateBenefitsRequestBody
   )

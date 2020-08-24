@@ -27,7 +27,7 @@ object RelType {
   val DELETE_STATE_BENEFIT = "delete-state-benefit"
   val UPDATE_STATE_BENEFIT_AMOUNTS = "update-state-benefit-amounts"
   val DELETE_STATE_BENEFIT_AMOUNTS = "delete-state-benefit-amounts"
-  val IGORNE_STATE_BENEFIT = "ignore-state-benefit"
+  val IGNORE_STATE_BENEFIT = "ignore-state-benefit"
 
   val SELF = "self"
 }

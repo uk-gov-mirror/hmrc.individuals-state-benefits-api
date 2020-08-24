@@ -115,7 +115,7 @@ trait HateoasLinks {
     Link(
       href = s"${uriWithId(appConfig, nino, taxYear, benefitId)}/ignore",
       method = PUT,
-      rel = IGORNE_STATE_BENEFIT
+      rel = IGNORE_STATE_BENEFIT
     )
 
 }
