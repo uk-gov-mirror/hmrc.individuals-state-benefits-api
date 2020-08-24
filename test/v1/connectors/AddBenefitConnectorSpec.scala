@@ -32,7 +32,7 @@ class AddBenefitConnectorSpec extends ConnectorSpec {
   val taxYear: String = "2021-22"
 
   val addBenefitRequestBody: AddBenefitRequestBody = AddBenefitRequestBody(
-    benefitType = BenefitType.incapacityBenefit,
+    benefitType = BenefitType.incapacityBenefit.toString,
     startDate = "2020-08-03",
     endDate = Some("2020-12-03")
   )

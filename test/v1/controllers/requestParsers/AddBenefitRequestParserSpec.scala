@@ -22,7 +22,7 @@ import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockAddBenefitValidator
 import v1.models.errors._
-import v1.models.request.addStateBenefit.{AddStateBenefitBody, AddStateBenefitRawData, AddStateBenefitRequest}
+import v1.models.request.addBenefit._
 
 class AddBenefitRequestParserSpec extends UnitSpec {
 
@@ -45,15 +45,15 @@ class AddBenefitRequestParserSpec extends UnitSpec {
 
   private val validRawBody = AnyContentAsJson(validRequestBodyJson)
 
-  private val addBenefitRawData = AddStateBenefitRawData(
+  private val addBenefitRawData = AddBenefitRawData(
     nino = nino,
     taxYear = taxYear,
     body = validRawBody
   )
 
-  private val addBenefitBody = AddStateBenefitBody("otherStateBenefits", startDate, Some(endDate))
+  private val addBenefitBody = AddBenefitRequestBody("otherStateBenefits", startDate, Some(endDate))
 
-  private val addBenefitRequest = AddStateBenefitRequest(
+  private val addBenefitRequest = AddBenefitRequest(
     nino = Nino(nino),
     taxYear = taxYear,
     body = addBenefitBody

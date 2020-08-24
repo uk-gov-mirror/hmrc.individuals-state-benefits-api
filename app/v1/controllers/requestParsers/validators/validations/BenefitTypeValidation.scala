@@ -21,7 +21,7 @@ import v1.models.errors.{BenefitTypeFormatError, MtdError}
 
 object BenefitTypeValidation {
 
-  private val benefitTypeEnumList= List(BenefitType.statePension, BenefitType.statePensionLumpSum,
+  private val benefitTypeEnumList = List(BenefitType.statePension, BenefitType.statePensionLumpSum,
     BenefitType.employmentSupportAllowance, BenefitType.jobSeekersAllowance, BenefitType.bereavementAllowance,
     BenefitType.otherStateBenefits, BenefitType.incapacityBenefit).map(_.toString)
 

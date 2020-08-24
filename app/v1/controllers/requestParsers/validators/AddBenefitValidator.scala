@@ -21,35 +21,35 @@ import javax.inject.Inject
 import utils.CurrentDateTime
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
-import v1.models.request.addStateBenefit.{AddStateBenefitBody, AddStateBenefitRawData}
+import v1.models.request.addBenefit.{AddBenefitRawData, AddBenefitRequestBody}
 
-class AddBenefitValidator @Inject()(implicit currentDateTime: CurrentDateTime, appConfig: AppConfig) extends Validator[AddStateBenefitRawData] {
+class AddBenefitValidator @Inject()(implicit currentDateTime: CurrentDateTime, appConfig: AppConfig) extends Validator[AddBenefitRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidation, bodyParameterValidation)
 
-  private def parameterFormatValidation: AddStateBenefitRawData => List[List[MtdError]] = (data: AddStateBenefitRawData) => {
+  private def parameterFormatValidation: AddBenefitRawData => List[List[MtdError]] = (data: AddBenefitRawData) => {
     List(
       NinoValidation.validate(data.nino),
       TaxYearValidation.validate(data.taxYear),
     )
   }
 
-  private def parameterRuleValidation: AddStateBenefitRawData => List[List[MtdError]] = { data =>
+  private def parameterRuleValidation: AddBenefitRawData => List[List[MtdError]] = { data =>
     List(
       TaxYearNotSupportedValidation.validate(data.taxYear),
       TaxYearNotEndedValidation.validate(data.taxYear)
     )
   }
 
-  private def bodyFormatValidation: AddStateBenefitRawData => List[List[MtdError]] = { data =>
+  private def bodyFormatValidation: AddBenefitRawData => List[List[MtdError]] = { data =>
 
     List(
-      JsonFormatValidation.validate[AddStateBenefitBody](data.body.json)
+      JsonFormatValidation.validate[AddBenefitRequestBody](data.body.json)
     )
   }
 
-  private def bodyParameterValidation: AddStateBenefitRawData => List[List[MtdError]] = { data =>
-    val body = data.body.json.as[AddStateBenefitBody]
+  private def bodyParameterValidation: AddBenefitRawData => List[List[MtdError]] = { data =>
+    val body = data.body.json.as[AddBenefitRequestBody]
 
     List(
       StateBenefitsDateValidation.validate(body.startDate, body.endDate, data.taxYear),
@@ -57,7 +57,7 @@ class AddBenefitValidator @Inject()(implicit currentDateTime: CurrentDateTime, a
     )
   }
 
-  override def validate(data: AddStateBenefitRawData): List[MtdError] = {
+  override def validate(data: AddBenefitRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }

@@ -17,19 +17,17 @@
 package v1.models.request.addBenefit
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
-import v1.models.domain.BenefitType
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
-case class AddBenefitRequestBody(benefitType: BenefitType, startDate: String, endDate: Option[String])
+case class AddBenefitRequestBody(benefitType: String, startDate: String, endDate: Option[String])
 
 object AddBenefitRequestBody {
 
   implicit val reads: Reads[AddBenefitRequestBody] = (
-    (JsPath \ "benefitType").read[BenefitType] and
+    (JsPath \ "benefitType").read[String] and
       (JsPath \ "startDate").read[String] and
       (JsPath \ "endDate").readNullable[String]
     ) (AddBenefitRequestBody.apply _)
 
-
-  implicit val writes: Writes[AddBenefitRequestBody] = Json.writes[AddBenefitRequestBody]
+  implicit val writes: OWrites[AddBenefitRequestBody] = Json.writes[AddBenefitRequestBody]
 }

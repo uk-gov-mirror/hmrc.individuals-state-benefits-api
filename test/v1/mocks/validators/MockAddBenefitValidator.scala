@@ -20,8 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.AddBenefitValidator
 import v1.models.errors.MtdError
-import v1.models.request.addStateBenefit.AddStateBenefitRawData
-
+import v1.models.request.addBenefit.AddBenefitRawData
 
 trait MockAddBenefitValidator extends MockFactory {
 
@@ -29,9 +28,9 @@ trait MockAddBenefitValidator extends MockFactory {
 
   object MockAddBenefitValidator {
 
-    def validate(data: AddStateBenefitRawData): CallHandler1[AddStateBenefitRawData, List[MtdError]] = {
+    def validate(data: AddBenefitRawData): CallHandler1[AddBenefitRawData, List[MtdError]] = {
       (mockAddBenefitValidator
-        .validate(_: AddStateBenefitRawData))
+        .validate(_: AddBenefitRawData))
         .expects(data)
     }
   }
