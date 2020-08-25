@@ -62,6 +62,9 @@ object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_B
 object RuleDeleteForbiddenError extends MtdError("RULE_DELETE_FORBIDDEN", "A deletion of a HMRC held state benefit is not permitted")
 
 object RuleUpdateForbiddenError extends MtdError("RULE_UPDATE_FORBIDDEN", "An update for a HMRC held benefit is not permitted")
+
+object RuleIgnoreForbiddenError extends MtdError("RULE_IGNORE_FORBIDDEN", "A customer added state benefit cannot be ignored")
+
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")
 

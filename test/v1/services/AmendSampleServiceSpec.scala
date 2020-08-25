@@ -30,7 +30,6 @@ class AmendSampleServiceSpec extends ServiceSpec {
 
   private val nino = "AA123456A"
   private val taxYear = "2017-18"
-  private val correlationId = "X-123"
 
   private val requestBody = AmendSampleRequestBody(
     data = "someData"

@@ -30,7 +30,6 @@ class UpdateBenefitServiceSpec extends ServiceSpec {
   private val nino = "AA123456A"
   private val taxYear = "2021-22"
   private val benefitId = "123e4567-e89b-12d3-a456-426614174000"
-  private val correlationId = "X-123"
 
   val updateBenefitRequestBody: UpdateBenefitRequestBody = UpdateBenefitRequestBody(
     startDate = "2020-08-03",

@@ -18,51 +18,39 @@ package v1.services
 
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.EndpointLogContext
-import v1.mocks.connectors.MockAddBenefitConnector
-import v1.models.domain.BenefitType
+import v1.mocks.connectors.MockIgnoreBenefitConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.addBenefit.{AddBenefitRequest, AddBenefitRequestBody}
-import v1.models.response.AddBenefitResponse
+import v1.models.request.ignoreBenefit.{IgnoreBenefitRequest, IgnoreBenefitRequestBody}
 
 import scala.concurrent.Future
 
-class AddBenefitServiceSpec extends ServiceSpec {
+class IgnoreBenefitServiceSpec extends ServiceSpec {
 
-  private val nino = "AA112233A"
-  private val taxYear = "2021-22"
+  val nino: String = "AA111111A"
+  val taxYear: String = "2019-20"
+  val benefitId: String = "123e4567-e89b-12d3-a456-426614174000"
 
-  val addBenefitRequestBody: AddBenefitRequestBody = AddBenefitRequestBody(
-    benefitType = BenefitType.incapacityBenefit.toString,
-    startDate = "2020-08-03",
-    endDate = Some("2020-12-03")
-  )
+  val requestBody: IgnoreBenefitRequestBody = IgnoreBenefitRequestBody(ignoreBenefit = true)
+  val request: IgnoreBenefitRequest = IgnoreBenefitRequest(Nino(nino), taxYear, benefitId, requestBody)
 
-  val request: AddBenefitRequest = AddBenefitRequest(
-    nino = Nino(nino),
-    taxYear = taxYear,
-    body = addBenefitRequestBody
-  )
-
-  val response: AddBenefitResponse = AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253")
-
-  trait Test extends MockAddBenefitConnector{
+  trait Test extends MockIgnoreBenefitConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service: AddBenefitService = new AddBenefitService(
-      connector = mockAddBenefitConnector
+    val service: IgnoreBenefitService = new IgnoreBenefitService(
+      connector = mockIgnoreBenefitConnector
     )
   }
 
-  "AddBenefitService" when {
-    "addBenefit" must {
+  "IgnoreBenefitService" when {
+    "ignoreBenefit" must {
       "return correct result for a success" in new Test {
-        val outcome = Right(ResponseWrapper(correlationId, response))
+        val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockAddBenefitConnector.addBenefit(request)
+        MockIgnoreBenefitConnector.ignoreBenefit(request)
           .returns(Future.successful(outcome))
 
-        await(service.addBenefit(request)) shouldBe outcome
+        await(service.ignoreBenefit(request)) shouldBe outcome
       }
 
       "map errors according to spec" when {
@@ -70,21 +58,20 @@ class AddBenefitServiceSpec extends ServiceSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockAddBenefitConnector.addBenefit(request)
+            MockIgnoreBenefitConnector.ignoreBenefit(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.addBenefit(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.ignoreBenefit(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
           }
 
         val input = Seq(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
+          ("INVALID_BENEFIT_ID", NotFoundError),
           ("INVALID_CORRELATIONID", DownstreamError),
           ("INVALID_PAYLOAD", DownstreamError),
-          ("INVALID_REQUEST_TAX_YEAR", RuleTaxYearNotSupportedError),
+          ("IGNORE_FORBIDDEN", RuleIgnoreForbiddenError),
           ("NOT_SUPPORTED_TAX_YEAR", RuleTaxYearNotEndedError),
-          ("INVALID_START_DATE", RuleStartDateAfterTaxYearEndError),
-          ("INVALID_CESSATION_DATE", RuleEndDateBeforeTaxYearStartError),
           ("SERVER_ERROR", DownstreamError),
           ("SERVICE_UNAVAILABLE", DownstreamError)
         )
