@@ -14,32 +14,29 @@
       "type": "array",
       "items": {
         "type": "object",
-        "description": "A list of endpoint links that indicate possible actions related to the current resource",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
         "properties": {
           "href": {
-            "description": "The relative url of the endpoint",
+            "description": "The relative url of the endpoint.",
             "type": "string",
-            "example": "/individuals/state-benefits/{nino}/{taxYear}/{benefitId}"
+            "example": "/individuals/state-benefits/{nino}/{taxYear}"
           },
           "rel": {
-            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
             "type": "string",
             "enum": [
               "self",
-              "list-state-benefits",
-              "add-state-benefit",
-              "delete-state-benefit",
-              "ignore-state-benefit"
+              "update-state-benefit",
+              "delete-state-benefit"
             ]
           },
           "method": {
-            "description": "The HTTP method type for the endpoint",
+            "description": "The HTTP method type for the endpoint.",
             "type": "string",
             "enum": [
               "GET",
               "PUT",
-              "DELETE",
-              "POST"
+              "DELETE"
             ]
           }
         },
