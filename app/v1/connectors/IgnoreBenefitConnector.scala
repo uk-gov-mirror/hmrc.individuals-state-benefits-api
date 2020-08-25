@@ -18,6 +18,7 @@ package v1.connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
+import play.api.http.Status
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
 
@@ -32,6 +33,8 @@ class IgnoreBenefitConnector @Inject()(val http: HttpClient,
     ec: ExecutionContext): Future[DesOutcome[Unit]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
+
+    implicit val successCode: SuccessCode = SuccessCode(Status.CREATED)
 
     val nino = request.nino
     val taxYear = request.taxYear
