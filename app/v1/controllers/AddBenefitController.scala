@@ -18,7 +18,6 @@ package v1.controllers
 
 import cats.data.EitherT
 import cats.implicits._
-import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
@@ -34,12 +33,12 @@ import v1.services.{AddBenefitService, EnrolmentsAuthService, MtdIdLookupService
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AddStateBenefitController @Inject()(val authService: EnrolmentsAuthService,
-                                          val lookupService: MtdIdLookupService,
-                                          requestParser: AddBenefitRequestParser,
-                                          service: AddBenefitService,
-                                          hateoasFactory: HateoasFactory,
-                                          cc: ControllerComponents)(implicit ec: ExecutionContext)
+class AddBenefitController @Inject()(val authService: EnrolmentsAuthService,
+                                     val lookupService: MtdIdLookupService,
+                                     requestParser: AddBenefitRequestParser,
+                                     service: AddBenefitService,
+                                     hateoasFactory: HateoasFactory,
+                                     cc: ControllerComponents)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =

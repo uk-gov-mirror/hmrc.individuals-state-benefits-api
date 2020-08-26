@@ -28,7 +28,7 @@ import v1.services.AddBenefitService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAddStateBenefitService extends MockFactory {
+trait MockAddBenefitService extends MockFactory {
 
   val mockAddStateBenefitService: AddBenefitService = mock[AddBenefitService]
 

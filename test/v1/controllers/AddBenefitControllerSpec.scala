@@ -22,9 +22,9 @@ import play.api.mvc.{AnyContentAsJson, Result}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.hateoas.HateoasLinks
-import v1.mocks.MockAddStateBenefitService
+import v1.mocks.MockAddBenefitService
 import v1.mocks.hateoas.MockHateoasFactory
-import v1.mocks.requestParsers.MockAddStateBenefitRequestParser
+import v1.mocks.requestParsers.MockAddBenefitRequestParser
 import v1.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.domain.BenefitType
 import v1.models.errors._
@@ -37,23 +37,23 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class AddStateBenefitControllerSpec
+class AddBenefitControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAppConfig
-    with MockAddStateBenefitService
-    with MockAddStateBenefitRequestParser
+    with MockAddBenefitService
+    with MockAddBenefitRequestParser
     with MockHateoasFactory
     with HateoasLinks {
 
   trait Test {
     val hc = HeaderCarrier()
 
-    val controller = new AddStateBenefitController(
+    val controller = new AddBenefitController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      requestParser = mockAddStateBenefitRequestParser,
+      requestParser = mockAddBenefitRequestParser,
       service = mockAddStateBenefitService,
       hateoasFactory = mockHateoasFactory,
       cc = cc
@@ -132,11 +132,11 @@ class AddStateBenefitControllerSpec
     """.stripMargin
   )
 
-  "AddStateBenefitController" should {
+  "AddBenefitController" should {
     "return OK" when {
       "happy path" in new Test {
 
-        MockAddStateBenefitRequestParser
+        MockAddBenefitRequestParser
           .parse(rawData)
           .returns(Right(requestData))
 
@@ -161,7 +161,7 @@ class AddStateBenefitControllerSpec
         def errorsFromParserTester(error: MtdError, expectedStatus: Int): Unit = {
           s"a ${error.code} error is returned from the parser" in new Test {
 
-            MockAddStateBenefitRequestParser
+            MockAddBenefitRequestParser
               .parse(rawData)
               .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
 
@@ -196,7 +196,7 @@ class AddStateBenefitControllerSpec
         def serviceErrors(mtdError: MtdError, expectedStatus: Int): Unit = {
           s"a $mtdError error is returned from the service" in new Test {
 
-            MockAddStateBenefitRequestParser
+            MockAddBenefitRequestParser
               .parse(rawData)
               .returns(Right(requestData))
 

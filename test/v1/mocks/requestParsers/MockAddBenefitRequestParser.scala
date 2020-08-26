@@ -22,13 +22,13 @@ import v1.controllers.requestParsers.AddBenefitRequestParser
 import v1.models.errors.ErrorWrapper
 import v1.models.request.addBenefit.{AddBenefitRawData, AddBenefitRequest}
 
-trait MockAddStateBenefitRequestParser extends MockFactory {
+trait MockAddBenefitRequestParser extends MockFactory {
 
-  val mockAddStateBenefitRequestParser: AddBenefitRequestParser = mock[AddBenefitRequestParser]
+  val mockAddBenefitRequestParser: AddBenefitRequestParser = mock[AddBenefitRequestParser]
 
-  object MockAddStateBenefitRequestParser {
+  object MockAddBenefitRequestParser {
     def parse(data: AddBenefitRawData): CallHandler[Either[ErrorWrapper, AddBenefitRequest]] = {
-      (mockAddStateBenefitRequestParser.parseRequest(_: AddBenefitRawData)).expects(data)
+      (mockAddBenefitRequestParser.parseRequest(_: AddBenefitRawData)).expects(data)
     }
   }
 

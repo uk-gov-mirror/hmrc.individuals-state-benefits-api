@@ -52,8 +52,8 @@ class AddBenefitValidator @Inject()(implicit currentDateTime: CurrentDateTime, a
     val body = data.body.json.as[AddBenefitRequestBody]
 
     List(
-      StateBenefitsDateValidation.validate(body.startDate, body.endDate, data.taxYear),
-      BenefitTypeValidation.validate(body.benefitType)
+      BenefitTypeValidation.validate(body.benefitType),
+      StateBenefitsDateValidation.validate(body.startDate, body.endDate, data.taxYear)
     )
   }
 

@@ -8,5 +8,5 @@ DELETE     /:nino/:taxYear/:benefitId              v1.controllers.DeleteBenefitC
 
 PUT        /:nino/:taxYear/:benefitId              v1.controllers.UpdateBenefitController.update(nino: String, taxYear: String, benefitId: String)
 
-POST       /:nino/:taxYear                         v1.controllers.AddStateBenefitController.addStateBenefit(nino: String, taxYear: String)
+POST       /:nino/:taxYear                         v1.controllers.AddBenefitController.addStateBenefit(nino: String, taxYear: String)
 
