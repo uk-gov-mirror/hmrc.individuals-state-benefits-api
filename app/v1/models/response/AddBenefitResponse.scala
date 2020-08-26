@@ -17,7 +17,7 @@
 package v1.models.response
 
 import config.AppConfig
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Json, OFormat}
 import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
@@ -25,7 +25,7 @@ case class AddBenefitResponse(benefitId: String)
 
 object AddBenefitResponse extends HateoasLinks {
 
-  implicit val format: Format[AddBenefitResponse] = Json.format[AddBenefitResponse]
+  implicit val format: OFormat[AddBenefitResponse] = Json.format[AddBenefitResponse]
 
   implicit object AddBenefitLinksFactory extends HateoasLinksFactory[AddBenefitResponse, AddBenefitHateoasData] {
     override def links(appConfig: AppConfig, data: AddBenefitHateoasData): Seq[Link] = {

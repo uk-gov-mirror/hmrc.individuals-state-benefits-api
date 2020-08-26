@@ -29,13 +29,13 @@ trait HateoasLinks {
 
   // URI with ID
   private def uriWithId(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
-    s"/${appConfig.apiGatewayContext}/state-benefits/$nino/$taxYear/$benefitId"
+    s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId"
 
   private def baseUri(appConfig: AppConfig, nino: String, taxYear: String) =
-    s"/${appConfig.apiGatewayContext}/state-benefits/$nino/$taxYear"
+    s"/${appConfig.apiGatewayContext}/$nino/$taxYear"
 
   private def uriWithAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
-    s"/${appConfig.apiGatewayContext}/state-benefits/$nino/$taxYear/$benefitId/amounts"
+    s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId/amounts"
 
   //Sample links
   def amendSample(appConfig: AppConfig, nino: String, taxYear: String): Link =
