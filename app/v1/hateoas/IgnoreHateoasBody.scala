@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package v1.models.hateoas
+package v1.hateoas
 
-import support.UnitSpec
-import utils.enums.EnumJsonSpecSupport
-import v1.models.hateoas.Method._
+import config.AppConfig
+import play.api.libs.json.{JsValue, Json}
 
-class MethodSpec extends UnitSpec with EnumJsonSpecSupport {
-  testRoundTrip[Method](("GET", GET), ("PUT", PUT), ("POST", POST), ("DELETE", DELETE))
+trait IgnoreHateoasBody extends HateoasLinks {
+
+  def ignoreBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
+
+    val links = Seq(
+      listBenefits(appConfig, nino, taxYear),
+      ignoreBenefit(appConfig, nino, taxYear, benefitId)
+    )
+
+    Json.obj("links" -> links)
+  }
 }
