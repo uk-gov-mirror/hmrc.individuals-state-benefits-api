@@ -23,16 +23,16 @@ body:
     examples:
       example-1:
         description: Ignore Benefit
-        value: !include ../examples/ignoreStateBenefit/request_true.json
+        value: !include ../examples/ignoreBenefit/request_true.json
       example-2:
         description: Use Benefit
-        value: !include ../examples/ignoreStateBenefit/request_false.json
+        value: !include ../examples/ignoreBenefit/request_false.json
 responses:
   200:
     body:
       application/json:
         type: !include ../schemas/ignore_benefit_response.json
-        example: !include ../examples/ignoreStateBenefit/response.json
+        example: !include ../examples/ignoreBenefit/response.json
     headers:
       X-CorrelationId:
         example: a1e8057e-fbbc-47a8-a8b4-78d9f015c253

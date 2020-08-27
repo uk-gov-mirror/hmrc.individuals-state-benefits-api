@@ -25,13 +25,13 @@ securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
     type: !include ../schemas/update_benefit_request.json
-    example: !include ../examples/updateStateBenefit/request.json
+    example: !include ../examples/updateBenefit/request.json
 responses:
   200:
     body:
       application/json:
         type: !include ../schemas/update_benefit_response.json
-        example: !include ../examples/updateStateBenefit/response.json
+        example: !include ../examples/updateBenefit/response.json
     headers:
       X-CorrelationId:
         example: c75f40a6-a3df-4429-a697-471eeec46435

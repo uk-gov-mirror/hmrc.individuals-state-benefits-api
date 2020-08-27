@@ -67,9 +67,14 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
 
     "use the add state benefits HateoasData specific links" in new Test {
       hateoasFactory.wrap(addStateBenefitResponse, addStateBenefitsHateoasData) shouldBe
-        HateoasWrapper(AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253"),List(Link("/context/AA123456A/2020-21",GET,"self"),
-          Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",PUT,"update-state-benefit"),
-          Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",DELETE,"delete-state-benefit")))
+        HateoasWrapper(
+          AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253"),
+          List(
+            Link("/context/AA123456A/2020-21",GET,"self"),
+            Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",PUT,"update-state-benefit"),
+            Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",DELETE,"delete-state-benefit")
+          )
+        )
     }
   }
 

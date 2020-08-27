@@ -19,56 +19,21 @@ package v1.hateoas
 import config.AppConfig
 import v1.models.hateoas.Link
 import v1.models.hateoas.Method.{PUT, _}
-import v1.models.hateoas.RelType.{AMEND_SAMPLE_REL, DELETE_SAMPLE_REL, _}
+import v1.models.hateoas.RelType._
 
 trait HateoasLinks {
 
-  //Sample URIs
-  private def sampleUri(appConfig: AppConfig, nino: String, taxYear: String) =
-    s"/${appConfig.apiGatewayContext}/sample/$nino/$taxYear"
-
-  // URI with ID
-  private def uriWithId(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
-    s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId"
-
+  // Uris
   private def baseUri(appConfig: AppConfig, nino: String, taxYear: String) =
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear"
+
+  private def uriWithId(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
+    s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId"
 
   private def uriWithAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId/amounts"
 
-  //Sample links
-  def amendSample(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(
-      href = sampleUri(appConfig, nino, taxYear),
-      method = PUT,
-      rel = AMEND_SAMPLE_REL
-    )
-
-  def retrieveSample(appConfig: AppConfig, nino: String, taxYear: String, isSelf: Boolean): Link =
-    if (isSelf) {
-      Link(
-        href = sampleUri(appConfig, nino, taxYear),
-        method = GET,
-        rel = SELF
-      )
-    }
-    else {
-      Link(
-        href = sampleUri(appConfig, nino, taxYear),
-        method = GET,
-        rel = RETRIEVE_SAMPLE_REL
-      )
-    }
-
-  def deleteSample(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(
-      href = sampleUri(appConfig, nino, taxYear),
-      method = DELETE,
-      rel = DELETE_SAMPLE_REL
-    )
-
-  // State benefits Hateoas
+  // Links
   def addBenefit(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(
       href = baseUri(appConfig, nino, taxYear),
@@ -117,4 +82,5 @@ trait HateoasLinks {
       method = PUT,
       rel = IGNORE_STATE_BENEFIT
     )
+
 }
