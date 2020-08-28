@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
 import play.mvc.Http.MimeTypes
 import utils.Logging
 import v1.controllers.requestParsers.UpdateBenefitRequestParser
-import v1.hateoas.UpdateHateoasResponses
+import v1.hateoas.UpdateHateoasBodies
 import v1.models.errors._
 import v1.models.request.updateBenefit.UpdateBenefitRawData
 import v1.services.{EnrolmentsAuthService, MtdIdLookupService, UpdateBenefitService}
@@ -39,7 +39,7 @@ class UpdateBenefitController @Inject()(val authService: EnrolmentsAuthService,
                                              requestParser: UpdateBenefitRequestParser,
                                              service: UpdateBenefitService,
                                              cc: ControllerComponents)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging with UpdateHateoasResponses {
+  extends AuthorisedController(cc) with BaseController with Logging with UpdateHateoasBodies {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
