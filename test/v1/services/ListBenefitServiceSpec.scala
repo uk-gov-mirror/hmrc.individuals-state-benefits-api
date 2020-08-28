@@ -14,136 +14,26 @@
  * limitations under the License.
  */
 
-package v1.models.response
+package v1.services
 
-import play.api.libs.json.Json
-import support.UnitSpec
-import v1.models.response.listBenefits.{CustomerAddedStateBenefits, CustomerIncapacityBenefit, IncapacityBenefit, ListBenefitResponse, StateBenefits}
+import uk.gov.hmrc.domain.Nino
+import v1.controllers.EndpointLogContext
+import v1.mocks.connectors.MockListBenefitConnector
+import v1.models.errors._
+import v1.models.outcomes.ResponseWrapper
+import v1.models.request.listBenefits.ListBenefitsRequest
+import v1.models.response.listBenefits.{CustomerAddedStateBenefits, CustomerIncapacityBenefit, IncapacityBenefit, ListBenefitsResponse, StateBenefits}
 
-class ListBenefitResponseSpec extends UnitSpec {
+import scala.concurrent.Future
 
-  val json = Json.parse(
-    """
-      |{
-      |  "stateBenefits": {
-      |    "incapacityBenefit": [
-      |    {
-      |      "dateIgnored": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00,
-      |      "taxPaid": 2132.22
-      |     }
-      |    ],
-      |    "statePension": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "amount": 2000.00
-      |    },
-      |    "statePensionLumpSum": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "endDate"  : "2019-01-01",
-      |      "amount": 2000.00,
-      |      "taxPaid": 2132.22
-      |    },
-      |    "employmentSupportAllowance": [
-      |      {
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      }
-      |    ],
-      |    "jobSeekersAllowance": [
-      |      {
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      }
-      |    ],
-      |    "bereavementAllowance": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    },
-      |    "otherStateBenefits": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    }
-      |  },
-      |  "customerAddedStateBenefits": {
-      |    "incapacityBenefit": [
-      |      {
-      |        "submittedOn": "2019-04-04T01:01:01Z",
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      }
-      |    ],
-      |    "statePension": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "amount": 2000.00
-      |    },
-      |    "statePensionLumpSum": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "endDate" : "2019-01-01",
-      |      "amount": 2000.00,
-      |      "taxPaid": 2132.22
-      |    },
-      |    "employmentSupportAllowance": [
-      |      {
-      |        "submittedOn": "2019-04-04T01:01:01Z",
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      }
-      |    ],
-      |    "jobSeekersAllowance": [
-      |      {
-      |        "submittedOn": "2019-04-04T01:01:01Z",
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      }
-      |    ],
-      |    "bereavementAllowance": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    },
-      |    "otherStateBenefits": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    }
-      |  }
-      |}
-      |""".stripMargin
-  )
+class ListBenefitServiceSpec extends ServiceSpec {
 
-  val model: ListBenefitResponse = ListBenefitResponse(
+  private val nino = "AA112233A"
+  private val taxYear = "2019"
+
+  private val requestData = ListBenefitsRequest(Nino(nino), taxYear)
+
+  private val validResponse = ListBenefitsResponse(
     stateBenefits = StateBenefits(
       incapacityBenefit = Seq(
         IncapacityBenefit(
@@ -281,18 +171,49 @@ class ListBenefitResponseSpec extends UnitSpec {
     )
   )
 
-  "ListBenefitResponse" when {
-    "read from valid JSON" should {
-      "produce the expected ListBenefitResponse object" in {
 
-        json.as[ListBenefitResponse] shouldBe model
+  trait Test extends MockListBenefitConnector {
+    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    val service: ListBenefitService = new ListBenefitService(connector = mockListBenefitConnector)
+  }
+
+  "ListBenefitsService" when {
+    "listBenefits" must {
+      "return correct result for a success" in new Test {
+        val outcome = Right(ResponseWrapper(correlationId, validResponse))
+
+
+        MockListBenefitConnector.listBenefits(requestData)
+          .returns(Future.successful(outcome))
+
+        await(service.listBenefit(requestData)) shouldBe outcome
       }
-    }
 
-    "written to JSON" should {
-      "produce the expected JsObject" in {
+      "map errors according to spec" when {
 
-        Json.toJson(model) shouldBe json
+        def serviceError(desErrorCode: String, error: MtdError): Unit =
+          s"a $desErrorCode error is returned from the service" in new Test {
+
+            MockListBenefitConnector.listBenefits(requestData)
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+
+            await(service.listBenefit(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          }
+
+        val input = Seq(
+          ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
+          ("INVALID_TAX_YEAR", TaxYearFormatError),
+          ("INVALID_BENEFIT_ID", BenefitIdFormatError),
+          ("INVALID_CORRELATIONID", DownstreamError),
+          ("NO_DATA_FOUND", NotFoundError),
+          ("INVALID_DATE_RANGE", RuleTaxYearRangeInvalidError),
+          ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotEndedError),
+          ("SERVER_ERROR", DownstreamError),
+          ("SERVICE_UNAVAILABLE", DownstreamError)
+        )
+
+        input.foreach(args => (serviceError _).tupled(args))
       }
     }
   }
