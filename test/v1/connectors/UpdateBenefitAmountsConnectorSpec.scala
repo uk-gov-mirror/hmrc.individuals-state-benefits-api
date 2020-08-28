@@ -61,7 +61,7 @@ class UpdateBenefitAmountsConnectorSpec extends ConnectorSpec {
 
   "UpdateBenefitAmountsConnector" when {
     "updateBenefitAmounts" must {
-      "return a 201 status for a success scenario" in new Test {
+      "return a 204 status for a success scenario" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         MockedHttpClient
