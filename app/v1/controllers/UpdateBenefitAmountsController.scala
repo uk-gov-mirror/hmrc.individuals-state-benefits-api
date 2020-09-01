@@ -24,33 +24,33 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
 import play.mvc.Http.MimeTypes
 import utils.Logging
-import v1.controllers.requestParsers.IgnoreBenefitRequestParser
-import v1.hateoas.IgnoreHateoasBody
+import v1.controllers.requestParsers.UpdateBenefitAmountsRequestParser
+import v1.hateoas.UpdateHateoasBodies
 import v1.models.errors._
-import v1.models.request.ignoreBenefit.IgnoreBenefitRawData
-import v1.services.{EnrolmentsAuthService, IgnoreBenefitService, MtdIdLookupService}
+import v1.models.request.updateBenefitAmounts.UpdateBenefitAmountsRawData
+import v1.services.{EnrolmentsAuthService, MtdIdLookupService, UpdateBenefitAmountsService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
-                                        val lookupService: MtdIdLookupService,
-                                        appConfig: AppConfig,
-                                        requestParser: IgnoreBenefitRequestParser,
-                                        service: IgnoreBenefitService,
-                                        cc: ControllerComponents)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with BaseController with Logging with IgnoreHateoasBody {
+class UpdateBenefitAmountsController @Inject()(val authService: EnrolmentsAuthService,
+                                               val lookupService: MtdIdLookupService,
+                                               appConfig: AppConfig,
+                                               requestParser: UpdateBenefitAmountsRequestParser,
+                                               service: UpdateBenefitAmountsService,
+                                               cc: ControllerComponents)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc) with BaseController with Logging with UpdateHateoasBodies {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
-      controllerName = "IgnoreBenefitController",
-      endpointName = "ignoreBenefit"
+      controllerName = "UpdateBenefitAmountsController",
+      endpointName = "updateBenefitAmounts"
     )
 
-  def ignoreBenefit(nino: String, taxYear: String, benefitId: String): Action[JsValue] =
+  def updateBenefitAmounts(nino: String, taxYear: String, benefitId: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
 
-      val rawData: IgnoreBenefitRawData = IgnoreBenefitRawData(
+      val rawData: UpdateBenefitAmountsRawData = UpdateBenefitAmountsRawData(
         nino = nino,
         taxYear = taxYear,
         benefitId = benefitId,
@@ -60,13 +60,13 @@ class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](requestParser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.ignoreBenefit(parsedRequest))
+          serviceResponse <- EitherT(service.updateBenefitAmounts(parsedRequest))
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          Ok(ignoreBenefitHateoasBody(appConfig, nino, taxYear, benefitId))
+          Ok(updateBenefitAmountsHateoasBody(appConfig, nino, taxYear, benefitId))
             .withApiHeaders(serviceResponse.correlationId)
             .as(MimeTypes.JSON)
         }
@@ -83,9 +83,9 @@ class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
     (errorWrapper.error: @unchecked) match {
       case BadRequestError | NinoFormatError | TaxYearFormatError | BenefitIdFormatError |
            RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError | RuleTaxYearNotEndedError |
-           CustomMtdError(RuleIncorrectOrEmptyBodyError.code)
+           CustomMtdError(RuleIncorrectOrEmptyBodyError.code) |
+           CustomMtdError(ValueFormatError.code)
       => BadRequest(Json.toJson(errorWrapper))
-      case RuleIgnoreForbiddenError => Forbidden(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }

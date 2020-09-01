@@ -19,7 +19,7 @@ package v1.hateoas
 import config.AppConfig
 import play.api.libs.json.{JsValue, Json}
 
-trait UpdateHateoasResponses extends HateoasLinks {
+trait UpdateHateoasBodies extends HateoasLinks {
 
   def updateBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
 
@@ -28,6 +28,17 @@ trait UpdateHateoasResponses extends HateoasLinks {
       listBenefits(appConfig, nino, taxYear),
       deleteBenefit(appConfig, nino, taxYear, benefitId),
       updateBenefitAmounts(appConfig, nino, taxYear, benefitId)
+    )
+
+    Json.obj("links" -> links)
+  }
+
+  def updateBenefitAmountsHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
+
+    val links = Seq(
+      listBenefits(appConfig, nino, taxYear),
+      updateBenefitAmounts(appConfig, nino, taxYear, benefitId),
+      deleteBenefitAmounts(appConfig, nino, taxYear, benefitId)
     )
 
     Json.obj("links" -> links)
