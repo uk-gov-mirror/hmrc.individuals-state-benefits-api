@@ -29,7 +29,6 @@ class DeleteRetrieveServiceSpec extends ServiceSpec {
 
   val nino: String = "AA112233A"
   val taxYear: String = "2019"
-  val correlationId: String = "X-corr"
 
   trait Test extends MockDeleteRetrieveConnector {
 

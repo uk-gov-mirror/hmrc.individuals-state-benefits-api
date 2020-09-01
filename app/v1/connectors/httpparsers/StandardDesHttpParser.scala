@@ -36,7 +36,7 @@ object StandardDesHttpParser extends HttpParser {
       Right(ResponseWrapper(correlationId, ()))
     }
 
-  implicit def reads[A: Reads](implicit successCode: SuccessCode = SuccessCode(OK)): HttpReads[DesOutcome[A]] =
+  implicit def reads[A: Reads](implicit successCode: SuccessCode): HttpReads[DesOutcome[A]] =
     (_: String, url: String, response: HttpResponse) => doRead(url, response) { correlationId =>
       response.validateJson[A] match {
         case Some(ref) => Right(ResponseWrapper(correlationId, ref))

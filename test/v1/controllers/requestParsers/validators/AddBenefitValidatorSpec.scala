@@ -251,7 +251,7 @@ class AddBenefitValidatorSpec extends UnitSpec {
       // body value error scenarios
       "return multiple errors for incorrect field formats" in new Test {
         validator.validate(AddBenefitRawData(validNino, validTaxYear, AnyContentAsJson(invalidFormatBodyParametersJson))) shouldBe
-          List(StartDateFormatError, EndDateFormatError, BenefitTypeFormatError)
+          List(BenefitTypeFormatError, StartDateFormatError, EndDateFormatError)
       }
 
       "return multiple errors for dates which precede the current tax year and are incorrectly ordered" in new Test {

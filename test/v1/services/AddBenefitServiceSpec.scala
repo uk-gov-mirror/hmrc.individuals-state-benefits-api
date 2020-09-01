@@ -31,7 +31,6 @@ class AddBenefitServiceSpec extends ServiceSpec {
 
   private val nino = "AA112233A"
   private val taxYear = "2021-22"
-  private val correlationId = "X-corr"
 
   val addBenefitRequestBody: AddBenefitRequestBody = AddBenefitRequestBody(
     benefitType = BenefitType.incapacityBenefit.toString,

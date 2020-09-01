@@ -16,6 +16,7 @@
 
 package v1.connectors.httpparsers
 
+import play.api.http.Status
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json, Reads}
 import support.UnitSpec
@@ -50,7 +51,8 @@ class StandardDesHttpParserSpec extends UnitSpec {
 
   "The generic HTTP parser" when {
     "no status code is specified" must {
-      val httpReads: HttpReads[DesOutcome[SomeModel]] = implicitly
+      implicit val successCode: SuccessCode = SuccessCode(Status.OK)
+      val httpReads: HttpReads[DesOutcome[SomeModel]] = StandardDesHttpParser.reads
 
       "return a Right DES response containing the model object if the response json corresponds to a model object" in {
         val httpResponse = HttpResponse(OK, desExpectedJson.toString(), Map("CorrelationId" -> Seq(correlationId)))

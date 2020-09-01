@@ -18,6 +18,7 @@ package v1.connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
+import play.api.http.Status
 import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
@@ -43,6 +44,7 @@ class DeleteRetrieveConnector @Inject()(val http: HttpClient,
     desUri: DesUri[Resp]): Future[DesOutcome[Resp]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
+    implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
     get(uri = desUri)
   }

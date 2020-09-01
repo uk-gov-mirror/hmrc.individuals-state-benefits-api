@@ -1,0 +1,19 @@
+{
+  "links": [
+    {
+      "href": "/individuals/state-benefits/TC663795B/2021-22",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "/individuals/state-benefits/TC663795B/2021-22/a1e8057e-fbbc-47a8-a8b4-78d9f015c253/amounts",
+      "rel": "update-state-benefit-amounts",
+      "method": "PUT"
+    },
+    {
+      "href": "/individuals/state-benefits/TC663795B/2021-22/a1e8057e-fbbc-47a8-a8b4-78d9f015c253/amounts",
+      "rel": "delete-state-benefit-amounts",
+      "method": "DELETE"
+    }
+  ]
+}
