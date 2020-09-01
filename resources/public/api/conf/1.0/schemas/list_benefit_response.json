@@ -3,6 +3,7 @@
   "title": "Get State Benefits",
   "description": "View a list of State Benefits & Pensions associated with the customer, the list may contain Benefits that the customer has added via their third party software, these are clearly marked.",
   "type": "object",
+  "required": ["links"],
   "properties": {
     "stateBenefits": {
       "description": "Object containing details of state benefits held by HMRC.",
@@ -11,6 +12,43 @@
     "customerAddedStateBenefits": {
       "description": "Object containing details of state benefits provided to HMRC by the user.",
       "$ref": "#/definitions/customerAddedStateBenefits"
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/state-benefits/{nino}/{taxYear}"
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource",
+            "type": "string",
+            "enum": [
+              "self",
+              "add-state-benefit"
+            ]
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint",
+            "type": "string",
+            "enum": [
+              "GET",
+              "PUT",
+              "DELETE",
+              "POST"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ]
+      }
     }
   },
   "definitions": {
