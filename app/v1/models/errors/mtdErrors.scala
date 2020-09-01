@@ -40,6 +40,8 @@ object BenefitIdFormatError extends MtdError("FORMAT_BENEFIT_ID", "The provided 
 
 object BenefitTypeFormatError extends MtdError("FORMAT_BENEFIT_TYPE", "The provided benefit type is invalid")
 
+object ValueFormatError extends MtdError("FORMAT_VALUE", "")
+
 // Rule Errors
 object RuleTaxYearNotSupportedError extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value")
 
