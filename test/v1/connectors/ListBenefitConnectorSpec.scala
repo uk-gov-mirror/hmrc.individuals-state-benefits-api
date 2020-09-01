@@ -195,7 +195,7 @@ class ListBenefitConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient
           .get(
-            url = s"$baseUrl/income-tax/income/employments/$nino/$taxYear",
+            url = s"$baseUrl/income-tax/income/state-benefits/$nino/$taxYear",
             requiredHeaders = desRequestHeaders: _*
           )
           .returns(Future.successful(outcome))
