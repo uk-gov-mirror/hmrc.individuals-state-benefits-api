@@ -14,27 +14,35 @@
  * limitations under the License.
  */
 
-package v1.mocks.connectors
+package v1.connectors
 
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
+import config.AppConfig
+import javax.inject.{Inject, Singleton}
+import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DesOutcome, ListBenefitConnector}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.models.request.listBenefits.ListBenefitsRequest
 import v1.models.response.listBenefits.ListBenefitsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockListBenefitConnector extends MockFactory {
+@Singleton
+class ListBenefitsConnector @Inject()(val http: HttpClient,
+                                      val appConfig: AppConfig) extends BaseDesConnector {
 
-  val mockListBenefitConnector: ListBenefitConnector = mock[ListBenefitConnector]
+  def listBenefits(request: ListBenefitsRequest)(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext): Future[DesOutcome[ListBenefitsResponse]] = {
 
-  object MockListBenefitConnector {
+    import v1.connectors.httpparsers.StandardDesHttpParser._
+    implicit val successCode: SuccessCode = SuccessCode(Status.OK)
 
-    def listBenefits(requestData: ListBenefitsRequest): CallHandler[Future[DesOutcome[ListBenefitsResponse]]] = {
-      (mockListBenefitConnector
-        .listBenefits(_: ListBenefitsRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
-    }
+    val nino = request.nino.nino
+    val taxYear = request.taxYear
+
+    get(
+      DesUri[ListBenefitsResponse](s"income-tax/income/state-benefits/$nino/$taxYear")
+    )
   }
 }
+

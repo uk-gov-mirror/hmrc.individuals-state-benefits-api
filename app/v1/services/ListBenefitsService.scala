@@ -21,7 +21,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.ListBenefitConnector
+import v1.connectors.ListBenefitsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -32,7 +32,7 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ListBenefitService @Inject()(connector: ListBenefitConnector) extends DesResponseMappingSupport with Logging {
+class ListBenefitsService @Inject()(connector: ListBenefitsConnector) extends DesResponseMappingSupport with Logging {
 
   def listBenefit(request: ListBenefitsRequest)
                      (implicit hc: HeaderCarrier, ec: ExecutionContext, logContext: EndpointLogContext):
@@ -48,11 +48,11 @@ class ListBenefitService @Inject()(connector: ListBenefitConnector) extends DesR
   private def mappingDesToMtdError: Map[String, MtdError] = Map(
     "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
     "INVALID_TAX_YEAR" -> TaxYearFormatError,
-    "INVALID_BENEFIT_ID" -> BenefitIdFormatError,
+    "INVALID_BENEFIT_ID" -> DownstreamError,
     "INVALID_CORRELATIONID" -> DownstreamError,
     "NO_DATA_FOUND" -> NotFoundError,
-    "INVALID_DATE_RANGE" -> RuleTaxYearRangeInvalidError,
-    "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotEndedError,
+    "INVALID_DATE_RANGE" -> RuleTaxYearNotSupportedError,
+    "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
     "SERVER_ERROR" -> DownstreamError,
     "SERVICE_UNAVAILABLE" -> DownstreamError
   )

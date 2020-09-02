@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.connectors
 
+import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
-import v1.controllers.EndpointLogContext
-import v1.mocks.connectors.MockListBenefitConnector
-import v1.models.errors._
+import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listBenefits.ListBenefitsRequest
 import v1.models.response.listBenefits.{CustomerAddedStateBenefits, CustomerIncapacityBenefit, IncapacityBenefit, ListBenefitsResponse, StateBenefits}
 
 import scala.concurrent.Future
 
-class ListBenefitServiceSpec extends ServiceSpec {
+class ListBenefitsConnectorSpec extends ConnectorSpec {
 
-  private val nino = "AA112233A"
-  private val taxYear = "2019"
+  val nino: String = "AA111111A"
+  val taxYear: String = "2019"
 
-  private val requestData = ListBenefitsRequest(Nino(nino), taxYear)
+  val request: ListBenefitsRequest = ListBenefitsRequest(Nino(nino), taxYear)
 
   private val validResponse = ListBenefitsResponse(
     stateBenefits = StateBenefits(
@@ -171,49 +170,37 @@ class ListBenefitServiceSpec extends ServiceSpec {
     )
   )
 
+  class Test extends MockHttpClient with MockAppConfig {
 
-  trait Test extends MockListBenefitConnector {
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+    val connector: ListBenefitsConnector = new ListBenefitsConnector(
+      http = mockHttpClient,
+      appConfig = mockAppConfig
+    )
 
-    val service: ListBenefitService = new ListBenefitService(connector = mockListBenefitConnector)
+    val desRequestHeaders: Seq[(String, String)] = Seq(
+      "Environment" -> "des-environment",
+      "Authorization" -> s"Bearer des-token"
+    )
+
+    MockedAppConfig.desBaseUrl returns baseUrl
+    MockedAppConfig.desToken returns "des-token"
+    MockedAppConfig.desEnvironment returns "des-environment"
   }
 
-  "ListBenefitsService" when {
+  "ListBenefitsConnector" when {
     "listBenefits" must {
-      "return correct result for a success" in new Test {
+      "return a 200 status for a success scenario" in new Test {
+
         val outcome = Right(ResponseWrapper(correlationId, validResponse))
 
-
-        MockListBenefitConnector.listBenefits(requestData)
+        MockedHttpClient
+          .get(
+            url = s"$baseUrl/income-tax/income/state-benefits/$nino/$taxYear",
+            requiredHeaders = desRequestHeaders: _*
+          )
           .returns(Future.successful(outcome))
 
-        await(service.listBenefit(requestData)) shouldBe outcome
-      }
-
-      "map errors according to spec" when {
-
-        def serviceError(desErrorCode: String, error: MtdError): Unit =
-          s"a $desErrorCode error is returned from the service" in new Test {
-
-            MockListBenefitConnector.listBenefits(requestData)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
-
-            await(service.listBenefit(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
-          }
-
-        val input = Seq(
-          ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-          ("INVALID_TAX_YEAR", TaxYearFormatError),
-          ("INVALID_BENEFIT_ID", BenefitIdFormatError),
-          ("INVALID_CORRELATIONID", DownstreamError),
-          ("NO_DATA_FOUND", NotFoundError),
-          ("INVALID_DATE_RANGE", RuleTaxYearRangeInvalidError),
-          ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotEndedError),
-          ("SERVER_ERROR", DownstreamError),
-          ("SERVICE_UNAVAILABLE", DownstreamError)
-        )
-
-        input.foreach(args => (serviceError _).tupled(args))
+        await(connector.listBenefits(request)) shouldBe outcome
       }
     }
   }
