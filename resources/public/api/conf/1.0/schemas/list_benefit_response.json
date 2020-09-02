@@ -1,0 +1,323 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Get State Benefits",
+  "description": "View a list of State Benefits & Pensions associated with the customer, the list may contain Benefits that the customer has added via their third party software, these are clearly marked.",
+  "type": "object",
+  "required": ["links"],
+  "properties": {
+    "stateBenefits": {
+      "description": "Object containing details of state benefits held by HMRC.",
+      "$ref": "#/definitions/stateBenefits"
+    },
+    "customerAddedStateBenefits": {
+      "description": "Object containing details of state benefits provided to HMRC by the user.",
+      "$ref": "#/definitions/customerAddedStateBenefits"
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A list of endpoint links that indicate possible actions related to the current resource.",
+        "properties": {
+          "href": {
+            "description": "The relative url of the endpoint",
+            "type": "string",
+            "example": "/individuals/state-benefits/{nino}/{taxYear}"
+          },
+          "rel": {
+            "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",
+            "type": "string",
+            "enum": [
+              "self",
+              "add-state-benefit"
+            ]
+          },
+          "method": {
+            "description": "The HTTP method type for the endpoint.",
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST"
+            ]
+          }
+        },
+        "required": [
+          "href",
+          "rel",
+          "method"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "benefitId": {
+      "description": "Unique identifier of the benefit.",
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date",
+      "description":  "The date the benefit started in the format YYYY-MM-DD.",
+      "example": "2021-04-06"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date",
+      "description":  "The date the benefit ended in the format YYYY-MM-DD.",
+      "example": "2021-04-06"
+    },
+    "dateIgnored": {
+      "type": "string",
+      "format": "date-time",
+      "description": "An ISO-8601 compliant date-time representing when the customer requested the data to be ignored.",
+      "example": "2021-04-04T01:01:01Z"
+    },
+    "submittedOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "An ISO-8601 compliant date-time representing when incapacity benefit was submitted.",
+      "example": "2021-04-04T01:01:01Z"
+    },
+    "amountZeroPositive": {
+      "description": "The total amount of benefit received. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "type": "number",
+      "multipleOf": 0.01,
+      "minimum": 0,
+      "maximum": 99999999999.99,
+      "example": "1999.99"
+    },
+    "taxPaidZeroPositive": {
+      "description": "The amount of tax paid on the benefit. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "type": "number",
+      "multipleOf": 0.01,
+      "minimum": 0,
+      "maximum": 99999999999.99,
+      "example": "1999.99"
+    },
+    "taxPaidNegPositive": {
+      "description": "The amount of tax paid on the benefit. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
+      "type": "number",
+      "multipleOf": 0.01,
+      "minimum": -99999999999.99,
+      "maximum": 99999999999.99,
+      "example": "1999.99"
+    },
+
+
+    "stateBenefit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benefitId",
+        "startDate"
+      ],
+      "properties": {
+        "dateIgnored": {
+          "$ref": "#/definitions/dateIgnored"
+        },
+        "submittedOn": {
+          "$ref": "#/definitions/submittedOn"
+        },
+        "benefitId": {
+          "$ref": "#/definitions/benefitId"
+        },
+        "startDate": {
+          "$ref": "#/definitions/startDate"
+        },
+        "endDate": {
+          "$ref": "#/definitions/endDate"
+        },
+        "amount": {
+          "$ref": "#/definitions/amountZeroPositive"
+        },
+        "taxPaid": {
+          "$ref": "#/definitions/taxPaidZeroPositive"
+        }
+      }
+    },
+
+    "stateBenefitNegativeTaxPaid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benefitId",
+        "startDate"
+      ],
+      "properties": {
+        "dateIgnored": {
+          "$ref": "#/definitions/dateIgnored"
+        },
+        "submittedOn": {
+          "$ref": "#/definitions/submittedOn"
+        },
+        "benefitId": {
+          "$ref": "#/definitions/benefitId"
+        },
+        "startDate": {
+          "$ref": "#/definitions/startDate"
+        },
+        "endDate": {
+          "$ref": "#/definitions/endDate"
+        },
+        "amount": {
+          "$ref": "#/definitions/amountZeroPositive"
+        },
+        "taxPaid": {
+          "$ref": "#/definitions/taxPaidNegPositive"
+        }
+      }
+    },
+
+    "customerAddedStateBenefit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benefitId",
+        "startDate"
+      ],
+      "properties": {
+        "submittedOn": {
+          "$ref": "#/definitions/submittedOn"
+        },
+        "benefitId": {
+          "$ref": "#/definitions/benefitId"
+        },
+        "startDate": {
+          "$ref": "#/definitions/startDate"
+        },
+        "endDate": {
+          "$ref": "#/definitions/endDate"
+        },
+        "amount": {
+          "$ref": "#/definitions/amountZeroPositive"
+        },
+        "taxPaid": {
+          "$ref": "#/definitions/taxPaidZeroPositive"
+        }
+      }
+    },
+
+    "customerAddedNegativeTaxPaid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benefitId",
+        "startDate"
+      ],
+      "properties": {
+        "submittedOn": {
+          "$ref": "#/definitions/submittedOn"
+        },
+        "benefitId": {
+          "$ref": "#/definitions/benefitId"
+        },
+        "startDate": {
+          "$ref": "#/definitions/startDate"
+        },
+        "endDate": {
+          "$ref": "#/definitions/endDate"
+        },
+        "amount": {
+          "$ref": "#/definitions/amountZeroPositive"
+        },
+        "taxPaid": {
+          "$ref": "#/definitions/taxPaidNegPositive"
+        }
+      }
+    },
+
+
+
+    "stateBenefits": {
+      "type": "object",
+      "additionalProperties": false,
+      "minItems": 1,
+      "properties": {
+        "incapacityBenefit": {
+          "description": "Array containing details of HMRC held incapacity benefits.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stateBenefit"
+          }
+        },
+        "statePension": {
+          "description": "Object containing details of HMRC held state pension information.",
+          "$ref": "#/definitions/stateBenefit"
+        },
+        "statePensionLumpSum": {
+          "description": "Object containing details of HMRC held state pension lump sum information.",
+          "$ref": "#/definitions/stateBenefit"
+        },
+        "employmentSupportAllowance": {
+          "description": "Array containing details of HMRC held employment support allowances.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stateBenefitNegativeTaxPaid"
+          }
+        },
+        "jobSeekersAllowance": {
+          "description": "Array containing details of HMRC held job seekers allowances.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stateBenefitNegativeTaxPaid"
+          }
+        },
+        "bereavementAllowance": {
+          "description": "Object containing details of HMRC held bereavement allowance information.",
+          "$ref": "#/definitions/stateBenefit"
+        },
+        "otherStateBenefits": {
+          "description": "Object containing details of all other HMRC held benefits.",
+          "$ref": "#/definitions/stateBenefit"
+        }
+      }
+    },
+
+    "customerAddedStateBenefits": {
+      "type": "object",
+      "additionalProperties": false,
+      "minItems": 1,
+      "properties": {
+        "incapacityBenefit": {
+          "description": "Array containing details of customer added incapacity benefits.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/customerAddedStateBenefit"
+          }
+        },
+        "statePension": {
+          "description": "Object containing details of customer added state pension information.",
+          "$ref": "#/definitions/customerAddedStateBenefit"
+        },
+        "statePensionLumpSum": {
+          "description": "Object containing details of customer added state pension lump sum information.",
+          "$ref": "#/definitions/customerAddedStateBenefit"
+        },
+        "employmentSupportAllowance": {
+          "description": "Array containing details of customer added employment support allowances.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/customerAddedNegativeTaxPaid"
+          }
+        },
+        "jobSeekersAllowance": {
+          "description": "Array containing details of customer added job seekers allowances.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/customerAddedNegativeTaxPaid"
+          }
+        },
+        "bereavementAllowance": {
+          "description": "Object containing details of customer added bereavement allowance information.",
+          "$ref": "#/definitions/customerAddedStateBenefit"
+        },
+        "otherStateBenefits": {
+          "description": "Object containing details of all other customer added benefits.",
+          "$ref": "#/definitions/customerAddedStateBenefit"
+        }
+      }
+    }
+  }
+}
