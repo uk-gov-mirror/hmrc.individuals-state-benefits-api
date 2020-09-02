@@ -27,12 +27,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockListBenefitsConnector extends MockFactory {
 
-  val mockListBenefitConnector: ListBenefitsConnector = mock[ListBenefitsConnector]
+  val mockListBenefitsConnector: ListBenefitsConnector = mock[ListBenefitsConnector]
 
-  object MockListBenefitConnector {
+  object MockListBenefitsConnector {
 
     def listBenefits(requestData: ListBenefitsRequest): CallHandler[Future[DesOutcome[ListBenefitsResponse]]] = {
-      (mockListBenefitConnector
+      (mockListBenefitsConnector
         .listBenefits(_: ListBenefitsRequest)(_: HeaderCarrier, _: ExecutionContext))
         .expects(requestData, *, *)
     }

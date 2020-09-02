@@ -175,7 +175,7 @@ class ListBenefitsServiceSpec extends ServiceSpec {
   trait Test extends MockListBenefitsConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service: ListBenefitsService = new ListBenefitsService(connector = mockListBenefitConnector)
+    val service: ListBenefitsService = new ListBenefitsService(connector = mockListBenefitsConnector)
   }
 
   "ListBenefitsService" when {
@@ -184,10 +184,10 @@ class ListBenefitsServiceSpec extends ServiceSpec {
         val outcome = Right(ResponseWrapper(correlationId, validResponse))
 
 
-        MockListBenefitConnector.listBenefits(requestData)
+        MockListBenefitsConnector.listBenefits(requestData)
           .returns(Future.successful(outcome))
 
-        await(service.listBenefit(requestData)) shouldBe outcome
+        await(service.listBenefits(requestData)) shouldBe outcome
       }
 
       "map errors according to spec" when {
@@ -195,10 +195,10 @@ class ListBenefitsServiceSpec extends ServiceSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockListBenefitConnector.listBenefits(requestData)
+            MockListBenefitsConnector.listBenefits(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.listBenefit(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.listBenefits(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
           }
 
         val input = Seq(
