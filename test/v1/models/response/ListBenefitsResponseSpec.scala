@@ -281,9 +281,9 @@ class ListBenefitsResponseSpec extends UnitSpec {
     )
   )
 
-  "ListBenefitResponse" when {
+  "ListBenefitsResponse" when {
     "read from valid JSON" should {
-      "produce the expected ListBenefitResponse object" in {
+      "produce the expected ListBenefitsResponse object" in {
 
         json.as[ListBenefitsResponse] shouldBe model
       }

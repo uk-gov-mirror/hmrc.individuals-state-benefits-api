@@ -5,3 +5,4 @@ PUT        /:nino/:taxYear/:benefitId/ignore       v1.controllers.IgnoreBenefitC
 DELETE     /:nino/:taxYear/:benefitId              v1.controllers.DeleteBenefitController.deleteBenefit(nino: String, taxYear: String, benefitId: String)
 PUT        /:nino/:taxYear/:benefitId              v1.controllers.UpdateBenefitController.update(nino: String, taxYear: String, benefitId: String)
 POST       /:nino/:taxYear                         v1.controllers.AddBenefitController.addStateBenefit(nino: String, taxYear: String)
+GET        /:nino/:taxYear                         v1.controllers.ListBenefitsController.listBenefits(nino: String, taxYear: String)

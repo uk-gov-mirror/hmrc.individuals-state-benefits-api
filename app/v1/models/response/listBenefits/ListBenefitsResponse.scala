@@ -25,10 +25,10 @@ case class ListBenefitsResponse(stateBenefits: StateBenefits, customerAddedState
 
 object ListBenefitsResponse extends HateoasLinks {
 
-  implicit val formatListBenefitResponse: OFormat[ListBenefitsResponse] = Json.format[ListBenefitsResponse]
+  implicit val formatListBenefitsResponse: OFormat[ListBenefitsResponse] = Json.format[ListBenefitsResponse]
 
-  implicit object ListBenefitLinksFactory extends HateoasLinksFactory[ListBenefitsResponse, ListBenefitHateoasData] {
-    override def links(appConfig: AppConfig, data: ListBenefitHateoasData): Seq[Link] = {
+  implicit object ListBenefitsLinksFactory extends HateoasLinksFactory[ListBenefitsResponse, ListBenefitsHateoasData] {
+    override def links(appConfig: AppConfig, data: ListBenefitsHateoasData): Seq[Link] = {
       import data._
       Seq(
         addBenefit(appConfig, nino, taxYear),
@@ -38,4 +38,4 @@ object ListBenefitsResponse extends HateoasLinks {
   }
 }
 
-case class ListBenefitHateoasData(nino: String, taxYear: String, benefitId: String) extends HateoasData
+case class ListBenefitsHateoasData(nino: String, taxYear: String) extends HateoasData
