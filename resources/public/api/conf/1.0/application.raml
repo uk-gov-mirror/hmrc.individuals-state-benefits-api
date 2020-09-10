@@ -27,6 +27,7 @@ uses:
   types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
   errors: errors.raml
   headers: headers.raml
+  queryParameters: queryParameters.raml
 
 '/individuals/state-benefits':
   /{nino}:
@@ -36,7 +37,7 @@ uses:
       uriParameters:
         taxYear: !include pathParameters/taxYearMinimum2021.raml
       post: !include endpoints/addBenefit.raml
-      get: !include endpoints/listBenefit.raml
+      get: !include endpoints/listBenefits.raml
       /{benefitId}:
         uriParameters:
           benefitId: !include pathParameters/benefitId.raml

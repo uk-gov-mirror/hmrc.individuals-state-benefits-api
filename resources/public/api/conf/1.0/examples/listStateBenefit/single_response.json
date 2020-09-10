@@ -1,0 +1,41 @@
+{
+  "stateBenefits": [
+    {
+      "benefitType": "statePensionLumpSum",
+      "benefitId": "e4bf331e-0e55-297f-9a74-c766674775d4",
+      "startDate": "2019-09-01",
+      "endDate": "2019-09-02",
+      "amount": 345.55,
+      "taxPaid": 78.88,
+      "links": [
+        {
+          "href": "individuals/state-benefits/{nino}/{taxYear}?benefitId={benefitId}",
+          "rel": "self",
+          "method": "GET"
+        },
+        {
+          "href": "individuals/state-benefits/{nino}/{taxYear}/{benefitId}/ignore",
+          "rel": "ignore-state-benefit",
+          "method": "PUT"
+        },
+        {
+          "href": "individuals/state-benefits/{nino}/{taxYear}/{benefitId}/amounts",
+          "rel": "update-state-benefit-amounts",
+          "method": "PUT"
+        },
+        {
+          "href": "individuals/state-benefits/{nino}/{taxYear}/{benefitId}/amounts",
+          "rel": "delete-state-benefit-amounts",
+          "method": "DELETE"
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "href": "individuals/state-benefits/{nino}/{taxYear}",
+      "rel": "self",
+      "method": "GET"
+    }
+  ]
+}
