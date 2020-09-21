@@ -27,6 +27,9 @@ trait HateoasLinks {
   private def baseUri(appConfig: AppConfig, nino: String, taxYear: String) =
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear"
 
+  private def baseUriWithBenefitIdParam(appConfig: AppConfig, nino: String, taxYear: String, id: String) =
+    s"""/${appConfig.apiGatewayContext}/$nino/$taxYear?benefitId="$id""""
+
   private def uriWithId(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId"
 
@@ -58,6 +61,13 @@ trait HateoasLinks {
   def listBenefits(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(
       href = baseUri(appConfig, nino, taxYear),
+      method = GET,
+      rel = SELF
+    )
+
+  def retrieveSingleBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
+    Link(
+      href = baseUriWithBenefitIdParam(appConfig, nino, taxYear, benefitId),
       method = GET,
       rel = SELF
     )

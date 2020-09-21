@@ -62,7 +62,7 @@ class ListBenefitsController @Inject()(val authService: EnrolmentsAuthService,
           serviceResponse <- EitherT(service.listBenefits(parsedRequest))
           hateoasResponse <- EitherT.fromEither[Future](
             hateoasFactory
-              .wrap(
+              .wrapList(
                 serviceResponse.responseData,
                 ListBenefitsHateoasData(nino, taxYear)
               )

@@ -23,7 +23,7 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listBenefits.ListBenefitsRequest
-import v1.models.response.listBenefits.ListBenefitsResponse
+import v1.models.response.listBenefits.{ListBenefitsResponse, StateBenefit}
 import v1.services.ListBenefitsService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ trait MockListBenefitsService extends MockFactory {
 
   object MockListBenefitsService{
 
-    def listBenefits(requestData: ListBenefitsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListBenefitsResponse]]]] = {
+    def listBenefits(requestData: ListBenefitsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListBenefitsResponse[StateBenefit]]]]] = {
       (mockListBenefitsService
         .listBenefits(_: ListBenefitsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
         .expects(requestData, *, *, *)

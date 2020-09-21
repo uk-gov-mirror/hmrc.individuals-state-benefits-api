@@ -16,18 +16,27 @@
 
 package v1.models.response.listBenefits
 
+import cats.Functor
 import config.AppConfig
 import play.api.libs.json._
-import v1.hateoas.{HateoasLinks, HateoasLinksFactory}
+import utils.JsonUtils
+import v1.hateoas.{HateoasLinks, HateoasListLinksFactory}
 import v1.models.hateoas.{HateoasData, Link}
 
-case class ListBenefitsResponse(stateBenefits: StateBenefits, customerAddedStateBenefits: CustomerAddedStateBenefits)
+case class ListBenefitsResponse[B](stateBenefits: Option[Seq[B]],
+                                customerAddedStateBenefits: Option[Seq[B]])
 
-object ListBenefitsResponse extends HateoasLinks {
+object ListBenefitsResponse extends HateoasLinks with JsonUtils {
 
-  implicit val formatListBenefitsResponse: OFormat[ListBenefitsResponse] = Json.format[ListBenefitsResponse]
+  implicit object ListBenefitsLinksFactory extends HateoasListLinksFactory[ListBenefitsResponse, StateBenefit, ListBenefitsHateoasData] {
 
-  implicit object ListBenefitsLinksFactory extends HateoasLinksFactory[ListBenefitsResponse, ListBenefitsHateoasData] {
+    override def itemLinks(appConfig: AppConfig, data: ListBenefitsHateoasData, stateBenefit: StateBenefit): Seq[Link] = {
+      import data._
+      Seq(
+        retrieveSingleBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+      )
+    }
+
     override def links(appConfig: AppConfig, data: ListBenefitsHateoasData): Seq[Link] = {
       import data._
       Seq(
@@ -36,6 +45,40 @@ object ListBenefitsResponse extends HateoasLinks {
       )
     }
   }
+
+  implicit object ResponseFunctor extends Functor[ListBenefitsResponse] {
+    override def map[A, B](fa: ListBenefitsResponse[A])(f: A => B): ListBenefitsResponse[B] =
+      ListBenefitsResponse(
+        fa.stateBenefits.map(x => x.map(f)), fa.customerAddedStateBenefits.map(y => y.map(f)))
+  }
+
+  implicit def writes[B: Writes]: OWrites[ListBenefitsResponse[B]] = (response: ListBenefitsResponse[B]) => Json.obj(
+    "stateBenefits" -> response.stateBenefits,
+    "customerAddedStateBenefits" -> response.customerAddedStateBenefits
+  )
+
+  def readJson[T]()(implicit rds: Reads[Seq[T]]): Reads[Seq[T]] = (json: JsValue) => {
+    json
+      .validate[JsValue]
+      .flatMap(
+        readJson => {
+          Json.toJson(readJson.as[JsObject].fields.flatMap {
+            case (field, arr: JsArray) =>
+              arr.value.map {
+                element =>
+                  element.as[JsObject] + ("benefitType" -> Json.toJson(field))
+              }
+            case (field, obj: JsObject) =>
+              Seq(obj.as[JsObject] + ("benefitType" -> Json.toJson(field)))
+            case (_, _) => Seq.empty
+          }).validate[Seq[T]]})
+  }
+
+  implicit def reads[B: Reads]: Reads[ListBenefitsResponse[B]] = for {
+    stateBenefits <- (__ \ "stateBenefits").readNullable(readJson[B]())
+    customerAddedStateBenefits <- (__ \ "customerAddedStateBenefits").readNullable(readJson[B]())
+  } yield ListBenefitsResponse[B](stateBenefits, customerAddedStateBenefits)
+
 }
 
 case class ListBenefitsHateoasData(nino: String, taxYear: String) extends HateoasData

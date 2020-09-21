@@ -26,7 +26,7 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.listBenefits.ListBenefitsRequest
-import v1.models.response.listBenefits.ListBenefitsResponse
+import v1.models.response.listBenefits.{ListBenefitsResponse, StateBenefit}
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +36,7 @@ class ListBenefitsService @Inject()(connector: ListBenefitsConnector) extends De
 
   def listBenefits(request: ListBenefitsRequest)
                   (implicit hc: HeaderCarrier, ec: ExecutionContext, logContext: EndpointLogContext):
-  Future[Either[ErrorWrapper, ResponseWrapper[ListBenefitsResponse]]] = {
+  Future[Either[ErrorWrapper, ResponseWrapper[ListBenefitsResponse[StateBenefit]]]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.listBenefits(request)).leftMap(mapDesErrors(mappingDesToMtdError))
