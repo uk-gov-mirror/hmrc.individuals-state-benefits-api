@@ -2,17 +2,17 @@
   "benefitId": "a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
   "links": [
     {
-      "href": "/individuals/state-benefits/TC663795B/2021-22",
+      "href": "/individuals/state-benefits/TC663795B/2020-21",
       "rel": "self",
       "method": "GET"
     },
     {
-      "href": "/individuals/state-benefits/TC663795B/2021-22/a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
+      "href": "/individuals/state-benefits/TC663795B/2020-21/a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
       "rel": "update-state-benefit",
       "method": "PUT"
     },
     {
-      "href": "/individuals/state-benefits/TC663795B/2021-22/a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
+      "href": "/individuals/state-benefits/TC663795B/2020-21/a1e8057e-fbbc-47a8-a8b4-78d9f015c253",
       "rel": "delete-state-benefit",
       "method": "DELETE"
     }
