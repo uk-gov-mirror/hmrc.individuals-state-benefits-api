@@ -415,7 +415,7 @@ class ListBenefitsControllerISpec extends IntegrationBaseSpec {
       |	"links": [{
       |		"href": "/individuals/state-benefits/AA123456B/2019-20",
       |		"method": "POST",
-      |		"rel": "add-state-benefit"
+      |		"rel": "create-state-benefit"
       |	}, {
       |		"href": "/individuals/state-benefits/AA123456B/2019-20",
       |		"method": "GET",

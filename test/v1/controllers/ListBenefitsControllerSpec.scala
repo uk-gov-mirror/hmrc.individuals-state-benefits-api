@@ -125,7 +125,7 @@ class ListBenefitsControllerSpec
        |    {
        |      "href": "/individuals/state-benefits/$nino/$taxYear",
        |      "method": "POST",
-       |      "rel": "add-state-benefit"
+       |      "rel": "create-state-benefit"
        |    }
        |  ]
        |}
@@ -166,7 +166,7 @@ class ListBenefitsControllerSpec
       |	"links": [{
       |		"href": "/context/AA123456A/2020-21",
       |		"method": "POST",
-      |		"rel": "add-state-benefit"
+      |		"rel": "create-state-benefit"
       |	}, {
       |		"href": "/context/AA123456A/2020-21",
       |		"method": "GET",
@@ -197,7 +197,7 @@ class ListBenefitsControllerSpec
 
   val stateBenefitsLink: Link = Link("/context/AA123456A/2020-21?benefitId=\"f0d83ac0-a10a-4d57-9e41-6d033832779f\"",GET,"self")
   val customerStateBenefitsLink: Link = Link("/context/AA123456A/2020-21?benefitId=\"f0d83ac0-a10a-4d57-9e41-6d033832779f\"",GET,"self")
-  val listBenefitsLink: Seq[Link] = List(Link("/context/AA123456A/2020-21",POST,"add-state-benefit"), Link("/context/AA123456A/2020-21",GET,"self"))
+  val listBenefitsLink: Seq[Link] = List(Link("/context/AA123456A/2020-21",POST,"create-state-benefit"), Link("/context/AA123456A/2020-21",GET,"self"))
 
   val listBenefitsResponse: ListBenefitsResponse[StateBenefit] = ListBenefitsResponse(
     stateBenefits = Some(Seq(stateBenefits)),

@@ -41,14 +41,14 @@ trait HateoasLinks {
     Link(
       href = baseUri(appConfig, nino, taxYear),
       method = POST,
-      rel = ADD_STATE_BENEFIT
+      rel = CREATE_STATE_BENEFIT
     )
 
   def updateBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
       href = uriWithId(appConfig, nino, taxYear, benefitId),
       method = PUT,
-      rel = UPDATE_STATE_BENEFIT
+      rel = AMEND_STATE_BENEFIT
     )
 
   def deleteBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
@@ -76,7 +76,7 @@ trait HateoasLinks {
     Link(
       href = uriWithAmounts(appConfig, nino, taxYear, benefitId),
       method = PUT,
-      rel = UPDATE_STATE_BENEFIT_AMOUNTS
+      rel = AMEND_STATE_BENEFIT_AMOUNTS
     )
 
   def deleteBenefitAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =

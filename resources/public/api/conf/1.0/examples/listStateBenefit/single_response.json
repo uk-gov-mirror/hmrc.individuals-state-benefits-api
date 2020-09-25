@@ -20,7 +20,7 @@
         },
         {
           "href": "individuals/state-benefits/{nino}/{taxYear}/{benefitId}/amounts",
-          "rel": "update-state-benefit-amounts",
+          "rel": "amend-state-benefit-amounts",
           "method": "PUT"
         },
         {

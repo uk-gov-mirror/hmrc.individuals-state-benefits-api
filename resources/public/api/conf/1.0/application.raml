@@ -36,7 +36,7 @@ uses:
     /{taxYear}:
       uriParameters:
         taxYear: !include pathParameters/taxYearMinimum2020.raml
-      post: !include endpoints/addBenefit.raml
+      post: !include endpoints/createBenefit.raml
       get: !include endpoints/listBenefits.raml
       /{benefitId}:
         uriParameters:

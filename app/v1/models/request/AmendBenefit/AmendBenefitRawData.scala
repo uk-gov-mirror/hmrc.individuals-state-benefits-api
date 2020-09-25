@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package v1.models.hateoas
+package v1.models.request.AmendBenefit
 
-object RelType {
-  val AMEND_SAMPLE_REL = "amend-sample-rel"
-  val RETRIEVE_SAMPLE_REL = "retrieve-sample-rel"
-  val DELETE_SAMPLE_REL = "delete-sample-rel"
+import play.api.mvc.AnyContentAsJson
+import v1.models.request.RawData
 
-  val CREATE_STATE_BENEFIT = "create-state-benefit"
-  val LIST_STATE_BENEFITS = "list-state-benefits"
-  val AMEND_STATE_BENEFIT = "amend-state-benefit"
-  val DELETE_STATE_BENEFIT = "delete-state-benefit"
-  val AMEND_STATE_BENEFIT_AMOUNTS = "amend-state-benefit-amounts"
-  val DELETE_STATE_BENEFIT_AMOUNTS = "delete-state-benefit-amounts"
-  val IGNORE_STATE_BENEFIT = "ignore-state-benefit"
-
-  val SELF = "self"
-}
+case class AmendBenefitRawData(nino: String, taxYear: String, benefitId: String, body: AnyContentAsJson) extends RawData

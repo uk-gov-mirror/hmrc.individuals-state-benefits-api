@@ -41,8 +41,8 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
   val taxYear: String = "2020-21"
   val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  val addStateBenefitResponse: AddBenefitResponse = AddBenefitResponse(benefitId)
-  val addStateBenefitsHateoasData: AddBenefitHateoasData = AddBenefitHateoasData(nino, taxYear, benefitId)
+  val createStateBenefitResponse: AddBenefitResponse = AddBenefitResponse(benefitId)
+  val createStateBenefitsHateoasData: AddBenefitHateoasData = AddBenefitHateoasData(nino, taxYear, benefitId)
 
   val listBenefitsHateoasData: ListBenefitsHateoasData = ListBenefitsHateoasData(nino, taxYear)
 
@@ -69,7 +69,7 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
 
   val stateBenefitsLink = Link("/context/AA123456A/2020-21?benefitId=\"f0d83ac0-a10a-4d57-9e41-6d033832779f\"",GET,"self")
   val customerStateBenefitsLink = Link("/context/AA123456A/2020-21?benefitId=\"f0d83ac0-a10a-4d57-9e41-6d033832779f\"",GET,"self")
-  val listBenefitsLink = List(Link("/context/AA123456A/2020-21",POST,"add-state-benefit"), Link("/context/AA123456A/2020-21",GET,"self"))
+  val listBenefitsLink = List(Link("/context/AA123456A/2020-21",POST,"create-state-benefit"), Link("/context/AA123456A/2020-21",GET,"self"))
 
   val listBenefitsResponse: ListBenefitsResponse[StateBenefit] = ListBenefitsResponse(
     stateBenefits = Some(Seq(stateBenefits)),
@@ -106,12 +106,12 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
     }
 
     "use the add state benefits HateoasData specific links" in new Test {
-      hateoasFactory.wrap(addStateBenefitResponse, addStateBenefitsHateoasData) shouldBe
+      hateoasFactory.wrap(createStateBenefitResponse, createStateBenefitsHateoasData) shouldBe
         HateoasWrapper(
           AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253"),
           List(
             Link("/context/AA123456A/2020-21",GET,"self"),
-            Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",PUT,"update-state-benefit"),
+            Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",PUT,"amend-state-benefit"),
             Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",DELETE,"delete-state-benefit")
           )
         )

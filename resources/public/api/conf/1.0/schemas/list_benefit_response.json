@@ -37,7 +37,7 @@
             "type": "string",
             "enum": [
               "self",
-              "add-state-benefit"
+              "create-state-benefit"
             ]
           },
           "method": {
@@ -207,7 +207,7 @@
             "enum": [
               "self",
               "ignore-state-benefit",
-              "update-state-benefit-amounts",
+              "amend-state-benefit-amounts",
               "delete-state-benefit-amounts"
             ]
           },
@@ -244,9 +244,9 @@
             "type": "string",
             "enum": [
               "self",
-              "update-state-benefit",
+              "amend-state-benefit",
               "delete-state-benefit",
-              "update-state-benefit-amounts",
+              "amend-state-benefit-amounts",
               "delete-state-benefit-amounts"
             ]
           },

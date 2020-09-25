@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Amend State Benefit Request",
+  "description": "Amend State Benefit Request",
+  "type": "object",
+  "properties": {
+    "startDate": {
+      "$ref": "definitions.json#/definitions/startDate"
+    },
+    "endDate": {
+      "$ref": "definitions.json#/definitions/endDate"
+    }
+  },
+  "required": [
+    "startDate"
+  ]
+}
