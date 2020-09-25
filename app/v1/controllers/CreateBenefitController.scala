@@ -22,13 +22,16 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
 import play.mvc.Http.MimeTypes
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.Logging
 import v1.controllers.requestParsers.CreateBenefitRequestParser
 import v1.hateoas.HateoasFactory
+import v1.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.request.createBenefit.CreateBenefitRawData
 import v1.models.response.AddBenefitHateoasData
-import v1.services.{CreateBenefitService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{CreateBenefitService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,8 +40,10 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
                                         val lookupService: MtdIdLookupService,
                                         requestParser: CreateBenefitRequestParser,
                                         service: CreateBenefitService,
+                                        auditService: AuditService,
                                         hateoasFactory: HateoasFactory,
                                         cc: ControllerComponents)(implicit ec: ExecutionContext)
+
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -73,6 +78,12 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}"
           )
 
+          auditSubmission(
+            GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear), Some(request.body),
+              serviceResponse.correlationId, AuditResponse(httpStatus = OK, response = Right(Some(Json.toJson(hateoasResponse))))
+            )
+          )
+
           Ok(Json.toJson(hateoasResponse))
             .withApiHeaders(serviceResponse.correlationId)
             .as(MimeTypes.JSON)
@@ -81,6 +92,12 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
       result.leftMap { errorWrapper =>
         val correlationId = getCorrelationId(errorWrapper)
         val result = errorResult(errorWrapper).withApiHeaders(correlationId)
+
+        auditSubmission(
+          GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear), Some(request.body),
+            correlationId, AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
+          )
+        )
 
         result
       }.merge
@@ -97,4 +114,12 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }
   }
+
+  private def auditSubmission(details: GenericAuditDetail)
+                             (implicit hc: HeaderCarrier,
+                              ec: ExecutionContext): Future[AuditResult] = {
+    val event = AuditEvent("CreateStateBenefit", "create-state-benefit", details)
+    auditService.auditEvent(event)
+  }
+
 }
