@@ -19,13 +19,13 @@ description: 'This endpoint allows a developer to create/update benefits financi
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
 body:
   application/json:
-    type: !include ../schemas/update_benefitAmounts_request.json
+    type: !include ../schemas/amend_benefitAmounts_request.json
     example: !include ../examples/amendBenefitAmounts/request.json
 responses:
   200:
     body:
       application/json:
-        type: !include ../schemas/update_benefitAmounts_response.json
+        type: !include ../schemas/amend_benefitAmounts_response.json
         example: !include ../examples/amendBenefitAmounts/response.json
     headers:
       X-CorrelationId:
