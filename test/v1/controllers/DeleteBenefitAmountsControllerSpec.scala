@@ -21,7 +21,8 @@ import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockDeleteBenefitRequestParser
-import v1.mocks.services.{MockDeleteRetrieveService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.mocks.services.{MockAuditService, MockDeleteRetrieveService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteBenefit.{DeleteBenefitRawData, DeleteBenefitRequest}
@@ -33,13 +34,14 @@ class DeleteBenefitAmountsControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
+    with MockAuditService
     with MockDeleteRetrieveService
     with MockDeleteBenefitRequestParser {
 
   val nino: String = "AA123456A"
   val taxYear: String = "2019-20"
   val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-  val correlationId: String = "X-123"
+  val correlationId: String = "a1e8057e-fbbc-47a8-a8b478d9f015c253"
 
   val rawData: DeleteBenefitRawData = DeleteBenefitRawData(
     nino = nino,
@@ -53,6 +55,20 @@ class DeleteBenefitAmountsControllerSpec
     benefitId = benefitId
   )
 
+  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
+    AuditEvent(
+      auditType = "DeleteStateBenefitAmounts",
+      transactionName = "delete-state-benefit-amounts",
+      detail = GenericAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        params = Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId),
+        request = None,
+        `X-CorrelationId` = correlationId,
+        response = auditResponse
+      )
+    )
+
   trait Test {
     val hc = HeaderCarrier()
 
@@ -61,6 +77,7 @@ class DeleteBenefitAmountsControllerSpec
       lookupService = mockMtdIdLookupService,
       requestParser = mockDeleteBenefitRequestParser,
       service = mockDeleteRetrieveService,
+      auditService = mockAuditService,
       cc = cc
     )
 
@@ -85,6 +102,9 @@ class DeleteBenefitAmountsControllerSpec
         status(result) shouldBe NO_CONTENT
         contentAsString(result) shouldBe ""
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(NO_CONTENT, None, None)
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
 
@@ -102,6 +122,9 @@ class DeleteBenefitAmountsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -134,6 +157,9 @@ class DeleteBenefitAmountsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
