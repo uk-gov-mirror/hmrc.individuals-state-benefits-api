@@ -22,7 +22,8 @@ import play.api.mvc.{AnyContentAsJson, Result}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockAmendBenefitAmountsRequestParser
-import v1.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockAmendBenefitAmountsService}
+import v1.mocks.services.{MockAmendBenefitAmountsService, MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.AmendBenefitAmounts.{AmendBenefitAmountsRawData, AmendBenefitAmountsRequest, AmendBenefitAmountsRequestBody}
@@ -36,7 +37,8 @@ class AmendBenefitAmountsControllerSpec
     with MockMtdIdLookupService
     with MockAppConfig
     with MockAmendBenefitAmountsService
-    with MockAmendBenefitAmountsRequestParser {
+    with MockAmendBenefitAmountsRequestParser
+    with MockAuditService {
 
   trait Test {
     val hc = HeaderCarrier()
@@ -47,6 +49,7 @@ class AmendBenefitAmountsControllerSpec
       appConfig = mockAppConfig,
       requestParser = mockAmendBenefitAmountsRequestParser,
       service = mockUpdateBenefitAmountsService,
+      auditService = mockAuditService,
       cc = cc
     )
 
@@ -112,6 +115,20 @@ class AmendBenefitAmountsControllerSpec
     """.stripMargin
   )
 
+  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
+    AuditEvent(
+      auditType = "AmendStateBenefitAmounts",
+      transactionName = "amend-state-benefit-amounts",
+      detail = GenericAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        params = Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId),
+        request = Some(requestBodyJson),
+        `X-CorrelationId` = correlationId,
+        response = auditResponse
+      )
+    )
+
   "UpdateBenefitAmountsController" should {
     "return OK" when {
       "happy path" in new Test {
@@ -129,6 +146,9 @@ class AmendBenefitAmountsControllerSpec
         status(result) shouldBe OK
         contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
 
@@ -146,6 +166,9 @@ class AmendBenefitAmountsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -181,6 +204,9 @@ class AmendBenefitAmountsControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

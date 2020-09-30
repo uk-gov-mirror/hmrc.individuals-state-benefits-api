@@ -23,6 +23,7 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockAmendBenefitRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockAmendBenefitService}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors.{BadRequestError, BenefitIdFormatError, EndDateFormatError, NinoFormatError, RuleEndDateBeforeStartDateError, RuleEndDateBeforeTaxYearStartError, RuleIncorrectOrEmptyBodyError, RuleStartDateAfterTaxYearEndError, RuleTaxYearNotEndedError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, StartDateFormatError, TaxYearFormatError, _}
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.AmendBenefit.{AmendBenefitRawData, AmendBenefitRequest, AmendBenefitRequestBody}
@@ -81,6 +82,7 @@ class AmendBenefitControllerSpec
       appConfig = mockAppConfig,
       requestParser = mockUpdateBenefitRequestParser,
       service = mockUpdateBenefitService,
+      auditService = mockAuditService,
       cc = cc
     )
 
@@ -89,7 +91,7 @@ class AmendBenefitControllerSpec
     MockedAppConfig.apiGatewayContext.returns("individuals/state-benefits").anyNumberOfTimes()
   }
 
-  val responseBody: JsValue = Json.parse(
+  val responseJson: JsValue = Json.parse(
     s"""
       |{
       |  "links": [
@@ -118,6 +120,20 @@ class AmendBenefitControllerSpec
     """.stripMargin
   )
 
+  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
+    AuditEvent(
+      auditType = "AmendStateBenefit",
+      transactionName = "amend-state-benefit",
+      detail = GenericAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        params = Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId),
+        request = Some(requestBodyJson),
+        `X-CorrelationId` = correlationId,
+        response = auditResponse
+      )
+    )
+
   "UpdateBenefitController" should {
     "return OK" when {
       "happy path" in new Test {
@@ -135,8 +151,11 @@ class AmendBenefitControllerSpec
         )
 
         status(result) shouldBe OK
-        contentAsJson(result) shouldBe responseBody
+        contentAsJson(result) shouldBe responseJson
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(responseJson))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
 
@@ -157,6 +176,8 @@ class AmendBenefitControllerSpec
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
 
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -201,6 +222,9 @@ class AmendBenefitControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

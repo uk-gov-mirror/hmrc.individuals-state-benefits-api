@@ -22,7 +22,8 @@ import play.api.mvc.{AnyContentAsJson, Result}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockIgnoreBenefitRequestParser
-import v1.mocks.services.{MockEnrolmentsAuthService, MockIgnoreBenefitService, MockMtdIdLookupService}
+import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockIgnoreBenefitService, MockMtdIdLookupService}
+import v1.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.ignoreBenefit.{IgnoreBenefitRawData, IgnoreBenefitRequest, IgnoreBenefitRequestBody}
@@ -36,7 +37,8 @@ class IgnoreBenefitControllerSpec
     with MockMtdIdLookupService
     with MockAppConfig
     with MockIgnoreBenefitService
-    with MockIgnoreBenefitRequestParser {
+    with MockIgnoreBenefitRequestParser
+    with MockAuditService {
 
   trait Test {
     val hc = HeaderCarrier()
@@ -47,6 +49,7 @@ class IgnoreBenefitControllerSpec
       appConfig = mockAppConfig,
       requestParser = mockIgnoreBenefitRequestParser,
       service = mockIgnoreBenefitService,
+      auditService = mockAuditService,
       cc = cc
     )
 
@@ -103,6 +106,20 @@ class IgnoreBenefitControllerSpec
     """.stripMargin
   )
 
+  def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
+    AuditEvent(
+      auditType = "IgnoreStateBenefit",
+      transactionName = "ignore-state-benefit",
+      detail = GenericAuditDetail(
+        userType = "Individual",
+        agentReferenceNumber = None,
+        params = Map("nino" -> nino, "taxYear" -> taxYear),
+        request = Some(requestBodyJson),
+        `X-CorrelationId` = correlationId,
+        response = auditResponse
+      )
+    )
+
   "IgnoreBenefitController" should {
     "return OK" when {
       "happy path" in new Test {
@@ -120,6 +137,9 @@ class IgnoreBenefitControllerSpec
         status(result) shouldBe OK
         contentAsJson(result) shouldBe hateoasResponse
         header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+        val auditResponse: AuditResponse = AuditResponse(OK, None, Some(hateoasResponse))
+        MockedAuditService.verifyAuditEvent(event(auditResponse)).once
       }
     }
 
@@ -137,6 +157,9 @@ class IgnoreBenefitControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(error.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 
@@ -171,6 +194,9 @@ class IgnoreBenefitControllerSpec
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
             header("X-CorrelationId", result) shouldBe Some(correlationId)
+
+            val auditResponse: AuditResponse = AuditResponse(expectedStatus, Some(Seq(AuditError(mtdError.code))), None)
+            MockedAuditService.verifyAuditEvent(event(auditResponse)).once
           }
         }
 

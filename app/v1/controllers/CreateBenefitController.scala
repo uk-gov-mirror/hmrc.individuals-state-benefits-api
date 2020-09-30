@@ -31,7 +31,7 @@ import v1.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.request.createBenefit.CreateBenefitRawData
 import v1.models.response.AddBenefitHateoasData
-import v1.services.{CreateBenefitService, AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.{AuditService, CreateBenefitService, EnrolmentsAuthService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
