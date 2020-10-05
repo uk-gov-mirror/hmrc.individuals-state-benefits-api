@@ -73,7 +73,7 @@ class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
           val hateoasResponse = ignoreBenefitHateoasBody(appConfig, nino, taxYear, benefitId)
 
           auditSubmission(
-            GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear), Some(request.body),
+            GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId), Some(request.body),
               serviceResponse.correlationId, AuditResponse(httpStatus = OK, response = Right(Some(Json.toJson(hateoasResponse))))
             )
           )
@@ -88,7 +88,7 @@ class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
         val result = errorResult(errorWrapper).withApiHeaders(correlationId)
 
         auditSubmission(
-          GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear), Some(request.body),
+          GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId), Some(request.body),
             correlationId, AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
           )
         )

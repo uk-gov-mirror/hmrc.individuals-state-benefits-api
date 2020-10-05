@@ -113,7 +113,7 @@ class IgnoreBenefitControllerSpec
       detail = GenericAuditDetail(
         userType = "Individual",
         agentReferenceNumber = None,
-        params = Map("nino" -> nino, "taxYear" -> taxYear),
+        params = Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId),
         request = Some(requestBodyJson),
         `X-CorrelationId` = correlationId,
         response = auditResponse
