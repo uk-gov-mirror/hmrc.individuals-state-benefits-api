@@ -1,46 +1,46 @@
 {
-  "stateBenefits": [
+  "stateBenefits":[
     {
-      "benefitType": "statePensionLumpSum",
-      "benefitId": "e4bf331e-0e55-297f-9a74-c766674775d4",
-      "startDate": "2019-09-01",
-      "endDate": "2019-09-02",
-      "amount": 345.55,
-      "taxPaid": 78.88,
-      "links": [
+      "benefitType":"statePensionLumpSum",
+      "benefitId":"e4bf331e-0e55-297f-9a74-c766674775d4",
+      "startDate":"2019-09-01",
+      "endDate":"2019-09-02",
+      "amount":345.55,
+      "taxPaid":78.88,
+      "links":[
         {
-          "href": "individuals/state-benefits/{nino}/{taxYear}?benefitId={benefitId}",
-          "rel": "self",
-          "method": "GET"
+          "href":"individuals/state-benefits/TC663795B/2020-21?benefitId={benefitId}",
+          "rel":"self",
+          "method":"GET"
         },
         {
-          "href": "individuals/state-benefits/{nino}/{taxYear}/{benefitId}/ignore",
-          "rel": "ignore-state-benefit",
-          "method": "PUT"
+          "href":"individuals/state-benefits/TC663795B/2020-21/{benefitId}/ignore",
+          "rel":"ignore-state-benefit",
+          "method":"PUT"
         },
         {
-          "href": "individuals/state-benefits/{nino}/{taxYear}/{benefitId}/amounts",
-          "rel": "amend-state-benefit-amounts",
-          "method": "PUT"
+          "href":"individuals/state-benefits/TC663795B/2020-21/{benefitId}/amounts",
+          "rel":"amend-state-benefit-amounts",
+          "method":"PUT"
         },
         {
-          "href": "individuals/state-benefits/{nino}/{taxYear}/{benefitId}/amounts",
-          "rel": "delete-state-benefit-amounts",
-          "method": "DELETE"
+          "href":"individuals/state-benefits/TC663795B/2020-21/{benefitId}/amounts",
+          "rel":"delete-state-benefit-amounts",
+          "method":"DELETE"
         }
       ]
     }
   ],
-  "links": [
+  "links":[
     {
-      "href": "individuals/state-benefits/{nino}/{taxYear}",
-      "rel": "self",
-      "method": "GET"
+      "href":"individuals/state-benefits/TC663795B/2020-21",
+      "rel":"self",
+      "method":"GET"
     },
     {
-      "href": "individuals/state-benefits/{nino}/{taxYear}",
-      "rel": "create-state-benefit",
-      "method": "POST"
+      "href":"individuals/state-benefits/TC663795B/2020-21",
+      "rel":"create-state-benefit",
+      "method":"POST"
     }
   ]
 }

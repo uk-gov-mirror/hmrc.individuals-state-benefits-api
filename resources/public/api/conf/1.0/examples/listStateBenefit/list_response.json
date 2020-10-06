@@ -1,58 +1,64 @@
 {
-  "stateBenefits": [
+  "stateBenefits":[
     {
-      "benefitType": "incapacityBenefit",
-      "dateIgnored": "2019-04-04T01:01:01Z",
-      "benefitId": "9d51a3eb-e374-5349-aa02-96db92561138",
-      "startDate": "2020-01-01",
-      "endDate": "2020-04-01",
-      "amount": 34345.12,
-      "taxPaid": 345.34,
-      "links": [{
-        "href": "/individuals/state-benefits/{nino}/{taxYear}?benefitId=9d51a3eb-e374-5349-aa02-96db92561138",
-        "method": "GET",
-        "rel": "self"
-      }]
+      "benefitType":"incapacityBenefit",
+      "dateIgnored":"2019-04-04T01:01:01Z",
+      "benefitId":"9d51a3eb-e374-5349-aa02-96db92561138",
+      "startDate":"2020-01-01",
+      "endDate":"2020-04-01",
+      "amount":34345.12,
+      "taxPaid":345.34,
+      "links":[
+        {
+          "href":"/individuals/state-benefits/TC663795B/2020-21?benefitId=9d51a3eb-e374-5349-aa02-96db92561138",
+          "method":"GET",
+          "rel":"self"
+        }
+      ]
     },
     {
-      "benefitType": "otherStateBenefits",
-      "benefitId": "9d51a3eb-e374-5349-aa02-96db92561124",
-      "startDate": "2020-01-01",
-      "endDate": "2020-10-29",
-      "amount": 512.56,
-      "taxPaid": 342.78,
-      "links": [{
-        "href": "/individuals/state-benefits/{nino}/{taxYear}?benefitId=9d51a3eb-e374-5349-aa02-96db92561124",
-        "method": "GET",
-        "rel": "self"
-      }]
+      "benefitType":"otherStateBenefits",
+      "benefitId":"9d51a3eb-e374-5349-aa02-96db92561124",
+      "startDate":"2020-01-01",
+      "endDate":"2020-10-29",
+      "amount":512.56,
+      "taxPaid":342.78,
+      "links":[
+        {
+          "href":"/individuals/state-benefits/TC663795B/2020-21?benefitId=9d51a3eb-e374-5349-aa02-96db92561124",
+          "method":"GET",
+          "rel":"self"
+        }
+      ]
     }
   ],
-  "customerAddedStateBenefits": [
+  "customerAddedStateBenefits":[
     {
-      "benefitType": "statePensionLumpSum",
-      "submittedOn": "2019-04-04T01:01:01Z",
-      "benefitId": "cf87eb89-3d07-1496-89da-cf16d45c934b",
-      "startDate": "2019-11-01",
-      "amount": 203.90,
-      "taxPaid": 112.12,
-      "links": [{
-        "href": "/individuals/state-benefits/{nino}/{taxYear}?benefitId=cf87eb89-3d07-1496-89da-cf16d45c934b",
-        "method": "GET",
-        "rel": "self"
-      }]
+      "benefitType":"statePensionLumpSum",
+      "submittedOn":"2019-04-04T01:01:01Z",
+      "benefitId":"cf87eb89-3d07-1496-89da-cf16d45c934b",
+      "startDate":"2019-11-01",
+      "amount":203.90,
+      "taxPaid":112.12,
+      "links":[
+        {
+          "href":"/individuals/state-benefits/TC663795B/2020-21?benefitId=cf87eb89-3d07-1496-89da-cf16d45c934b",
+          "method":"GET",
+          "rel":"self"
+        }
+      ]
     }
   ],
-  "links": [
+  "links":[
     {
-      "href": "individuals/state-benefits/{nino}/{taxYear}",
-      "rel": "self",
-      "method": "GET"
+      "href":"individuals/state-benefits/TC663795B/2020-21",
+      "rel":"self",
+      "method":"GET"
     },
     {
-      "href": "individuals/state-benefits/{nino}/{taxYear}",
-      "rel": "create-state-benefit",
-      "method": "POST"
+      "href":"individuals/state-benefits/TC663795B/2020-21",
+      "rel":"create-state-benefit",
+      "method":"POST"
     }
   ]
 }
