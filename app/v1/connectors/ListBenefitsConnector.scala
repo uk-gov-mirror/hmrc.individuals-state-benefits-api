@@ -39,8 +39,13 @@ class ListBenefitsConnector @Inject()(val http: HttpClient,
     val nino = request.nino.nino
     val taxYear = request.taxYear
 
-    get(
-      DesUri[ListBenefitsResponse[StateBenefit]](s"income-tax/income/state-benefits/$nino/$taxYear")
+    val queryParams = Map("benefitId" -> request.benefitId).collect {
+        case (key, Some(value)) => key -> value
+      }
+
+    getWithQueryParams(
+      DesUri[ListBenefitsResponse[StateBenefit]](s"income-tax/income/state-benefits/$nino/$taxYear"),
+      queryParams
     )
   }
 }

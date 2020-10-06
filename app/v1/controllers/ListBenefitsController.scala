@@ -28,6 +28,7 @@ import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.listBenefits.ListBenefitsRawData
 import v1.models.response.listBenefits.ListBenefitsHateoasData
+import v1.models.response.listBenefits.ListBenefitsResponse.ListBenefitsLinksFactory
 import v1.services.{EnrolmentsAuthService, ListBenefitsService, MtdIdLookupService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,12 +49,13 @@ class ListBenefitsController @Inject()(val authService: EnrolmentsAuthService,
       endpointName = "ListBenefitsAmounts"
     )
 
-  def listBenefits(nino: String, taxYear: String): Action[AnyContent] =
+  def listBenefits(nino: String, taxYear: String, benefitId: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
 
       val rawData = ListBenefitsRawData(
         nino = nino,
-        taxYear = taxYear
+        taxYear = taxYear,
+        benefitId = benefitId
       )
 
       val result =
@@ -64,7 +66,7 @@ class ListBenefitsController @Inject()(val authService: EnrolmentsAuthService,
             hateoasFactory
               .wrapList(
                 serviceResponse.responseData,
-                ListBenefitsHateoasData(nino, taxYear)
+                ListBenefitsHateoasData(nino, taxYear, benefitId)
               )
               .asRight[ErrorWrapper])
         } yield {
@@ -87,7 +89,7 @@ class ListBenefitsController @Inject()(val authService: EnrolmentsAuthService,
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     (errorWrapper.error: @unchecked) match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError |
+      case BadRequestError | NinoFormatError | TaxYearFormatError | BenefitIdFormatError |
            RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError |
            CustomMtdError(RuleIncorrectOrEmptyBodyError.code) => BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))

@@ -16,7 +16,7 @@
 
 package v1.models.response
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
 import v1.models.response.listBenefits.StateBenefit
 import v1.models.utils.JsonErrorValidators
@@ -32,10 +32,11 @@ class StateBenefitSpec extends UnitSpec with JsonErrorValidators {
       |			"startDate": "2020-01-01",
       |			"endDate": "2020-04-01",
       |			"amount": 34345.55,
-      |			"taxPaid": 345.55
+      |			"taxPaid": 345.55,
+      |     "createdBy": "HMRC"
       |}""".stripMargin)
 
-  val model = StateBenefit(
+  val model: StateBenefit = StateBenefit(
     benefitType = "incapacityBenefit",
     dateIgnored = Some("2019-04-04T01:01:01Z"),
     submittedOn = Some("9d51a3eb-e374-5349-aa02-96db92561138"),
@@ -43,7 +44,8 @@ class StateBenefitSpec extends UnitSpec with JsonErrorValidators {
     startDate = "2020-01-01",
     endDate = Some("2020-04-01"),
     amount = Some(34345.55),
-    taxPaid = Some(345.55))
+    taxPaid = Some(345.55),
+    createdBy = Some("HMRC"))
 
   testJsonProperties[StateBenefit](json)(
     mandatoryProperties = Seq(
@@ -56,7 +58,8 @@ class StateBenefitSpec extends UnitSpec with JsonErrorValidators {
       "submittedOn",
       "endDate",
       "amount",
-      "taxPaid"
+      "taxPaid",
+      "createdBy"
     )
   )
 
@@ -69,7 +72,7 @@ class StateBenefitSpec extends UnitSpec with JsonErrorValidators {
 
     "writes from valid object" should {
       "produce the expected json" in {
-        Json.toJson(model) shouldBe json
+        Json.toJson(model) shouldBe json.as[JsObject] - "createdBy"
       }
     }
   }

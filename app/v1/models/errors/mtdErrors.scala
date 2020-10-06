@@ -43,9 +43,11 @@ object BenefitTypeFormatError extends MtdError("FORMAT_BENEFIT_TYPE", "The provi
 object ValueFormatError extends MtdError("FORMAT_VALUE", "")
 
 // Rule Errors
-object RuleTaxYearNotSupportedError extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value")
+object RuleTaxYearNotSupportedError extends
+  MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "The specified tax year is not supported. That is, the tax year specified is before the minimum tax year value")
 
-object RuleTaxYearRangeInvalidError extends MtdError(code = "RULE_TAX_YEAR_RANGE_INVALID", message = "Tax year range invalid. A tax year range of one year is required")
+object RuleTaxYearRangeInvalidError extends
+  MtdError(code = "RULE_TAX_YEAR_RANGE_INVALID", message = "Tax year range invalid. A tax year range of one year is required")
 
 object RuleTaxYearNotEndedError extends MtdError(code = "RULE_TAX_YEAR_NOT_ENDED", "Tax year not ended")
 

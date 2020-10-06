@@ -36,6 +36,11 @@
       "href": "individuals/state-benefits/{nino}/{taxYear}",
       "rel": "self",
       "method": "GET"
+    },
+    {
+      "href": "individuals/state-benefits/{nino}/{taxYear}",
+      "rel": "create-state-benefit",
+      "method": "POST"
     }
   ]
 }

@@ -34,7 +34,8 @@ class ListBenefitsValidator @Inject()(implicit appConfig: AppConfig)
   private def parameterFormatValidation: ListBenefitsRawData => List[List[MtdError]] = (data: ListBenefitsRawData) => {
     List(
       NinoValidation.validate(data.nino),
-      TaxYearValidation.validate(data.taxYear)
+      TaxYearValidation.validate(data.taxYear),
+      data.benefitId.map(BenefitIdValidation.validate).getOrElse(Nil)
     )
   }
 

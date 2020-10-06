@@ -55,6 +55,16 @@ trait BaseDesConnector {
     doGet(desHeaderCarrier(hc))
   }
 
+  def getWithQueryParams[Resp](uri: DesUri[Resp], queryParams: Map[String, String])(implicit ec: ExecutionContext,
+                                   hc: HeaderCarrier,
+                                   httpReads: HttpReads[DesOutcome[Resp]]): Future[DesOutcome[Resp]] = {
+
+    def doGet(implicit hc: HeaderCarrier): Future[DesOutcome[Resp]] =
+      http.GET(s"${appConfig.desBaseUrl}/${uri.value}", queryParams.toSeq)
+
+    doGet(desHeaderCarrier(hc))
+  }
+
   def delete[Resp](uri: DesUri[Resp])(implicit ec: ExecutionContext,
                                       hc: HeaderCarrier,
                                       httpReads: HttpReads[DesOutcome[Resp]]): Future[DesOutcome[Resp]] = {

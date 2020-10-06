@@ -30,6 +30,8 @@ class ListBenefitsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
   private val validTaxYear = "2020-21"
+  private val benefitId = Some("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
+
 
   class Test extends MockCurrentDateTime with MockAppConfig {
 
@@ -51,42 +53,50 @@ class ListBenefitsValidatorSpec extends UnitSpec {
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in new Test {
-        validator.validate(ListBenefitsRawData(validNino, validTaxYear)) shouldBe Nil
+        validator.validate(ListBenefitsRawData(validNino, validTaxYear, benefitId)) shouldBe Nil
       }
     }
 
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in new Test {
-        validator.validate(ListBenefitsRawData("A12344A", validTaxYear)) shouldBe
+        validator.validate(ListBenefitsRawData("A12344A", validTaxYear, benefitId)) shouldBe
           List(NinoFormatError)
       }
     }
 
     "return TaxYearFormatError error" when {
       "an invalid tax year is supplied" in new Test {
-        validator.validate(ListBenefitsRawData(validNino, "20199")) shouldBe
+        validator.validate(ListBenefitsRawData(validNino, "20199", benefitId)) shouldBe
           List(TaxYearFormatError)
       }
     }
 
     "return RuleTaxYearNotSupportedError error" when {
       "a tax year that is not supported is supplied" in new Test {
-        validator.validate(ListBenefitsRawData(validNino, "2019-20")) shouldBe
+        validator.validate(ListBenefitsRawData(validNino, "2019-20", benefitId)) shouldBe
           List(RuleTaxYearNotSupportedError)
       }
     }
 
     "return RuleTaxYearRangeInvalidError error" when {
       "an out of range tax year is supplied" in new Test {
-        validator.validate(ListBenefitsRawData(validNino, "2020-22")) shouldBe
+        validator.validate(ListBenefitsRawData(validNino, "2020-22", benefitId)) shouldBe
           List(RuleTaxYearRangeInvalidError)
       }
     }
 
-    "return NinoFormatError and TaxYearFormatError errors" when {
+
+    "return BenefitIdFormatError error" when {
+      "a an invalid benefit ID is supplied" in new Test {
+        validator.validate(ListBenefitsRawData(validNino, "2019-20", Some("invalidBenefitId"))) shouldBe
+          List(BenefitIdFormatError)
+      }
+    }
+
+    "return NinoFormatError, TaxYearFormatError, and BenefitIdFormatError errors" when {
       "request supplied has invalid nino and tax year" in new Test {
-        validator.validate(ListBenefitsRawData("A12344A", "20199")) shouldBe
-          List(NinoFormatError, TaxYearFormatError)
+        validator.validate(ListBenefitsRawData("A12344A", "20199", Some("invalidBenefitId"))) shouldBe
+          List(NinoFormatError, TaxYearFormatError, BenefitIdFormatError)
       }
     }
   }

@@ -26,10 +26,12 @@ class ListBenefitsRequestParserSpec extends UnitSpec {
 
   val nino: String = "AA123456B"
   val taxYear: String = "2020-21"
+  val benefitId = Some("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
   val listBenefitsRawData: ListBenefitsRawData = ListBenefitsRawData(
     nino = nino,
-    taxYear = taxYear
+    taxYear = taxYear,
+    benefitId = benefitId
   )
 
   trait Test extends MockListBenefitsValidator {
@@ -44,7 +46,7 @@ class ListBenefitsRequestParserSpec extends UnitSpec {
         MockListBenefitsValidator.validate(listBenefitsRawData).returns(Nil)
 
         parser.parseRequest(listBenefitsRawData) shouldBe
-          Right(ListBenefitsRequest(Nino(nino), taxYear))
+          Right(ListBenefitsRequest(Nino(nino), taxYear, benefitId))
       }
     }
 

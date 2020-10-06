@@ -29,8 +29,15 @@ class ListBenefitsConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA111111A"
   val taxYear: String = "2019"
+  private val benefitId = Some("4557ecb5-fd32-48cc-81f5-e6acd1099f3c")
 
-  val request: ListBenefitsRequest = ListBenefitsRequest(Nino(nino), taxYear)
+  def queryParams: Seq[(String, String)] =
+    Seq("benefitId" -> benefitId)
+      .collect {
+        case (k, Some(v)) => (k, v)
+      }
+
+  val request: ListBenefitsRequest = ListBenefitsRequest(Nino(nino), taxYear, benefitId)
 
   private val validResponse = ListBenefitsResponse(
     stateBenefits = Some(
@@ -86,8 +93,9 @@ class ListBenefitsConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, validResponse))
 
         MockedHttpClient
-          .get(
+          .parameterGet(
             url = s"$baseUrl/income-tax/income/state-benefits/$nino/$taxYear",
+            queryParams,
             requiredHeaders = desRequestHeaders: _*
           )
           .returns(Future.successful(outcome))

@@ -25,5 +25,5 @@ class ListBenefitsRequestParser @Inject()(val validator: ListBenefitsValidator)
   extends RequestParser[ListBenefitsRawData, ListBenefitsRequest] {
 
   override protected def requestFor(data: ListBenefitsRawData): ListBenefitsRequest =
-    ListBenefitsRequest(Nino(data.nino), data.taxYear)
+    ListBenefitsRequest(Nino(data.nino), data.taxYear, data.benefitId)
 }

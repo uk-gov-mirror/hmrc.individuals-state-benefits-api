@@ -28,7 +28,7 @@ trait HateoasLinks {
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear"
 
   private def baseUriWithBenefitIdParam(appConfig: AppConfig, nino: String, taxYear: String, id: String) =
-    s"""/${appConfig.apiGatewayContext}/$nino/$taxYear?benefitId="$id""""
+    s"""/${appConfig.apiGatewayContext}/$nino/$taxYear?benefitId=$id"""
 
   private def uriWithId(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId"

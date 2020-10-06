@@ -19,155 +19,9 @@ package v1.models.response
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.response.listBenefits.{ListBenefitsResponse, StateBenefit}
+import v1.fixtures.ListBenefitsFixture._
 
 class ListBenefitsResponseSpec extends UnitSpec {
-
-  val desJson: JsValue = Json.parse(
-    """
-      |{
-      |  "stateBenefits": {
-      |    "incapacityBenefit": [
-      |    {
-      |      "dateIgnored": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00,
-      |      "taxPaid": 2132.22
-      |     },
-      |     {
-      |      "dateIgnored": "2019-03-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779g",
-      |      "startDate": "2020-03-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 1000.00
-      |     }
-      |    ],
-      |    "statePension": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "amount": 2000.00
-      |    },
-      |    "statePensionLumpSum": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "endDate"  : "2019-01-01",
-      |      "amount": 2000.00,
-      |      "taxPaid": 2132.22
-      |    },
-      |    "employmentSupportAllowance": [
-      |      {
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      },
-      |      {
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779g",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 1000.00
-      |      }
-      |    ],
-      |    "jobSeekersAllowance": [
-      |      {
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      },
-      |      {
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779g",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 1000.00
-      |      }
-      |    ],
-      |    "bereavementAllowance": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    },
-      |    "otherStateBenefits": {
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    }
-      |  },
-      |  "customerAddedStateBenefits": {
-      |    "incapacityBenefit": [
-      |      {
-      |        "submittedOn": "2019-04-04T01:01:01Z",
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      },
-      |      {
-      |        "submittedOn": "2019-04-04T01:01:01Z",
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779g",
-      |        "startDate": "2020-03-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 1000.00
-      |      }
-      |    ],
-      |    "statePension": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "amount": 2000.00
-      |    },
-      |    "statePensionLumpSum": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2019-01-01",
-      |      "endDate" : "2019-01-01",
-      |      "amount": 2000.00,
-      |      "taxPaid": 2132.22
-      |    },
-      |    "employmentSupportAllowance": [
-      |      {
-      |        "submittedOn": "2019-04-04T01:01:01Z",
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      }
-      |    ],
-      |    "jobSeekersAllowance": [
-      |      {
-      |        "submittedOn": "2019-04-04T01:01:01Z",
-      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |        "startDate": "2020-01-01",
-      |        "endDate": "2020-04-01",
-      |        "amount": 2000.00,
-      |        "taxPaid": 2132.22
-      |      }
-      |    ],
-      |    "bereavementAllowance": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    },
-      |    "otherStateBenefits": {
-      |      "submittedOn": "2019-04-04T01:01:01Z",
-      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
-      |      "startDate": "2020-01-01",
-      |      "endDate": "2020-04-01",
-      |      "amount": 2000.00
-      |    }
-      |  }
-      |}
-      |""".stripMargin
-  )
 
   val model: ListBenefitsResponse[StateBenefit] = ListBenefitsResponse(
     stateBenefits = Some(
@@ -180,7 +34,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "incapacityBenefit",
@@ -190,7 +45,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(1000.00),
           taxPaid = None,
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "statePension",
@@ -200,7 +56,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = None,
           amount = Some(2000.00),
           taxPaid = None,
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "statePensionLumpSum",
@@ -210,7 +67,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2019-01-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "employmentSupportAllowance",
@@ -220,7 +78,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "employmentSupportAllowance",
@@ -230,7 +89,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(1000.00),
           taxPaid = None,
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "jobSeekersAllowance",
@@ -240,7 +100,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "jobSeekersAllowance",
@@ -250,7 +111,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(1000.00),
           taxPaid = None,
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "bereavementAllowance",
@@ -260,7 +122,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = None,
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         ),
         StateBenefit(
           benefitType = "otherStateBenefits",
@@ -270,7 +133,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = None,
-          submittedOn = None
+          submittedOn = None,
+          createdBy = Some("HMRC")
         )
       )
     ),
@@ -283,7 +147,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         ),
         StateBenefit(
           benefitType = "incapacityBenefit",
@@ -292,7 +157,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(1000.00),
           taxPaid = None,
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         ),
         StateBenefit(
           benefitType = "statePension",
@@ -301,7 +167,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = None,
           amount = Some(2000.00),
           taxPaid = None,
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         ),
         StateBenefit(
           benefitType = "statePensionLumpSum",
@@ -310,7 +177,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2019-01-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         ),
         StateBenefit(
           benefitType = "employmentSupportAllowance",
@@ -319,7 +187,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         ),
         StateBenefit(
           benefitType = "jobSeekersAllowance",
@@ -328,7 +197,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         ),
         StateBenefit(
           benefitType = "bereavementAllowance",
@@ -337,7 +207,8 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = None,
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         ),
         StateBenefit(
           benefitType = "otherStateBenefits",
@@ -346,12 +217,12 @@ class ListBenefitsResponseSpec extends UnitSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = None,
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = Some("CUSTOM")
         )
       )
     )
   )
-
 
   val mtdJson: JsValue = Json.parse(
     """
