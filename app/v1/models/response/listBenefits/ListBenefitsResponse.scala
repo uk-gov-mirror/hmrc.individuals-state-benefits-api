@@ -33,25 +33,23 @@ object ListBenefitsResponse extends HateoasLinks with JsonUtils {
     override def itemLinks(appConfig: AppConfig, data: ListBenefitsHateoasData, stateBenefit: StateBenefit): Seq[Link] = {
       import data._
 
-      // Common links for both HMRC and CUSTOM created state benefits
+      val retrieveLink = retrieveSingleBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+      val updateAmountsLink = updateBenefitAmounts(appConfig, nino, taxYear, stateBenefit.benefitId)
+      val deleteAmountsLink = deleteBenefitAmounts(appConfig, nino, taxYear, stateBenefit.benefitId)
+      val deleteLink = deleteBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+      val updateLink = updateBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+      val ignoreLink = ignoreBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+
       val commonLinks = if (stateBenefit.hasAmounts) {
-        Seq(
-          retrieveSingleBenefit(appConfig, nino, taxYear, stateBenefit.benefitId),
-          updateBenefitAmounts(appConfig, nino, taxYear, stateBenefit.benefitId),
-          deleteBenefitAmounts(appConfig, nino, taxYear, stateBenefit.benefitId)
-        )
+        Seq(retrieveLink, updateAmountsLink, deleteAmountsLink)
       } else {
-        Seq(
-          retrieveSingleBenefit(appConfig, nino, taxYear, stateBenefit.benefitId),
-          updateBenefitAmounts(appConfig, nino, taxYear, stateBenefit.benefitId)
-        )
+        Seq(retrieveLink, updateAmountsLink)
       }
 
       // Links specific to the type (HMRC/CUSTOM) state benefit
       val links = stateBenefit.createdBy match {
-        case Some("CUSTOM") => commonLinks ++ Seq(deleteBenefit(appConfig, nino, taxYear, stateBenefit.benefitId),
-          updateBenefit(appConfig, nino, taxYear, stateBenefit.benefitId))
-        case _ => commonLinks :+ ignoreBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+        case Some("CUSTOM") => commonLinks ++ Seq(deleteLink, updateLink)
+        case _ => commonLinks :+ ignoreLink
       }
 
       // Differentiate the links based on the call list/single by benefitId passed in the request

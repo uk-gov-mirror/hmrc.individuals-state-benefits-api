@@ -17,8 +17,6 @@
 package v1.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.{DateTime, DateTimeZone}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -158,25 +156,6 @@ class AmendBenefitAmountsControllerISpec extends IntegrationBaseSpec {
         )
       )
 
-      def getCurrentTaxYear: String = {
-        val currentDate = DateTime.now(DateTimeZone.UTC)
-
-        val taxYearStartDate: DateTime = DateTime.parse(
-          currentDate.getYear + "-04-06",
-          DateTimeFormat.forPattern("yyyy-MM-dd")
-        )
-
-        def fromDesIntToString(taxYear: Int): String =
-          (taxYear - 1) + "-" + taxYear.toString.drop(2)
-
-        if (currentDate.isBefore(taxYearStartDate)){
-          fromDesIntToString(currentDate.getYear)
-        }
-        else {
-          fromDesIntToString(currentDate.getYear + 1)
-        }
-      }
-
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, requestBenefitId: String, requestBody: JsValue, expectedStatus: Int,
                                 expectedBody: ErrorWrapper, scenario: Option[String]): Unit = {
@@ -205,11 +184,13 @@ class AmendBenefitAmountsControllerISpec extends IntegrationBaseSpec {
           (validNino, validTaxYear, "ABCDE12345FG", validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), BenefitIdFormatError, None), None),
           (validNino, "2018-19", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), RuleTaxYearNotSupportedError, None), None),
           (validNino, "2019-21", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), RuleTaxYearRangeInvalidError, None), None),
-          (validNino, getCurrentTaxYear, validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), RuleTaxYearNotEndedError, None), None),
           (validNino, validTaxYear, validBenefitId, emptyRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), RuleIncorrectOrEmptyBodyError, None), None),
-          (validNino, validTaxYear, validBenefitId, invalidFieldTypeRequestBody, BAD_REQUEST, ErrorWrapper(Some("X-123"), invalidFieldTypeErrors, None), Some("(invalid field type)")),
-          (validNino, validTaxYear, validBenefitId, missingFieldRequestBodyJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), missingMandatoryFieldError, None), Some("(missing mandatory field)")),
-          (validNino, validTaxYear, validBenefitId, allInvalidValueRequestBodyJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), BadRequestError, Some(allInvalidValueErrors)), None)
+          (validNino, validTaxYear, validBenefitId, invalidFieldTypeRequestBody, BAD_REQUEST,
+            ErrorWrapper(Some("X-123"), invalidFieldTypeErrors, None), Some("(invalid field type)")),
+          (validNino, validTaxYear, validBenefitId, missingFieldRequestBodyJson, BAD_REQUEST,
+            ErrorWrapper(Some("X-123"), missingMandatoryFieldError, None), Some("(missing mandatory field)")),
+          (validNino, validTaxYear, validBenefitId, allInvalidValueRequestBodyJson, BAD_REQUEST,
+            ErrorWrapper(Some("X-123"), BadRequestError, Some(allInvalidValueErrors)), None)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))

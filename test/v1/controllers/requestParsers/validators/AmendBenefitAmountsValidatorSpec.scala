@@ -18,7 +18,6 @@ package v1.controllers.requestParsers.validators
 
 import config.AppConfig
 import mocks.MockAppConfig
-import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.AnyContentAsJson
@@ -87,10 +86,6 @@ class AmendBenefitAmountsValidatorSpec extends UnitSpec with ValueFormatErrorMes
 
     val validator = new AmendBenefitAmountsValidator()
 
-    MockCurrentDateTime.getCurrentDate
-      .returns(DateTime.parse("2022-07-11", dateTimeFormatter))
-      .anyNumberOfTimes()
-
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2021)
   }
@@ -131,11 +126,6 @@ class AmendBenefitAmountsValidatorSpec extends UnitSpec with ValueFormatErrorMes
       "return RuleTaxYearNotSupportedError error for an unsupported tax year" in new Test {
         validator.validate(AmendBenefitAmountsRawData(validNino, "2019-20", validBenefitId, validRawBody)) shouldBe
           List(RuleTaxYearNotSupportedError)
-      }
-
-      "return RuleTaxYearNotEndedError error for a tax year which hasn't ended" in new Test {
-        validator.validate(AmendBenefitAmountsRawData(validNino, "2022-23", validBenefitId, validRawBody)) shouldBe
-          List(RuleTaxYearNotEndedError)
       }
 
       // body format error scenarios

@@ -18,12 +18,11 @@ package v1.controllers.requestParsers.validators
 
 import config.AppConfig
 import javax.inject.Inject
-import utils.CurrentDateTime
 import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.MtdError
 import v1.models.request.AmendBenefitAmounts.{AmendBenefitAmountsRawData, AmendBenefitAmountsRequestBody}
 
-class AmendBenefitAmountsValidator @Inject()(implicit currentDateTime: CurrentDateTime, appConfig: AppConfig)
+class AmendBenefitAmountsValidator @Inject()(implicit appConfig: AppConfig)
   extends Validator[AmendBenefitAmountsRawData] with ValueFormatErrorMessages {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidator, bodyValueValidator)
@@ -42,8 +41,7 @@ class AmendBenefitAmountsValidator @Inject()(implicit currentDateTime: CurrentDa
 
   private def parameterRuleValidation: AmendBenefitAmountsRawData => List[List[MtdError]] = { data =>
     List(
-      TaxYearNotSupportedValidation.validate(data.taxYear),
-      TaxYearNotEndedValidation.validate(data.taxYear)
+      TaxYearNotSupportedValidation.validate(data.taxYear)
     )
   }
 
