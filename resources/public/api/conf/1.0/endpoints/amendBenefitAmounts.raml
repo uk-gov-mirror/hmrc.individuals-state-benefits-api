@@ -12,8 +12,8 @@ is:
   - errors.ruleIncorrectOrEmptyBody
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Amend State Benefit Amounts [test only]
-description: 'This endpoint allows a developer to create/update benefits financial data. A National Insurance number, tax year and benefit ID must be provided.'
+displayName: Create and Amend State Benefit Amounts [test only]
+description: 'This endpoint allows a developer to create and amend benefits financial data. A National Insurance number, tax year and benefit ID must be provided.'
 (annotations.sandboxData): !include ../scenarios/common.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
