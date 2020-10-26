@@ -100,7 +100,7 @@ class ListBenefitsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request(benefitId).get())
         response.status shouldBe OK
-        response.json shouldBe singleRetrieveWithAmounts
+        response.json shouldBe singleRetrieveWithAmountsBenefitId
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }
@@ -117,7 +117,7 @@ class ListBenefitsControllerISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request(benefitId).get())
         response.status shouldBe OK
-        response.json shouldBe responseBodyWithNoAmounts
+        response.json shouldBe responseBodyWithNoAmountsBenefitId
         response.header("Content-Type") shouldBe Some("application/json")
       }
     }
