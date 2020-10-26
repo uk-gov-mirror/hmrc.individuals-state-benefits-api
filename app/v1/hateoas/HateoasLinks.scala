@@ -33,6 +33,9 @@ trait HateoasLinks {
   private def uriWithId(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId"
 
+  private def uriWithId(appConfig: AppConfig, nino: String, taxYear: String, benefitId: Option[String]) =
+    s"/${appConfig.apiGatewayContext}/$nino/$taxYear${benefitId.fold(""){id => s"/$id"}}"
+
   private def uriWithAmounts(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String) =
     s"/${appConfig.apiGatewayContext}/$nino/$taxYear/$benefitId/amounts"
 
@@ -58,9 +61,16 @@ trait HateoasLinks {
       rel = DELETE_STATE_BENEFIT
     )
 
-  def listBenefits(appConfig: AppConfig, nino: String, taxYear: String): Link =
+  def listBenefits(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
-      href = baseUri(appConfig, nino, taxYear),
+      href = uriWithId(appConfig, nino, taxYear, benefitId),
+      method = GET,
+      rel = SELF
+    )
+
+  def listBenefits(appConfig: AppConfig, nino: String, taxYear: String, benefitId: Option[String]): Link =
+    Link(
+      href = uriWithId(appConfig, nino, taxYear, benefitId),
       method = GET,
       rel = SELF
     )

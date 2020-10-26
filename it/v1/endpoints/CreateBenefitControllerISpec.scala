@@ -60,7 +60,7 @@ class CreateBenefitControllerISpec extends IntegrationBaseSpec {
          |   "benefitId": "$benefitId",
          |   "links": [
          |         {
-         |         "href": "/individuals/state-benefits/$nino/$taxYear",
+         |         "href": "/individuals/state-benefits/$nino/$taxYear/$benefitId",
          |         "rel": "self",
          |         "method": "GET"
          |      },
