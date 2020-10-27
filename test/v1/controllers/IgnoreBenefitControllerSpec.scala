@@ -92,7 +92,7 @@ class IgnoreBenefitControllerSpec
       |{
       |   "links":[
       |      {
-      |         "href":"/baseUrl/$nino/$taxYear",
+      |         "href":"/baseUrl/$nino/$taxYear?benefitId=$benefitId",
       |         "rel":"self",
       |         "method":"GET"
       |      },

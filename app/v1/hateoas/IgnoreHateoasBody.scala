@@ -24,7 +24,7 @@ trait IgnoreHateoasBody extends HateoasLinks {
   def ignoreBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
 
     val links = Seq(
-      listBenefits(appConfig, nino, taxYear),
+      retrieveSingleBenefit(appConfig, nino, taxYear, benefitId),
       ignoreBenefit(appConfig, nino, taxYear, benefitId)
     )
 

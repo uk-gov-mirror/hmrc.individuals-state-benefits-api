@@ -72,7 +72,7 @@ class AmendBenefitControllerISpec extends IntegrationBaseSpec {
              |      "rel": "amend-state-benefit"
              |    },
              |    {
-             |      "href": "/individuals/state-benefits/$nino/$taxYear",
+             |      "href": "/individuals/state-benefits/$nino/$taxYear?benefitId=$benefitId",
              |      "method": "GET",
              |      "rel": "self"
              |    },

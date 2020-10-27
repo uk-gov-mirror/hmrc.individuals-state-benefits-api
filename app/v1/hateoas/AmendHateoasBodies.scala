@@ -25,7 +25,7 @@ trait AmendHateoasBodies extends HateoasLinks {
 
     val links = Seq(
       updateBenefit(appConfig, nino, taxYear, benefitId),
-      listBenefits(appConfig, nino, taxYear),
+      retrieveSingleBenefit(appConfig, nino, taxYear, benefitId),
       deleteBenefit(appConfig, nino, taxYear, benefitId),
       updateBenefitAmounts(appConfig, nino, taxYear, benefitId)
     )
@@ -36,7 +36,7 @@ trait AmendHateoasBodies extends HateoasLinks {
   def amendBenefitAmountsHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
 
     val links = Seq(
-      listBenefits(appConfig, nino, taxYear),
+      retrieveSingleBenefit(appConfig, nino, taxYear, benefitId),
       updateBenefitAmounts(appConfig, nino, taxYear, benefitId),
       deleteBenefitAmounts(appConfig, nino, taxYear, benefitId)
     )

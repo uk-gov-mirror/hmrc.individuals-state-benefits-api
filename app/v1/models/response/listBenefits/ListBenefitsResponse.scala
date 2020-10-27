@@ -62,6 +62,7 @@ object ListBenefitsResponse extends HateoasLinks with JsonUtils {
 
     override def links(appConfig: AppConfig, data: ListBenefitsHateoasData): Seq[Link] = {
       import data._
+
       Seq(
         addBenefit(appConfig, nino, taxYear),
         listBenefits(appConfig, nino, taxYear)
