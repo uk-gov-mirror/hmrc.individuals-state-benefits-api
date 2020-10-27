@@ -67,7 +67,7 @@ class CreateBenefitControllerSpec
     MockedAppConfig.apiGatewayContext.returns("individuals/state-benefits").anyNumberOfTimes()
 
     val links: List[Link] = List(
-      listBenefits(mockAppConfig, nino, taxYear, benefitId),
+      retrieveSingleBenefit(mockAppConfig, nino, taxYear,benefitId),
       updateBenefit(mockAppConfig, nino, taxYear, benefitId),
       deleteBenefit(mockAppConfig, nino, taxYear, benefitId)
     )
@@ -116,7 +116,7 @@ class CreateBenefitControllerSpec
        |   "benefitId": "$benefitId",
        |   "links": [
        |         {
-       |         "href": "/individuals/state-benefits/$nino/$taxYear/$benefitId",
+       |         "href": "/individuals/state-benefits/$nino/$taxYear?benefitId=$benefitId",
        |         "rel": "self",
        |         "method": "GET"
        |      },

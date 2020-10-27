@@ -96,7 +96,7 @@ class AmendBenefitAmountsControllerSpec
       |{
       |   "links":[
       |      {
-      |         "href":"/baseUrl/$nino/$taxYear/$benefitId",
+      |         "href":"/baseUrl/$nino/$taxYear?benefitId=$benefitId",
       |         "rel":"self",
       |         "method":"GET"
       |      },

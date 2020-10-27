@@ -113,7 +113,7 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
         HateoasWrapper(
           AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253"),
           List(
-            Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",GET,"self"),
+            Link("/context/AA123456A/2020-21?benefitId=b1e8057e-fbbc-47a8-a8b4-78d9f015c253",GET,"self"),
             Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",PUT,"amend-state-benefit"),
             Link("/context/AA123456A/2020-21/b1e8057e-fbbc-47a8-a8b4-78d9f015c253",DELETE,"delete-state-benefit")
           )

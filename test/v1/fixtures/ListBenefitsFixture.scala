@@ -186,7 +186,7 @@ object ListBenefitsFixture {
       |		"method": "POST",
       |		"rel": "create-state-benefit"
       |	}, {
-      |		"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
       |		"method": "GET",
       |		"rel": "self"
       |	}]
@@ -254,7 +254,7 @@ object ListBenefitsFixture {
       |		"method": "POST",
       |		"rel": "create-state-benefit"
       |	}, {
-      |		"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
       |		"method": "GET",
       |		"rel": "self"
       |	}]

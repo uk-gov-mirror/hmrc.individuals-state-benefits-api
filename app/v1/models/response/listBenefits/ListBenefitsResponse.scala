@@ -65,7 +65,7 @@ object ListBenefitsResponse extends HateoasLinks with JsonUtils {
 
       Seq(
         addBenefit(appConfig, nino, taxYear),
-        listBenefits(appConfig, nino, taxYear, data.benefitId)
+        listBenefits(appConfig, nino, taxYear)
       )
     }
   }

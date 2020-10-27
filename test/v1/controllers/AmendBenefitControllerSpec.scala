@@ -101,7 +101,7 @@ class AmendBenefitControllerSpec
       |      "rel": "amend-state-benefit"
       |    },
       |    {
-      |      "href": "/individuals/state-benefits/$nino/$taxYear/$benefitId",
+      |      "href": "/individuals/state-benefits/$nino/$taxYear?benefitId=$benefitId",
       |      "method": "GET",
       |      "rel": "self"
       |    },
