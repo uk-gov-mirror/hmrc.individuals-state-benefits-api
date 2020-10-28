@@ -16,10 +16,12 @@
 
 package v1.controllers.requestParsers.validators
 
+import com.typesafe.config.ConfigFactory
 import config.AppConfig
 import mocks.MockAppConfig
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+import play.api.Configuration
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.AnyContentAsJson
 import support.UnitSpec
@@ -90,7 +92,7 @@ class CreateBenefitValidatorSpec extends UnitSpec {
   private val validRawBody = AnyContentAsJson(validRequestJson)
   private val emptyRawBody = AnyContentAsJson(emptyRequestJson)
 
-  class Test extends MockCurrentDateTime with MockAppConfig {
+  class Test(errorFeatureSwitch: Boolean = true) extends MockCurrentDateTime with MockAppConfig {
 
     implicit val dateTimeProvider: CurrentDateTime = mockCurrentDateTime
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -105,12 +107,21 @@ class CreateBenefitValidatorSpec extends UnitSpec {
 
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2021)
+
+    MockedAppConfig.featureSwitch.returns(Some(Configuration(ConfigFactory.parseString(
+      s"""
+         |taxYearNotEndedRule.enabled = $errorFeatureSwitch
+      """.stripMargin))))
   }
 
   "AddBenefitValidator" when {
     "running a validation" should {
       "return no errors for a valid request" in new Test {
         validator.validate(CreateBenefitRawData(validNino, validTaxYear, validRawBody)) shouldBe Nil
+      }
+
+      "return RULE_END_DATE_BEFORE_TAX_YEAR_START error when config for Tax RuleTaxYearNotEndedError is set to false" in new Test(false) {
+        validator.validate(CreateBenefitRawData(validNino, "2022-23", validRawBody)) shouldBe List(RuleEndDateBeforeTaxYearStartError)
       }
 
       // parameter format error scenarios

@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import config.AppConfig
+import config.{AppConfig, FeatureSwitch}
 import javax.inject.Inject
 import utils.CurrentDateTime
 import v1.controllers.requestParsers.validators.validations._
@@ -40,9 +40,11 @@ class AmendBenefitValidator @Inject()(implicit currentDateTime: CurrentDateTime,
   }
 
   private def parameterRuleValidation: AmendBenefitRawData => List[List[MtdError]] = { data =>
+    val featureSwitch = FeatureSwitch(appConfig.featureSwitch)
+
     List(
       TaxYearNotSupportedValidation.validate(data.taxYear),
-      TaxYearNotEndedValidation.validate(data.taxYear)
+      if (featureSwitch.isTaxYearNotEndedRuleEnabled) TaxYearNotEndedValidation.validate(data.taxYear) else List.empty[MtdError]
     )
   }
 

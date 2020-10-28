@@ -22,6 +22,14 @@ case class FeatureSwitch(value: Option[Configuration]) {
 
   private val versionRegex = """(\d)\.\d""".r
 
+  def isTaxYearNotEndedRuleEnabled: Boolean = {
+    value match {
+      case Some(config) => config.getOptional[Boolean]("taxYearNotEndedRule.enabled").getOrElse(true)
+      case _ => true
+    }
+
+  }
+
   def isAllowListingEnabled: Boolean = {
     value match {
       case Some(config) => config.getOptional[Boolean]("white-list.enabled").getOrElse(false)
