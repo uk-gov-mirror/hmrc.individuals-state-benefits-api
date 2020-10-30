@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.Logging
+import utils.{IdGenerator, Logging}
 import v1.connectors.DesUri
 import v1.controllers.requestParsers.DeleteBenefitRequestParser
 import v1.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
@@ -40,7 +40,8 @@ class DeleteBenefitController @Inject()(val authService: EnrolmentsAuthService,
                                         requestParser: DeleteBenefitRequestParser,
                                         service: DeleteRetrieveService,
                                         auditService: AuditService,
-                                        cc: ControllerComponents)(implicit ec: ExecutionContext)
+                                        cc: ControllerComponents,
+                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -52,16 +53,17 @@ class DeleteBenefitController @Inject()(val authService: EnrolmentsAuthService,
   def deleteBenefit(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
 
+      implicit val correlationId: String = idGenerator.getCorrelationId
+      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+        s"with correlationId : $correlationId")
       val rawData: DeleteBenefitRawData = DeleteBenefitRawData(
         nino = nino,
         taxYear = taxYear,
         benefitId = benefitId
       )
-
       implicit val desUri: DesUri[Unit] = DesUri[Unit](
         s"income-tax/income/state-benefits/$nino/$taxYear/custom/$benefitId"
       )
-
       val result =
         for {
           _ <- EitherT.fromEither[Future](requestParser.parseRequest(rawData))
@@ -77,15 +79,16 @@ class DeleteBenefitController @Inject()(val authService: EnrolmentsAuthService,
               serviceResponse.correlationId, AuditResponse(httpStatus = NO_CONTENT, response = Right(None))
             )
           )
-
           NoContent
             .withApiHeaders(serviceResponse.correlationId)
             .as(MimeTypes.JSON)
         }
-
       result.leftMap { errorWrapper =>
-        val correlationId = getCorrelationId(errorWrapper)
-        val result = errorResult(errorWrapper).withApiHeaders(correlationId)
+        val resCorrelationId = errorWrapper.correlationId
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        logger.info(
+          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+            s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
           GenericAuditDetail(

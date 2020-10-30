@@ -27,6 +27,7 @@ class DeleteBenefitRequestParserSpec extends UnitSpec {
   val nino: String = "AA123456B"
   val taxYear: String = "2021-22"
   val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val deleteBenefitRawData: DeleteBenefitRawData = DeleteBenefitRawData(
     nino = nino,
@@ -56,7 +57,7 @@ class DeleteBenefitRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(deleteBenefitRawData) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur (NinoFormatError and TaxYearFormatError errors)" in new Test {
@@ -64,7 +65,7 @@ class DeleteBenefitRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(deleteBenefitRawData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
 
       "multiple validation errors occur (NinoFormatError, TaxYearFormatError and BenefitIdFormatError errors)" in new Test {
@@ -72,7 +73,7 @@ class DeleteBenefitRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))
 
         parser.parseRequest(deleteBenefitRawData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
       }
     }
   }

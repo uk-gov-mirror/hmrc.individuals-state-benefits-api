@@ -30,7 +30,8 @@ class AmendBenefitConnector @Inject()(val http: HttpClient,
 
   def amendBenefit(request: AmendBenefitRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
     implicit val successCode: SuccessCode = SuccessCode(Status.CREATED)

@@ -35,7 +35,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class ListBenefitsService @Inject()(connector: ListBenefitsConnector) extends DesResponseMappingSupport with Logging {
 
   def listBenefits(request: ListBenefitsRequest)
-                  (implicit hc: HeaderCarrier, ec: ExecutionContext, logContext: EndpointLogContext):
+                  (implicit hc: HeaderCarrier, ec: ExecutionContext, logContext: EndpointLogContext,
+                   correlationId: String):
   Future[Either[ErrorWrapper, ResponseWrapper[ListBenefitsResponse[StateBenefit]]]] = {
 
     val result = for {

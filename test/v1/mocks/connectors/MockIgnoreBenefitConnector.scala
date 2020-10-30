@@ -32,8 +32,8 @@ trait MockIgnoreBenefitConnector extends MockFactory {
 
     def ignoreBenefit(request: IgnoreBenefitRequest): CallHandler[Future[DesOutcome[Unit]]] = {
       (mockIgnoreBenefitConnector
-        .ignoreBenefit(_: IgnoreBenefitRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(request, *, *)
+        .ignoreBenefit(_: IgnoreBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(request, *, *, *)
     }
   }
 

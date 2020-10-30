@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package v1.mocks.connectors
+package v1.mocks
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DesOutcome, AmendBenefitConnector}
-import v1.models.request.AmendBenefit.AmendBenefitRequest
+import utils.IdGenerator
 
-import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAmendBenefitConnector extends MockFactory {
+trait MockIdGenerator extends MockFactory {
 
-  val mockUpdateBenefitConnector: AmendBenefitConnector = mock[AmendBenefitConnector]
+  val mockIdGenerator: IdGenerator = mock[IdGenerator]
 
-  object MockUpdateBenefitConnector {
-
-    def updateBenefit(requestData: AmendBenefitRequest): CallHandler[Future[DesOutcome[Unit]]] = {
-      (mockUpdateBenefitConnector
-        .amendBenefit(_: AmendBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
-        .expects(requestData, *, *, *)
-    }
+  object MockIdGenerator {
+    def getCorrelationId: CallHandler[String] = (mockIdGenerator.getCorrelationId _).expects()
   }
-
 }

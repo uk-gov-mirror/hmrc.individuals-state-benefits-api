@@ -30,7 +30,8 @@ class IgnoreBenefitConnector @Inject()(val http: HttpClient,
 
   def ignoreBenefit(request: IgnoreBenefitRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
 

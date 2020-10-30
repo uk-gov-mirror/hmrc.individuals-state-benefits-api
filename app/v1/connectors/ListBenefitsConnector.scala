@@ -31,7 +31,8 @@ class ListBenefitsConnector @Inject()(val http: HttpClient,
 
   def listBenefits(request: ListBenefitsRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[ListBenefitsResponse[StateBenefit]]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[ListBenefitsResponse[StateBenefit]]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
     implicit val successCode: SuccessCode = SuccessCode(Status.OK)

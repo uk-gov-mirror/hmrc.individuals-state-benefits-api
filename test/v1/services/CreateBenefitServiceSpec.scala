@@ -73,7 +73,7 @@ class CreateBenefitServiceSpec extends ServiceSpec {
             MockAddBenefitConnector.addBenefit(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.addBenefit(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.addBenefit(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(

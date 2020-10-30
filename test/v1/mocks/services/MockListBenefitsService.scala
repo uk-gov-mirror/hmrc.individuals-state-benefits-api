@@ -36,8 +36,8 @@ trait MockListBenefitsService extends MockFactory {
 
     def listBenefits(requestData: ListBenefitsRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[ListBenefitsResponse[StateBenefit]]]]] = {
       (mockListBenefitsService
-        .listBenefits(_: ListBenefitsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .listBenefits(_: ListBenefitsRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 

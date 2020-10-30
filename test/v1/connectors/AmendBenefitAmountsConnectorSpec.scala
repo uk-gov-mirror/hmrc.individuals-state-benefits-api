@@ -71,7 +71,7 @@ class AmendBenefitAmountsConnectorSpec extends ConnectorSpec {
             requiredHeaders = desRequestHeaders: _*
           ).returns(Future.successful(outcome))
 
-        await(connector.AmendBenefitAmounts(request)) shouldBe outcome
+        await(connector.amendBenefitAmounts(request)) shouldBe outcome
       }
     }
   }

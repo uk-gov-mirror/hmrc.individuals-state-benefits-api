@@ -29,6 +29,7 @@ class AmendBenefitAmountsRequestParserSpec extends UnitSpec {
   private val nino: String = "AA123456B"
   private val taxYear: String = "2020-21"
   private val benefitId = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val validRequestJson: JsValue = Json.parse(
     """
@@ -80,7 +81,7 @@ class AmendBenefitAmountsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(updateBenefitAmountsRawData.copy(nino = "notANino")) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple path parameter validation errors occur" in new Test {
@@ -89,7 +90,7 @@ class AmendBenefitAmountsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))
 
         parser.parseRequest(updateBenefitAmountsRawData.copy(nino = "notANino", taxYear = "notATaxYear", benefitId = "notABenefitId")) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
       }
 
       "multiple field value validation errors occur" in new Test {
@@ -120,7 +121,7 @@ class AmendBenefitAmountsRequestParserSpec extends UnitSpec {
           .returns(allInvalidValueErrors)
 
         parser.parseRequest(updateBenefitAmountsRawData.copy(body = allInvalidValueRawRequestBody)) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(allInvalidValueErrors)))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(allInvalidValueErrors)))
       }
     }
   }

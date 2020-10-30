@@ -35,8 +35,8 @@ trait MockAmendBenefitService extends MockFactory {
 
     def updateBenefit(requestData: AmendBenefitRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
       (mockUpdateBenefitService
-        .updateBenefit(_: AmendBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .updateBenefit(_: AmendBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 

@@ -91,7 +91,7 @@ class ListBenefitsServiceSpec extends ServiceSpec {
             MockListBenefitsConnector.listBenefits(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.listBenefits(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.listBenefits(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(

@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.Logging
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateBenefitRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
@@ -42,7 +42,8 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
                                         service: CreateBenefitService,
                                         auditService: AuditService,
                                         hateoasFactory: HateoasFactory,
-                                        cc: ControllerComponents)(implicit ec: ExecutionContext)
+                                        cc: ControllerComponents,
+                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
 
   extends AuthorisedController(cc) with BaseController with Logging {
 
@@ -55,12 +56,14 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
   def createStateBenefit(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
 
+      implicit val correlationId: String = idGenerator.getCorrelationId
+      logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+        s"with correlationId : $correlationId")
       val rawData: CreateBenefitRawData = CreateBenefitRawData(
         nino = nino,
         taxYear = taxYear,
         body = AnyContentAsJson(request.body)
       )
-
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](requestParser.parseRequest(rawData))
@@ -75,30 +78,28 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
-              s"Success response received with CorrelationId: ${serviceResponse.correlationId}"
-          )
-
+              s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
           auditSubmission(
             GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear), Some(request.body),
               serviceResponse.correlationId, AuditResponse(httpStatus = OK, response = Right(Some(Json.toJson(hateoasResponse))))
             )
           )
-
           Ok(Json.toJson(hateoasResponse))
             .withApiHeaders(serviceResponse.correlationId)
             .as(MimeTypes.JSON)
         }
-
       result.leftMap { errorWrapper =>
-        val correlationId = getCorrelationId(errorWrapper)
-        val result = errorResult(errorWrapper).withApiHeaders(correlationId)
+        val resCorrelationId = errorWrapper.correlationId
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        logger.info(
+          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+            s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
           GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear), Some(request.body),
             correlationId, AuditResponse(httpStatus = result.header.status, response = Left(errorWrapper.auditErrors))
           )
         )
-
         result
       }.merge
     }

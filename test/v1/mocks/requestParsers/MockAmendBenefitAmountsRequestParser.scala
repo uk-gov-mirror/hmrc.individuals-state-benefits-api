@@ -28,7 +28,7 @@ trait MockAmendBenefitAmountsRequestParser extends MockFactory {
 
   object MockAmendBenefitAmountsRequestParser {
     def parse(data: AmendBenefitAmountsRawData): CallHandler[Either[ErrorWrapper, AmendBenefitAmountsRequest]] = {
-      (mockAmendBenefitAmountsRequestParser.parseRequest(_: AmendBenefitAmountsRawData)).expects(data)
+      (mockAmendBenefitAmountsRequestParser.parseRequest(_: AmendBenefitAmountsRawData)(_: String)).expects(data, *)
     }
   }
 

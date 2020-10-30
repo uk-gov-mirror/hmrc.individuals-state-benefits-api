@@ -71,7 +71,7 @@ class AmendBenefitAmountsServiceSpec extends ServiceSpec {
           MockUpdateBenefitAmountsConnector.updateBenefitAmounts(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.updateBenefitAmounts(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.updateBenefitAmounts(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

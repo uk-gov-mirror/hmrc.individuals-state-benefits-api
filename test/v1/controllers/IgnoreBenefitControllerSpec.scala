@@ -21,6 +21,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockIgnoreBenefitRequestParser
 import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockIgnoreBenefitService, MockMtdIdLookupService}
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
@@ -38,10 +39,16 @@ class IgnoreBenefitControllerSpec
     with MockAppConfig
     with MockIgnoreBenefitService
     with MockIgnoreBenefitRequestParser
-    with MockAuditService {
+    with MockAuditService
+    with MockIdGenerator {
+
+  val nino: String = "AA123456A"
+  val taxYear: String = "2019-20"
+  val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new IgnoreBenefitController(
       authService = mockEnrolmentsAuthService,
@@ -50,18 +57,15 @@ class IgnoreBenefitControllerSpec
       requestParser = mockIgnoreBenefitRequestParser,
       service = mockIgnoreBenefitService,
       auditService = mockAuditService,
-      cc = cc
+      cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockedAppConfig.apiGatewayContext.returns("baseUrl").anyNumberOfTimes()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
-
-  val nino: String = "AA123456A"
-  val taxYear: String = "2019-20"
-  val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-  val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val requestBodyJson: JsValue = Json.parse(
     """
@@ -150,7 +154,7 @@ class IgnoreBenefitControllerSpec
 
             MockIgnoreBenefitRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.ignoreBenefit(nino, taxYear, benefitId)(fakePutRequest(requestBodyJson))
 
@@ -187,7 +191,7 @@ class IgnoreBenefitControllerSpec
 
             MockIgnoreBenefitService
               .ignoreBenefit(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.ignoreBenefit(nino, taxYear, benefitId)(fakePutRequest(requestBodyJson))
 

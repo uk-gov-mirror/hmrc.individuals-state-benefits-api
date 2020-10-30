@@ -36,7 +36,8 @@ class AmendBenefitService @Inject()(connector: AmendBenefitConnector) extends De
   def updateBenefit(request: AmendBenefitRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[Either[ErrorWrapper, ResponseWrapper[Unit]]] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[Either[ErrorWrapper, ResponseWrapper[Unit]]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amendBenefit(request)).leftMap(mapDesErrors(desErrorMap))

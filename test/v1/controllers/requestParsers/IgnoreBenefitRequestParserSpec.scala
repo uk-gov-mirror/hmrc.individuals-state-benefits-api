@@ -29,6 +29,7 @@ class IgnoreBenefitRequestParserSpec extends UnitSpec {
   private val nino: String = "AA123456B"
   private val taxYear: String = "2021-22"
   private val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val validRequestJson: JsValue = Json.parse(
     """
@@ -76,7 +77,7 @@ class IgnoreBenefitRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(ignoreBenefitRawData.copy(nino = "notANino")) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple path parameter validation errors occur" in new Test {
@@ -84,7 +85,7 @@ class IgnoreBenefitRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))
 
         parser.parseRequest(ignoreBenefitRawData.copy(nino = "notANino", taxYear = "notATaxYear", benefitId = "notABenefitId")) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
       }
 
       "a single field value validation error occur" in new Test {
@@ -105,7 +106,7 @@ class IgnoreBenefitRequestParserSpec extends UnitSpec {
           .returns(error)
 
         parser.parseRequest(ignoreBenefitRawData.copy(body = invalidValueRawBody)) shouldBe
-          Left(ErrorWrapper(None, RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ignoreBenefit"))), None))
+          Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ignoreBenefit"))), None))
       }
     }
   }

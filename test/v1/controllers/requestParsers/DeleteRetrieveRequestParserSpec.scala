@@ -27,6 +27,7 @@ class DeleteRetrieveRequestParserSpec extends UnitSpec {
 
   val nino: String = "AA123456B"
   val taxYear: String = "2017-18"
+  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   val deleteRetrieveSavingsRawData: DeleteRetrieveRawData = DeleteRetrieveRawData(
     nino = nino,
@@ -55,7 +56,7 @@ class DeleteRetrieveRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(deleteRetrieveSavingsRawData) shouldBe
-          Left(ErrorWrapper(None, NinoFormatError, None))
+          Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {
@@ -63,7 +64,7 @@ class DeleteRetrieveRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError, TaxYearFormatError))
 
         parser.parseRequest(deleteRetrieveSavingsRawData) shouldBe
-          Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
+          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

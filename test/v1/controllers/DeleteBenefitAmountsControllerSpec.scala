@@ -20,6 +20,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockDeleteBenefitRequestParser
 import v1.mocks.services.{MockAuditService, MockDeleteRetrieveService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
@@ -36,7 +37,8 @@ class DeleteBenefitAmountsControllerSpec
     with MockMtdIdLookupService
     with MockAuditService
     with MockDeleteRetrieveService
-    with MockDeleteBenefitRequestParser {
+    with MockDeleteBenefitRequestParser
+    with MockIdGenerator {
 
   val nino: String = "AA123456A"
   val taxYear: String = "2019-20"
@@ -70,7 +72,7 @@ class DeleteBenefitAmountsControllerSpec
     )
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new DeleteBenefitAmountsController(
       authService = mockEnrolmentsAuthService,
@@ -78,11 +80,13 @@ class DeleteBenefitAmountsControllerSpec
       requestParser = mockDeleteBenefitRequestParser,
       service = mockDeleteRetrieveService,
       auditService = mockAuditService,
-      cc = cc
+      cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.getCorrelationId.returns(correlationId)
   }
 
   "DeleteBenefitAmountsController" should {
@@ -115,7 +119,7 @@ class DeleteBenefitAmountsControllerSpec
 
             MockDeleteBenefitRequestParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.deleteBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
 
@@ -150,7 +154,7 @@ class DeleteBenefitAmountsControllerSpec
 
             MockDeleteRetrieveService
               .delete()
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.deleteBenefitAmounts(nino, taxYear, benefitId)(fakeDeleteRequest)
 

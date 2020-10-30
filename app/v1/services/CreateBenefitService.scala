@@ -38,7 +38,8 @@ class CreateBenefitService @Inject()(connector: CreateBenefitConnector)
   def addBenefit(request: CreateBenefitRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[Either[ErrorWrapper, ResponseWrapper[AddBenefitResponse]]] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[Either[ErrorWrapper, ResponseWrapper[AddBenefitResponse]]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.addBenefit(request)).leftMap(mapDesErrors(desErrorMap))

@@ -27,9 +27,10 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendBenefitAmountsConnector @Inject()(val http: HttpClient,
                                              val appConfig: AppConfig) extends BaseDesConnector {
 
-  def AmendBenefitAmounts(request: AmendBenefitAmountsRequest)(
+  def amendBenefitAmounts(request: AmendBenefitAmountsRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[Unit]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
 

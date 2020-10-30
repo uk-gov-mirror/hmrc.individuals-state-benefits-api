@@ -179,18 +179,18 @@ class AmendBenefitAmountsControllerISpec extends IntegrationBaseSpec {
         }
 
         val input = Seq(
-          ("AA1123A", validTaxYear, validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), NinoFormatError, None), None),
-          (validNino, "20199", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), TaxYearFormatError, None), None),
-          (validNino, validTaxYear, "ABCDE12345FG", validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), BenefitIdFormatError, None), None),
-          (validNino, "2018-19", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), RuleTaxYearNotSupportedError, None), None),
-          (validNino, "2019-21", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), RuleTaxYearRangeInvalidError, None), None),
-          (validNino, validTaxYear, validBenefitId, emptyRequestJson, BAD_REQUEST, ErrorWrapper(Some("X-123"), RuleIncorrectOrEmptyBodyError, None), None),
+          ("AA1123A", validTaxYear, validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper("X-123", NinoFormatError, None), None),
+          (validNino, "20199", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper("X-123", TaxYearFormatError, None), None),
+          (validNino, validTaxYear, "ABCDE12345FG", validRequestJson, BAD_REQUEST, ErrorWrapper("X-123", BenefitIdFormatError, None), None),
+          (validNino, "2018-19", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper("X-123", RuleTaxYearNotSupportedError, None), None),
+          (validNino, "2019-21", validBenefitId, validRequestJson, BAD_REQUEST, ErrorWrapper("X-123", RuleTaxYearRangeInvalidError, None), None),
+          (validNino, validTaxYear, validBenefitId, emptyRequestJson, BAD_REQUEST, ErrorWrapper("X-123", RuleIncorrectOrEmptyBodyError, None), None),
           (validNino, validTaxYear, validBenefitId, invalidFieldTypeRequestBody, BAD_REQUEST,
-            ErrorWrapper(Some("X-123"), invalidFieldTypeErrors, None), Some("(invalid field type)")),
+            ErrorWrapper("X-123", invalidFieldTypeErrors, None), Some("(invalid field type)")),
           (validNino, validTaxYear, validBenefitId, missingFieldRequestBodyJson, BAD_REQUEST,
-            ErrorWrapper(Some("X-123"), missingMandatoryFieldError, None), Some("(missing mandatory field)")),
+            ErrorWrapper("X-123", missingMandatoryFieldError, None), Some("(missing mandatory field)")),
           (validNino, validTaxYear, validBenefitId, allInvalidValueRequestBodyJson, BAD_REQUEST,
-            ErrorWrapper(Some("X-123"), BadRequestError, Some(allInvalidValueErrors)), None)
+            ErrorWrapper("X-123", BadRequestError, Some(allInvalidValueErrors)), None)
         )
 
         input.foreach(args => (validationErrorTest _).tupled(args))

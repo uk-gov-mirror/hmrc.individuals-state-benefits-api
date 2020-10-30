@@ -61,7 +61,7 @@ class IgnoreBenefitServiceSpec extends ServiceSpec {
             MockIgnoreBenefitConnector.ignoreBenefit(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.ignoreBenefit(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.ignoreBenefit(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(

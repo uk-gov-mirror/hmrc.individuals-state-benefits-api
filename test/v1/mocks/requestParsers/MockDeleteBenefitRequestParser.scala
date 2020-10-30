@@ -29,7 +29,7 @@ trait MockDeleteBenefitRequestParser extends MockFactory {
   object MockDeleteBenefitRequestParser {
 
     def parse(data: DeleteBenefitRawData): CallHandler[Either[ErrorWrapper, DeleteBenefitRequest]] = {
-      (mockDeleteBenefitRequestParser.parseRequest(_: DeleteBenefitRawData)).expects(data)
+      (mockDeleteBenefitRequestParser.parseRequest(_: DeleteBenefitRawData)(_: String)).expects(data, *)
     }
   }
 

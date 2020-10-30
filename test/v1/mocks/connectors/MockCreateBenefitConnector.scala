@@ -33,8 +33,8 @@ trait MockCreateBenefitConnector extends MockFactory {
 
     def addBenefit(request: CreateBenefitRequest): CallHandler[Future[DesOutcome[AddBenefitResponse]]] = {
       (mockAddBenefitConnector
-        .addBenefit(_: CreateBenefitRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(request, *, *)
+        .addBenefit(_: CreateBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(request, *, *, *)
     }
   }
 

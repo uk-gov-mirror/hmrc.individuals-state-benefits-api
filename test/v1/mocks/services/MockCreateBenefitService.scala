@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.mocks
+package v1.mocks.services
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
@@ -36,8 +36,8 @@ trait MockCreateBenefitService extends MockFactory {
 
     def createStateBenefit(requestData: CreateBenefitRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[AddBenefitResponse]]]] = {
       (mockCreateStateBenefitService
-        .addBenefit(_: CreateBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .addBenefit(_: CreateBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 }
