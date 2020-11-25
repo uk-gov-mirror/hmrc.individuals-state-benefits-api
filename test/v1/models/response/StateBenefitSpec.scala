@@ -45,21 +45,22 @@ class StateBenefitSpec extends UnitSpec with JsonErrorValidators {
     endDate = Some("2020-04-01"),
     amount = Some(34345.55),
     taxPaid = Some(345.55),
-    createdBy = Some("HMRC"))
+    createdBy = "HMRC"
+  )
 
   testJsonProperties[StateBenefit](json)(
     mandatoryProperties = Seq(
       "benefitType",
       "benefitId",
-      "startDate"
+      "startDate",
+      "createdBy"
     ),
     optionalProperties = Seq(
       "dateIgnored",
       "submittedOn",
       "endDate",
       "amount",
-      "taxPaid",
-      "createdBy"
+      "taxPaid"
     )
   )
 

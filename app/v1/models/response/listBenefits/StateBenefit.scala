@@ -28,7 +28,8 @@ case class StateBenefit(benefitType: String,
                         endDate: Option[String],
                         amount: Option[BigDecimal],
                         taxPaid: Option[BigDecimal],
-                        createdBy: Option[String] = None){
+                        createdBy: String,
+                        isCommon: Boolean = false){
 
   val hasAmounts: Boolean = amount.isDefined || taxPaid.isDefined
 }
@@ -44,6 +45,7 @@ object StateBenefit extends JsonUtils {
       (JsPath \ "endDate").writeNullable[String] and
       (JsPath \ "amount").writeNullable[BigDecimal] and
       (JsPath \ "taxPaid").writeNullable[BigDecimal] and
+      OWrites[Any](_ => Json.obj()) and
       OWrites[Any](_ => Json.obj())
     )(unlift(StateBenefit.unapply))
 
@@ -56,7 +58,8 @@ object StateBenefit extends JsonUtils {
       (JsPath \ "endDate").readNullable[String] and
       (JsPath \ "amount").readNullable[BigDecimal] and
       (JsPath \ "taxPaid").readNullable[BigDecimal] and
-      (JsPath \ "createdBy").readNullable[String]
+      (JsPath \ "createdBy").read[String] and
+      Reads.pure(false)
     )(StateBenefit.apply _)
 
 }

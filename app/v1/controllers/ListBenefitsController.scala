@@ -27,7 +27,7 @@ import v1.controllers.requestParsers.ListBenefitsRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.errors._
 import v1.models.request.listBenefits.ListBenefitsRawData
-import v1.models.response.listBenefits.ListBenefitsHateoasData
+import v1.models.response.listBenefits.{ListBenefitsHateoasData, ListBenefitsResponse, StateBenefit}
 import v1.models.response.listBenefits.ListBenefitsResponse.ListBenefitsLinksFactory
 import v1.services.{EnrolmentsAuthService, ListBenefitsService, MtdIdLookupService}
 
@@ -69,7 +69,7 @@ class ListBenefitsController @Inject()(val authService: EnrolmentsAuthService,
           hateoasResponse <- EitherT.fromEither[Future](
             hateoasFactory
               .wrapList(
-                serviceResponse.responseData,
+                findAndUpdateCommonBenefits(serviceResponse.responseData, benefitId),
                 ListBenefitsHateoasData(nino, taxYear, benefitId)
               )
               .asRight[ErrorWrapper])
@@ -103,4 +103,19 @@ class ListBenefitsController @Inject()(val authService: EnrolmentsAuthService,
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }
   }
+
+  private def findAndUpdateCommonBenefits(response: ListBenefitsResponse[StateBenefit], benefitId: Option[String]): ListBenefitsResponse[StateBenefit] = {
+
+    benefitId match {
+      case None => response
+      case _ => (response.stateBenefits, response.customerAddedStateBenefits) match {
+        case (Some(hmrc), Some(custom)) if hasCommon(hmrc, custom) =>
+          response.copy(Some(hmrc.map(_.copy(isCommon = true))), Some(custom.map(_.copy(isCommon = true))))
+        case (_, _) => response
+      }
+    }
+  }
+
+  private def hasCommon(hmrcB: Seq[StateBenefit], customB: Seq[StateBenefit]): Boolean =
+    (hmrcB ++ customB).toList.groupBy(_.benefitId).values.exists(_.length > 1)
 }

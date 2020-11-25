@@ -88,6 +88,23 @@ class ListBenefitsControllerISpec extends IntegrationBaseSpec {
       }
     }
 
+    "return a 200 status code with state benefit with duplicate benefitId" when {
+      "any valid get request is made" in new Test {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DesStub.onSuccess(DesStub.GET, desUri, Map("benefitId" -> benefitId.get), OK, singleStateBenefitDesJsonWithDuplicateId)
+        }
+
+        val response: WSResponse = await(request(benefitId).get())
+        response.status shouldBe OK
+        response.json shouldBe duplicateIdResponse
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+    }
+
     "return a 200 status code with single state benefit" when {
       "any valid request with benefitId is made" in new Test {
 

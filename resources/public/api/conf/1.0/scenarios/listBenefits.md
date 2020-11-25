@@ -16,6 +16,10 @@
             <td><p>Simulates a single HMRC held state benefit.</p></td>
         </tr>
         <tr>
+            <td><p>HMRC_AMENDED_AMOUNTS</p></td>
+            <td><p>Simulates the response where a HMRC held state benefit amounts have been amended.</p></td>
+        </tr>
+        <tr>
             <td><p>NOT_FOUND</p></td>
             <td><p>Simulates the scenario where no data is found.</p></td>
         </tr>

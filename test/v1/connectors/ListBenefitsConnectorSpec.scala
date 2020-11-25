@@ -50,7 +50,8 @@ class ListBenefitsConnectorSpec extends ConnectorSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = None
+          submittedOn = None,
+          createdBy = "HMRC"
         )
       )
     ),
@@ -63,7 +64,8 @@ class ListBenefitsConnectorSpec extends ConnectorSpec {
           endDate = Some("2020-04-01"),
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
-          submittedOn = Some("2019-04-04T01:01:01Z")
+          submittedOn = Some("2019-04-04T01:01:01Z"),
+          createdBy = "CUSTOM"
         )
       )
     )

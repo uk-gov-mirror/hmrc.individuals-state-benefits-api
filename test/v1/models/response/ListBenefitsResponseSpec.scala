@@ -35,7 +35,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "incapacityBenefit",
@@ -46,7 +46,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(1000.00),
           taxPaid = None,
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "statePension",
@@ -57,7 +57,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = None,
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "statePensionLumpSum",
@@ -68,7 +68,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "employmentSupportAllowance",
@@ -79,7 +79,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "employmentSupportAllowance",
@@ -90,7 +90,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(1000.00),
           taxPaid = None,
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "jobSeekersAllowance",
@@ -101,7 +101,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "jobSeekersAllowance",
@@ -112,7 +112,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(1000.00),
           taxPaid = None,
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "bereavementAllowance",
@@ -123,7 +123,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = None,
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         ),
         StateBenefit(
           benefitType = "otherStateBenefits",
@@ -134,7 +134,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = None,
           submittedOn = None,
-          createdBy = Some("HMRC")
+          createdBy = "HMRC"
         )
       )
     ),
@@ -148,7 +148,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         ),
         StateBenefit(
           benefitType = "incapacityBenefit",
@@ -158,7 +158,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(1000.00),
           taxPaid = None,
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         ),
         StateBenefit(
           benefitType = "statePension",
@@ -168,7 +168,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = None,
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         ),
         StateBenefit(
           benefitType = "statePensionLumpSum",
@@ -178,7 +178,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         ),
         StateBenefit(
           benefitType = "employmentSupportAllowance",
@@ -188,7 +188,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         ),
         StateBenefit(
           benefitType = "jobSeekersAllowance",
@@ -198,7 +198,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = Some(2132.22),
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         ),
         StateBenefit(
           benefitType = "bereavementAllowance",
@@ -208,7 +208,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = None,
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         ),
         StateBenefit(
           benefitType = "otherStateBenefits",
@@ -218,7 +218,7 @@ class ListBenefitsResponseSpec extends UnitSpec {
           amount = Some(2000.00),
           taxPaid = None,
           submittedOn = Some("2019-04-04T01:01:01Z"),
-          createdBy = Some("CUSTOM")
+          createdBy = "CUSTOM"
         )
       )
     )

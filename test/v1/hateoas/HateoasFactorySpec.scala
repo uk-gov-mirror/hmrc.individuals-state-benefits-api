@@ -54,7 +54,8 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
     endDate = Some("2020-04-01"),
     amount = Some(2000.00),
     taxPaid = Some(2132.22),
-    submittedOn = None
+    submittedOn = None,
+    createdBy = "HMRC"
   )
 
   val customerAddedStateBenefits: StateBenefit = StateBenefit(
@@ -65,7 +66,7 @@ class HateoasFactorySpec extends UnitSpec with MockAppConfig {
     amount = Some(2000.00),
     taxPaid = Some(2132.22),
     submittedOn = Some("2019-04-04T01:01:01Z"),
-    createdBy = Some("CUSTOM")
+    createdBy = "CUSTOM"
   )
 
   val stateBenefitsLinks: Seq[Link] = List(Link("/context/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779f",GET,"self"))

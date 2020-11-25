@@ -168,18 +168,18 @@ class ListBenefitsControllerSpec
       "benefitId is passed for single retrieval" in new Test {
 
         MockListBenefitsRequestParser
-          .parse(rawData(benefitId))
-          .returns(Right(requestData(benefitId)))
+          .parse(rawData(Some("f0d83ac0-a10a-4d57-9e41-6d033832779g")))
+          .returns(Right(requestData(Some("f0d83ac0-a10a-4d57-9e41-6d033832779g"))))
 
         MockListBenefitsService
-          .listBenefits(requestData(benefitId))
+          .listBenefits(requestData(Some("f0d83ac0-a10a-4d57-9e41-6d033832779g")))
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseData.copy(stateBenefits = None)))))
 
         MockHateoasFactory
-          .wrapList(responseData.copy(stateBenefits = None), ListBenefitsHateoasData(nino, taxYear, benefitId))
+          .wrapList(responseData.copy(stateBenefits = None), ListBenefitsHateoasData(nino, taxYear, Some("f0d83ac0-a10a-4d57-9e41-6d033832779g")))
           .returns(singleCustomOnlyHateoasResponse)
 
-        val result: Future[Result] = controller.listBenefits(nino, taxYear, benefitId)(fakeGetRequest)
+        val result: Future[Result] = controller.listBenefits(nino, taxYear, Some("f0d83ac0-a10a-4d57-9e41-6d033832779g"))(fakeGetRequest)
 
         status(result) shouldBe OK
         contentAsJson(result) shouldBe singleRetrieveWithAmounts

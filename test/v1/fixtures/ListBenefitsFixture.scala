@@ -82,7 +82,7 @@ object ListBenefitsFixture {
       |	"customerAddedStateBenefits": [{
       |		"benefitType": "incapacityBenefit",
       |		"submittedOn": "2019-04-04T01:01:01Z",
-      |		"benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |		"benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779g",
       |		"startDate": "2020-01-01",
       |		"endDate": "2020-04-01",
       |		"amount": 2000,
@@ -105,6 +105,50 @@ object ListBenefitsFixture {
       |}""".stripMargin)
 
   val singleRetrieveWithAmounts: JsValue = Json.parse(
+    """
+      |{
+      |	"customerAddedStateBenefits": [{
+      |		"benefitType": "incapacityBenefit",
+      |		"submittedOn": "2019-04-04T01:01:01Z",
+      |		"benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779g",
+      |		"startDate": "2020-01-01",
+      |		"endDate": "2020-04-01",
+      |		"amount": 2000,
+      |		"taxPaid": 2132.22,
+      |		"links": [{
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779g",
+      |			"method": "GET",
+      |			"rel": "self"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g/amounts",
+      |			"method": "PUT",
+      |			"rel": "amend-state-benefit-amounts"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g/amounts",
+      |			"method": "DELETE",
+      |			"rel": "delete-state-benefit-amounts"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g",
+      |			"method": "DELETE",
+      |			"rel": "delete-state-benefit"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g",
+      |			"method": "PUT",
+      |			"rel": "amend-state-benefit"
+      |		}]
+      |	}],
+      |	"links": [{
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
+      |		"method": "POST",
+      |		"rel": "create-state-benefit"
+      |	}, {
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
+      |		"method": "GET",
+      |		"rel": "self"
+      |	}]
+      |}""".stripMargin)
+
+  val singleRetrieveWithAmountsBenefitId: JsValue = Json.parse(
     """
       |{
       |	"customerAddedStateBenefits": [{
@@ -148,7 +192,7 @@ object ListBenefitsFixture {
       |	}]
       |}""".stripMargin)
 
-  val singleRetrieveWithAmountsBenefitId: JsValue = Json.parse(
+  val singleRetrieveWithDuplicateBenefitId: JsValue = Json.parse(
     """
       |{
       |	"customerAddedStateBenefits": [{
@@ -288,6 +332,65 @@ object ListBenefitsFixture {
       |	}]
       |}""".stripMargin)
 
+  val duplicateIdResponse: JsValue = Json.parse(
+    """
+      |{
+      |	"stateBenefits": [{
+      |		"benefitType": "incapacityBenefit",
+      |		"dateIgnored": "2019-04-04T01:01:01Z",
+      |		"benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |		"startDate": "2020-01-01",
+      |		"endDate": "2020-04-01",
+      |		"amount": 2000,
+      |		"taxPaid": 2132.22,
+      |		"links": [{
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |			"method": "GET",
+      |			"rel": "self"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts",
+      |			"method": "PUT",
+      |			"rel": "amend-state-benefit-amounts"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore",
+      |			"method": "PUT",
+      |			"rel": "ignore-state-benefit"
+      |		}]
+      |	}],
+      |	"customerAddedStateBenefits": [{
+      |		"benefitType": "incapacityBenefit",
+      |		"submittedOn": "2019-04-04T01:01:01Z",
+      |		"benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |		"startDate": "2020-01-01",
+      |		"endDate": "2020-04-01",
+      |		"amount": 2000,
+      |		"taxPaid": 2132.22,
+      |		"links": [{
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |			"method": "GET",
+      |			"rel": "self"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts",
+      |			"method": "PUT",
+      |			"rel": "amend-state-benefit-amounts"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts",
+      |			"method": "DELETE",
+      |			"rel": "delete-state-benefit-amounts"
+      |		}]
+      |	}],
+      |	"links": [{
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
+      |		"method": "POST",
+      |		"rel": "create-state-benefit"
+      |	}, {
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
+      |		"method": "GET",
+      |		"rel": "self"
+      |	}]
+      |}
+      |""".stripMargin)
+
   val singleStateBenefitDesJson: JsValue = Json.parse(
     """
       |{
@@ -300,6 +403,33 @@ object ListBenefitsFixture {
       |      "endDate": "2020-04-01",
       |      "amount": 2000.00,
       |      "taxPaid": 2132.22
+      |     }]
+      |   }
+      |}""".stripMargin)
+
+  val singleStateBenefitDesJsonWithDuplicateId: JsValue = Json.parse(
+    """
+      |{
+      |  "stateBenefits": {
+      |    "incapacityBenefit": [
+      |    {
+      |      "dateIgnored": "2019-04-04T01:01:01Z",
+      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |      "startDate": "2020-01-01",
+      |      "endDate": "2020-04-01",
+      |      "amount": 2000.00,
+      |      "taxPaid": 2132.22
+      |     }]
+      |   },
+      |   "customerAddedStateBenefits": {
+      |    "incapacityBenefit": [
+      |    {
+      |      "submittedOn": "2019-04-04T01:01:01Z",
+      |        "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |        "startDate": "2020-01-01",
+      |        "endDate": "2020-04-01",
+      |        "amount": 2000.00,
+      |        "taxPaid": 2132.22
       |     }]
       |   }
       |}""".stripMargin)
@@ -720,17 +850,19 @@ object ListBenefitsFixture {
     endDate = Some("2020-04-01"),
     amount = Some(2000.00),
     taxPaid = Some(2132.22),
-    submittedOn = None
+    submittedOn = None,
+    createdBy = "HMRC"
   )
 
   val customerAddedStateBenefits: StateBenefit = StateBenefit(
     benefitType = "incapacityBenefit",
-    benefitId = "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+    benefitId = "f0d83ac0-a10a-4d57-9e41-6d033832779g",
     startDate = "2020-01-01",
     endDate = Some("2020-04-01"),
     amount = Some(2000.00),
     taxPaid = Some(2132.22),
-    submittedOn = Some("2019-04-04T01:01:01Z")
+    submittedOn = Some("2019-04-04T01:01:01Z"),
+    createdBy = "CUSTOM"
   )
 
   val responseData: ListBenefitsResponse[StateBenefit] = ListBenefitsResponse(
@@ -750,7 +882,6 @@ object ListBenefitsFixture {
     Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts", PUT, "amend-state-benefit-amounts"),
     Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore", PUT, "ignore-state-benefit"))
 
-
   val amountsLink: Link = Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts",
     DELETE, "delete-state-benefit-amounts")
 
@@ -758,12 +889,12 @@ object ListBenefitsFixture {
     Link("/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779f",GET,"self"))
 
   val singleCustomerStateBenefitsLinks: Seq[Link] = List(
-    Link("/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779f",GET,"self"),
-    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts", PUT, "amend-state-benefit-amounts"),
-    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts",
+    Link("/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779g",GET,"self"),
+    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g/amounts", PUT, "amend-state-benefit-amounts"),
+    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g/amounts",
       DELETE, "delete-state-benefit-amounts"),
-    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f", DELETE, "delete-state-benefit"),
-    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f", PUT, "amend-state-benefit"))
+    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g", DELETE, "delete-state-benefit"),
+    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779g", PUT, "amend-state-benefit"))
 
   val listBenefitsLink: Seq[Link] = List(Link("/individuals/state-benefits/AA123456A/2020-21",POST,"create-state-benefit"),
     Link("/individuals/state-benefits/AA123456A/2020-21",GET,"self"))
