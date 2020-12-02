@@ -1,0 +1,3 @@
+DELETE     /:nino/:taxYear/:benefitId/amounts      v1.controllers.DeleteBenefitAmountsController.deleteBenefitAmounts(nino: String, taxYear: String, benefitId: String)
+PUT        /:nino/:taxYear/:benefitId/amounts      v1.controllers.AmendBenefitAmountsController.amendBenefitAmounts(nino: String, taxYear: String, benefitId: String)
+GET        /:nino/:taxYear                         v1.controllers.ListBenefitsController.listBenefits(nino: String, taxYear: String, benefitId: Option[String])
