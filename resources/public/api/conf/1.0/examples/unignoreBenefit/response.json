@@ -6,8 +6,8 @@
       "method": "GET"
     },
     {
-      "href": "/individuals/state-benefits/TC663795B/2020-21/a1e8057e-fbbc-47a8-a8b4-78d9f015c253/unignore",
-      "rel": "unignore-state-benefit",
+      "href": "/individuals/state-benefits/TC663795B/2020-21/a1e8057e-fbbc-47a8-a8b4-78d9f015c253/ignore",
+      "rel": "ignore-state-benefit",
       "method": "POST"
     }
   ]

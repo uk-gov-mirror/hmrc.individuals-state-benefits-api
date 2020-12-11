@@ -20,7 +20,7 @@
             "type": "string",
             "enum": [
               "self",
-              "ignore-state-benefit"
+              "unignore-state-benefit"
             ]
           },
           "method": {
@@ -28,7 +28,7 @@
             "type": "string",
             "enum": [
               "GET",
-              "PUT"
+              "POST"
             ]
           }
         },

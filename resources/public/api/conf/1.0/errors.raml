@@ -213,3 +213,14 @@ traits:
                 description: 'A customer added state benefit cannot be ignored.'
                 value:
                   code: RULE_IGNORE_FORBIDDEN
+  ruleUnignoreForbidden:
+    responses:
+      403:
+        body:
+          application/json:
+            type: types.errorResponse
+            examples:
+              ruleUnignoreForbidden:
+                description: 'A customer added state benefit cannot be unignored.'
+                value:
+                  code: RULE_UNIGNORE_FORBIDDEN

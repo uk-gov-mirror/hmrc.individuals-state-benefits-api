@@ -47,4 +47,6 @@ uses:
           put: !include endpoints/amendBenefitAmounts.raml
           delete: !include endpoints/deleteBenefitAmounts.raml
         /ignore:
-          put: !include endpoints/ignoreBenefit.raml
+          post: !include endpoints/ignoreBenefit.raml
+        /unignore:
+          post: !include endpoints/unignoreBenefit.raml

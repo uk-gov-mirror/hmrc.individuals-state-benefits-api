@@ -8,11 +8,11 @@ is:
   - errors.ruleTaxYearRangeInvalid
   - errors.ruleTaxYearNotSupported
   - errors.ruleTaxYearNotEnded
-  - errors.ruleIgnoreForbidden
+  - errors.ruleUnignoreForbidden
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
-displayName: Ignore State Benefit [test only]
-description: 'This endpoint allows a customer to mark a State Benefit as ignored, customer added benefits can’t be ignored they can only be deleted. A National Insurance number, tax year and benefit ID must be provided.'
+displayName: Unignore State Benefit [test only]
+description: 'This endpoint allows a customer to mark a State Benefit as unignored, customer added benefits can’t be unignored they can only be deleted. A National Insurance number, tax year and benefit ID must be provided.'
 (annotations.sandboxData): !include ../scenarios/ignoreBenefit.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
@@ -20,8 +20,8 @@ responses:
   200:
     body:
       application/json:
-        type: !include ../schemas/ignore_response.json
-        example: !include ../examples/ignoreBenefit/response.json
+        type: !include ../schemas/unignore_response.json
+        example: !include ../examples/unignoreBenefit/response.json
     headers:
       X-CorrelationId:
         example: a1e8057e-fbbc-47a8-a8b4-78d9f015c253
