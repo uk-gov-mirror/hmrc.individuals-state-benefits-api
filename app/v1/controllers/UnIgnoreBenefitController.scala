@@ -31,28 +31,28 @@ import v1.hateoas.IgnoreHateoasBody
 import v1.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.request.ignoreBenefit.IgnoreBenefitRawData
-import v1.services.{AuditService, EnrolmentsAuthService, IgnoreBenefitService, MtdIdLookupService}
+import v1.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService, UnIgnoreBenefitService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
-                                        val lookupService: MtdIdLookupService,
-                                        appConfig: AppConfig,
-                                        requestParser: IgnoreBenefitRequestParser,
-                                        service: IgnoreBenefitService,
-                                        auditService: AuditService,
-                                        cc: ControllerComponents,
-                                        idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+class UnIgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
+                                          val lookupService: MtdIdLookupService,
+                                          appConfig: AppConfig,
+                                          requestParser: IgnoreBenefitRequestParser,
+                                          service: UnIgnoreBenefitService,
+                                          auditService: AuditService,
+                                          cc: ControllerComponents,
+                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext)
   extends AuthorisedController(cc) with BaseController with Logging with IgnoreHateoasBody {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
-      controllerName = "IgnoreBenefitController",
-      endpointName = "ignoreBenefit"
+      controllerName = "UnIgnoreBenefitController",
+      endpointName = "unIgnoreBenefit"
     )
 
-  def ignoreBenefit(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
+  def unIgnoreBenefit(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
 
       implicit val correlationId: String = idGenerator.getCorrelationId
@@ -67,13 +67,13 @@ class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](requestParser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.ignoreBenefit(parsedRequest))
+          serviceResponse <- EitherT(service.unIgnoreBenefit(parsedRequest))
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          val hateoasResponse = ignoreBenefitHateoasBody(appConfig, nino, taxYear, benefitId)
+          val hateoasResponse = unIgnoreBenefitHateoasBody(appConfig, nino, taxYear, benefitId)
 
           auditSubmission(
             GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId), None,
@@ -107,7 +107,7 @@ class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
       case BadRequestError | NinoFormatError | TaxYearFormatError | BenefitIdFormatError |
            RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError | RuleTaxYearNotEndedError
       => BadRequest(Json.toJson(errorWrapper))
-      case RuleIgnoreForbiddenError => Forbidden(Json.toJson(errorWrapper))
+      case RuleUnIgnoreForbiddenError => Forbidden(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }
@@ -116,7 +116,7 @@ class IgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
   private def auditSubmission(details: GenericAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("IgnoreStateBenefit", "ignore-state-benefit", details)
+    val event = AuditEvent("UnIgnoreStateBenefit", "unignore-state-benefit", details)
     auditService.auditEvent(event)
   }
 

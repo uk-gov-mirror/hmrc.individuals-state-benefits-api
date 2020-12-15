@@ -17,8 +17,8 @@
 package v1.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.format.DateTimeFormat
+import org.joda.time.{DateTime, DateTimeZone}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -27,7 +27,7 @@ import support.IntegrationBaseSpec
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
-class IgnoreBenefitControllerISpec extends IntegrationBaseSpec {
+class UnIgnoreBenefitControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
@@ -46,8 +46,8 @@ class IgnoreBenefitControllerISpec extends IntegrationBaseSpec {
          |         "method":"GET"
          |      },
          |      {
-         |         "href":"/individuals/state-benefits/$nino/$taxYear/$benefitId/unignore",
-         |         "rel":"unignore-state-benefit",
+         |         "href":"/individuals/state-benefits/$nino/$taxYear/$benefitId/ignore",
+         |         "rel":"ignore-state-benefit",
          |         "method":"POST"
          |      }
          |   ]
@@ -55,7 +55,7 @@ class IgnoreBenefitControllerISpec extends IntegrationBaseSpec {
        """.stripMargin
     )
 
-    def uri: String = s"/$nino/$taxYear/$benefitId/ignore"
+    def uri: String = s"/$nino/$taxYear/$benefitId/unignore"
 
     def desUri: String = s"/income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId"
 
@@ -68,7 +68,7 @@ class IgnoreBenefitControllerISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the 'ignore benefit' endpoint" should {
+  "Calling the 'unignore benefit' endpoint" should {
     "return a 200 status code" when {
       "any valid request is made" in new Test {
 
@@ -76,7 +76,7 @@ class IgnoreBenefitControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.PUT, desUri, CREATED)
+          DesStub.onSuccess(DesStub.DELETE, desUri, NO_CONTENT)
         }
 
         val response: WSResponse = await(request().post(JsObject.empty))
@@ -148,7 +148,7 @@ class IgnoreBenefitControllerISpec extends IntegrationBaseSpec {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DesStub.onError(DesStub.PUT, desUri, desStatus, errorBody(desCode))
+              DesStub.onError(DesStub.DELETE, desUri, desStatus, errorBody(desCode))
             }
 
             val response: WSResponse = await(request().post(JsObject.empty))
@@ -170,7 +170,7 @@ class IgnoreBenefitControllerISpec extends IntegrationBaseSpec {
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_BENEFIT_ID", NOT_FOUND, NotFoundError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
-          (FORBIDDEN, "IGNORE_FORBIDDEN", FORBIDDEN, RuleIgnoreForbiddenError),
+          (FORBIDDEN, "UNIGNORE_FORBIDDEN", FORBIDDEN, RuleUnIgnoreForbiddenError),
           (UNPROCESSABLE_ENTITY, "NOT_SUPPORTED_TAX_YEAR", BAD_REQUEST, RuleTaxYearNotEndedError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError))

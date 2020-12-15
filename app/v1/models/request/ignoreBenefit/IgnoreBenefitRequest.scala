@@ -18,4 +18,4 @@ package v1.models.request.ignoreBenefit
 
 import uk.gov.hmrc.domain.Nino
 
-case class IgnoreBenefitRequest(nino: Nino, taxYear: String, benefitId: String, body: IgnoreBenefitRequestBody)
+case class IgnoreBenefitRequest(nino: Nino, taxYear: String, benefitId: String)

@@ -16,7 +16,6 @@
 
 package v1.models.request.ignoreBenefit
 
-import play.api.mvc.AnyContentAsJson
 import v1.models.request.RawData
 
-case class IgnoreBenefitRawData(nino: String, taxYear: String, benefitId: String, body: AnyContentAsJson) extends RawData
+case class IgnoreBenefitRawData(nino: String, taxYear: String, benefitId: String) extends RawData

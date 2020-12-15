@@ -19,11 +19,11 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.IgnoreBenefitValidator
-import v1.models.request.ignoreBenefit.{IgnoreBenefitRawData, IgnoreBenefitRequest, IgnoreBenefitRequestBody}
+import v1.models.request.ignoreBenefit.{IgnoreBenefitRawData, IgnoreBenefitRequest}
 
 class IgnoreBenefitRequestParser @Inject()(val validator: IgnoreBenefitValidator)
   extends RequestParser[IgnoreBenefitRawData, IgnoreBenefitRequest] {
 
   override protected def requestFor(data: IgnoreBenefitRawData): IgnoreBenefitRequest =
-    IgnoreBenefitRequest(Nino(data.nino), data.taxYear, data.benefitId, data.body.json.as[IgnoreBenefitRequestBody])
+    IgnoreBenefitRequest(Nino(data.nino), data.taxYear, data.benefitId)
 }

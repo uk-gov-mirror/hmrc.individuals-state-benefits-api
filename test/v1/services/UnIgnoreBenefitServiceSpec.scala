@@ -18,14 +18,14 @@ package v1.services
 
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.EndpointLogContext
-import v1.mocks.connectors.MockIgnoreBenefitConnector
+import v1.mocks.connectors.MockUnIgnoreBenefitConnector
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
 
 import scala.concurrent.Future
 
-class IgnoreBenefitServiceSpec extends ServiceSpec {
+class UnIgnoreBenefitServiceSpec extends ServiceSpec {
 
   val nino: String = "AA111111A"
   val taxYear: String = "2019-20"
@@ -33,23 +33,23 @@ class IgnoreBenefitServiceSpec extends ServiceSpec {
 
   val request: IgnoreBenefitRequest = IgnoreBenefitRequest(Nino(nino), taxYear, benefitId)
 
-  trait Test extends MockIgnoreBenefitConnector {
+  trait Test extends MockUnIgnoreBenefitConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
 
-    val service: IgnoreBenefitService = new IgnoreBenefitService(
-      connector = mockIgnoreBenefitConnector
+    val service: UnIgnoreBenefitService = new UnIgnoreBenefitService(
+      connector = mockUnIgnoreBenefitConnector
     )
   }
 
-  "IgnoreBenefitService" when {
-    "ignoreBenefit" must {
+  "UnIgnoreBenefitService" when {
+    "unIgnoreBenefit" must {
       "return correct result for a success" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockIgnoreBenefitConnector.ignoreBenefit(request)
+        MockUnIgnoreBenefitConnector.unIgnoreBenefit(request)
           .returns(Future.successful(outcome))
 
-        await(service.ignoreBenefit(request)) shouldBe outcome
+        await(service.unIgnoreBenefit(request)) shouldBe outcome
       }
 
       "map errors according to spec" when {
@@ -57,10 +57,10 @@ class IgnoreBenefitServiceSpec extends ServiceSpec {
         def serviceError(desErrorCode: String, error: MtdError): Unit =
           s"a $desErrorCode error is returned from the service" in new Test {
 
-            MockIgnoreBenefitConnector.ignoreBenefit(request)
+            MockUnIgnoreBenefitConnector.unIgnoreBenefit(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.ignoreBenefit(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+            await(service.unIgnoreBenefit(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(
@@ -68,7 +68,7 @@ class IgnoreBenefitServiceSpec extends ServiceSpec {
           ("INVALID_TAX_YEAR", TaxYearFormatError),
           ("INVALID_BENEFIT_ID", NotFoundError),
           ("INVALID_CORRELATIONID", DownstreamError),
-          ("IGNORE_FORBIDDEN", RuleIgnoreForbiddenError),
+          ("UNIGNORE_FORBIDDEN", RuleUnIgnoreForbiddenError),
           ("NOT_SUPPORTED_TAX_YEAR", RuleTaxYearNotEndedError),
           ("SERVER_ERROR", DownstreamError),
           ("SERVICE_UNAVAILABLE", DownstreamError)

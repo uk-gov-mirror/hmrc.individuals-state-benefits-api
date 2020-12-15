@@ -22,8 +22,6 @@ import mocks.MockAppConfig
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import play.api.Configuration
-import play.api.libs.json.{JsObject, JsValue, Json}
-import play.api.mvc.AnyContentAsJson
 import support.UnitSpec
 import utils.CurrentDateTime
 import v1.mocks.MockCurrentDateTime
@@ -35,28 +33,6 @@ class IgnoreBenefitValidatorSpec extends UnitSpec {
   private val validNino = "AA123456A"
   private val validTaxYear = "2020-21"
   private val validBenefitId = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-
-  private val validRequestJson: JsValue = Json.parse(
-    """
-      |{
-      |  "ignoreBenefit": true
-      |}
-    """.stripMargin
-  )
-
-  private val emptyRequestJson: JsValue = JsObject.empty
-
-  private val incorrectFormatRequestJson: JsValue = Json.parse(
-    """
-      |{
-      |  "ignoreBenefit": "no"
-      |}
-    """.stripMargin
-  )
-
-  private val validRawBody = AnyContentAsJson(validRequestJson)
-  private val emptyRawBody = AnyContentAsJson(emptyRequestJson)
-  private val incorrectFormatRawBody = AnyContentAsJson(incorrectFormatRequestJson)
 
   class Test(errorFeatureSwitch: Boolean = true) extends MockCurrentDateTime with MockAppConfig {
 
@@ -71,6 +47,7 @@ class IgnoreBenefitValidatorSpec extends UnitSpec {
       .returns(DateTime.parse("2022-07-11", dateTimeFormatter))
       .anyNumberOfTimes()
 
+    //noinspection ScalaStyle
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2021)
 
@@ -83,59 +60,48 @@ class IgnoreBenefitValidatorSpec extends UnitSpec {
   "IgnoreBenefitValidator" when {
     "running a validation" should {
       "return no errors for a valid request" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, validTaxYear, validBenefitId, validRawBody)) shouldBe Nil
+        validator.validate(IgnoreBenefitRawData(validNino, validTaxYear, validBenefitId)) shouldBe Nil
       }
 
       "return no errors when config for Tax RuleTaxYearNotEndedError is set to false" in new Test(false) {
-        validator.validate(IgnoreBenefitRawData(validNino, "2022-23", validBenefitId, validRawBody)) shouldBe List()
+        validator.validate(IgnoreBenefitRawData(validNino, "2022-23", validBenefitId)) shouldBe List()
       }
 
       // parameter format error scenarios
       "return NinoFormatError error when the supplied NINO is invalid" in new Test {
-        validator.validate(IgnoreBenefitRawData("A12344A", validTaxYear, validBenefitId, validRawBody)) shouldBe
+        validator.validate(IgnoreBenefitRawData("A12344A", validTaxYear, validBenefitId)) shouldBe
           List(NinoFormatError)
       }
 
       "return TaxYearFormatError error for an invalid tax year format" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, "20199", validBenefitId, validRawBody)) shouldBe
+        validator.validate(IgnoreBenefitRawData(validNino, "20199", validBenefitId)) shouldBe
           List(TaxYearFormatError)
       }
 
       "return RuleTaxYearRangeInvalidError error for an invalid tax year range" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, "2020-22", validBenefitId, validRawBody)) shouldBe
+        validator.validate(IgnoreBenefitRawData(validNino, "2020-22", validBenefitId)) shouldBe
           List(RuleTaxYearRangeInvalidError)
       }
 
       "return BenefitIdFormatError error for an invalid benefit ID" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, validTaxYear, "ABCDE12345FG", validRawBody)) shouldBe
+        validator.validate(IgnoreBenefitRawData(validNino, validTaxYear, "ABCDE12345FG")) shouldBe
           List(BenefitIdFormatError)
       }
 
       "return multiple errors for multiple invalid request parameters" in new Test {
-        validator.validate(IgnoreBenefitRawData("A12344A", "2020-22", "ABCDE12345FG", validRawBody)) shouldBe
+        validator.validate(IgnoreBenefitRawData("A12344A", "2020-22", "ABCDE12345FG")) shouldBe
           List(NinoFormatError, RuleTaxYearRangeInvalidError, BenefitIdFormatError)
       }
 
       // parameter rule error scenarios
       "return RuleTaxYearNotSupportedError error for an unsupported tax year" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, "2019-20", validBenefitId, validRawBody)) shouldBe
+        validator.validate(IgnoreBenefitRawData(validNino, "2019-20", validBenefitId)) shouldBe
           List(RuleTaxYearNotSupportedError)
       }
 
       "return RuleTaxYearNotEndedError error for a tax year which hasn't ended" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, "2022-23", validBenefitId, validRawBody)) shouldBe
+        validator.validate(IgnoreBenefitRawData(validNino, "2022-23", validBenefitId)) shouldBe
           List(RuleTaxYearNotEndedError)
-      }
-
-      // body format error scenarios
-      "return RuleIncorrectOrEmptyBodyError error for an empty request body" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, validTaxYear, validBenefitId, emptyRawBody)) shouldBe
-          List(RuleIncorrectOrEmptyBodyError)
-      }
-
-      "return RuleIncorrectOrEmptyBodyError error for an incorrect request body" in new Test {
-        validator.validate(IgnoreBenefitRawData(validNino, validTaxYear, validBenefitId, incorrectFormatRawBody)) shouldBe
-          List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ignoreBenefit"))))
       }
     }
   }

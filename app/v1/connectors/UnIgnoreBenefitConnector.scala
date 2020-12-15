@@ -20,28 +20,27 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import play.api.http.Status
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.EmptyBody
 import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IgnoreBenefitConnector @Inject()(val http: HttpClient,
-                                       val appConfig: AppConfig) extends BaseDesConnector {
+class UnIgnoreBenefitConnector @Inject()(val http: HttpClient,
+                                         val appConfig: AppConfig) extends BaseDesConnector {
 
-  def ignoreBenefit(request: IgnoreBenefitRequest)(
+  def unIgnoreBenefit(request: IgnoreBenefitRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     correlationId: String): Future[DesOutcome[Unit]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
 
-    implicit val successCode: SuccessCode = SuccessCode(Status.CREATED)
+    implicit val successCode: SuccessCode = SuccessCode(Status.NO_CONTENT)
 
     val nino = request.nino
     val taxYear = request.taxYear
     val benefitId = request.benefitId
 
-    put(EmptyBody, DesUri[Unit](s"income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId"))
+    delete(DesUri[Unit](s"income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId"))
   }
 }

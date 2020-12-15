@@ -20,12 +20,11 @@ import mocks.MockAppConfig
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
-import v1.models.request.EmptyBody
 import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
 
 import scala.concurrent.Future
 
-class IgnoreBenefitConnectorSpec extends ConnectorSpec {
+class UnIgnoreBenefitConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA111111A"
   val taxYear: String = "2019-20"
@@ -33,7 +32,7 @@ class IgnoreBenefitConnectorSpec extends ConnectorSpec {
   val request: IgnoreBenefitRequest = IgnoreBenefitRequest(Nino(nino), taxYear, benefitId)
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: IgnoreBenefitConnector = new IgnoreBenefitConnector(
+    val connector: UnIgnoreBenefitConnector = new UnIgnoreBenefitConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -43,18 +42,17 @@ class IgnoreBenefitConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desEnvironment returns "des-environment"
   }
 
-  "IgnoreBenefitConnector" when {
-    "happy path" should {
+  "UnIgnoreBenefitConnector" when {
+    "unIgnore request received" should {
       "return a successful response" in new Test {
         private val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockedHttpClient.put(
+        MockedHttpClient.delete(
           url = s"$baseUrl/income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId",
-          body = EmptyBody,
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         ).returns(Future.successful(outcome))
 
-        await(connector.ignoreBenefit(request)) shouldBe outcome
+        await(connector.unIgnoreBenefit(request)) shouldBe outcome
       }
     }
   }

@@ -16,45 +16,29 @@
 
 package v1.controllers.requestParsers
 
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.AnyContentAsJson
 import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import v1.mocks.validators.MockIgnoreBenefitValidator
 import v1.models.errors._
-import v1.models.request.ignoreBenefit.{IgnoreBenefitRawData, IgnoreBenefitRequest, IgnoreBenefitRequestBody}
+import v1.models.request.ignoreBenefit.{IgnoreBenefitRawData, IgnoreBenefitRequest}
 
 class IgnoreBenefitRequestParserSpec extends UnitSpec {
 
   private val nino: String = "AA123456B"
   private val taxYear: String = "2021-22"
   private val benefitId: String = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-  implicit val correlationId = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
-
-  private val validRequestJson: JsValue = Json.parse(
-    """
-      |{
-      |  "ignoreBenefit": true
-      |}
-    """.stripMargin
-  )
-
-  private val validRawBody = AnyContentAsJson(validRequestJson)
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val ignoreBenefitRawData = IgnoreBenefitRawData(
     nino = nino,
     taxYear = taxYear,
-    benefitId = benefitId,
-    body = validRawBody
+    benefitId = benefitId
   )
-
-  private val ignoreBenefitBodyModel = IgnoreBenefitRequestBody(ignoreBenefit = true)
 
   private val ignoreBenefitRequest = IgnoreBenefitRequest (
     nino = Nino(nino),
     taxYear = taxYear,
-    benefitId = benefitId,
-    body = ignoreBenefitBodyModel
+    benefitId = benefitId
   )
 
   trait Test extends MockIgnoreBenefitValidator {
@@ -86,27 +70,6 @@ class IgnoreBenefitRequestParserSpec extends UnitSpec {
 
         parser.parseRequest(ignoreBenefitRawData.copy(nino = "notANino", taxYear = "notATaxYear", benefitId = "notABenefitId")) shouldBe
           Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError, BenefitIdFormatError))))
-      }
-
-      "a single field value validation error occur" in new Test {
-
-        private val invalidValueRequestJson: JsValue = Json.parse(
-          s"""
-             |{
-             |  "ignoreBenefit": "notValid"
-             |}
-            """.stripMargin
-        )
-
-        private val invalidValueRawBody = AnyContentAsJson(invalidValueRequestJson)
-
-        private val error = List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ignoreBenefit"))))
-
-        MockIgnoreBenefitValidator.validate(ignoreBenefitRawData.copy(body = invalidValueRawBody))
-          .returns(error)
-
-        parser.parseRequest(ignoreBenefitRawData.copy(body = invalidValueRawBody)) shouldBe
-          Left(ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError.copy(paths = Some(List("/ignoreBenefit"))), None))
       }
     }
   }

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.models.request.ignoreBenefit
+package v1.models.request
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsObject, Writes}
 
-case class IgnoreBenefitRequestBody(ignoreBenefit: Boolean)
+object EmptyBody {
 
-object IgnoreBenefitRequestBody {
-  implicit val format: OFormat[IgnoreBenefitRequestBody] = Json.format[IgnoreBenefitRequestBody]
+  implicit val writes: Writes[EmptyBody.type] = (_: EmptyBody.type) => JsObject.empty
 }

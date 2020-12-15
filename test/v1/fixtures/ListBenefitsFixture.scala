@@ -255,7 +255,7 @@ object ListBenefitsFixture {
       |			"rel": "amend-state-benefit-amounts"
       |		}, {
       |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore",
-      |			"method": "PUT",
+      |			"method": "POST",
       |			"rel": "ignore-state-benefit"
       |		}]
       |	}],
@@ -289,7 +289,7 @@ object ListBenefitsFixture {
       |			"rel": "amend-state-benefit-amounts"
       |		}, {
       |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore",
-      |			"method": "PUT",
+      |			"method": "POST",
       |			"rel": "ignore-state-benefit"
       |		}]
       |	}],
@@ -353,7 +353,7 @@ object ListBenefitsFixture {
       |			"rel": "amend-state-benefit-amounts"
       |		}, {
       |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore",
-      |			"method": "PUT",
+      |			"method": "POST",
       |			"rel": "ignore-state-benefit"
       |		}]
       |	}],
@@ -880,7 +880,7 @@ object ListBenefitsFixture {
   val singleStateBenefitsLinks: Seq[Link] = List(
     Link("/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779f",GET,"self"),
     Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts", PUT, "amend-state-benefit-amounts"),
-    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore", PUT, "ignore-state-benefit"))
+    Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore", POST, "ignore-state-benefit"))
 
   val amountsLink: Link = Link("/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts",
     DELETE, "delete-state-benefit-amounts")

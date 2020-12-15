@@ -21,7 +21,7 @@ import cats.implicits._
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.IgnoreBenefitConnector
+import v1.connectors.UnIgnoreBenefitConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -31,17 +31,17 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IgnoreBenefitService @Inject()(connector: IgnoreBenefitConnector)
+class UnIgnoreBenefitService @Inject()(connector: UnIgnoreBenefitConnector)
   extends DesResponseMappingSupport with Logging {
 
-  def ignoreBenefit(request: IgnoreBenefitRequest)(
+  def unIgnoreBenefit(request: IgnoreBenefitRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     logContext: EndpointLogContext,
     correlationId: String): Future[Either[ErrorWrapper, ResponseWrapper[Unit]]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.ignoreBenefit(request)).leftMap(mapDesErrors(desErrorMap))
+      desResponseWrapper <- EitherT(connector.unIgnoreBenefit(request)).leftMap(mapDesErrors(desErrorMap))
     } yield desResponseWrapper
 
     result.value
@@ -52,7 +52,7 @@ class IgnoreBenefitService @Inject()(connector: IgnoreBenefitConnector)
     ("INVALID_TAX_YEAR", TaxYearFormatError),
     ("INVALID_BENEFIT_ID", NotFoundError),
     ("INVALID_CORRELATIONID", DownstreamError),
-    ("IGNORE_FORBIDDEN", RuleIgnoreForbiddenError),
+    ("UNIGNORE_FORBIDDEN", RuleUnIgnoreForbiddenError),
     ("NOT_SUPPORTED_TAX_YEAR", RuleTaxYearNotEndedError),
     ("SERVICE_ERROR", DownstreamError),
     ("SERVICE_UNAVAILABLE", DownstreamError)
