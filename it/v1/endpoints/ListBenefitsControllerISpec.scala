@@ -139,6 +139,23 @@ class ListBenefitsControllerISpec extends IntegrationBaseSpec {
       }
     }
 
+    "return a 200 status code with ignore hateoas link" when {
+      "a hmrc state benefit is not ignored yet" in new Test {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DesStub.onSuccess(DesStub.GET, desUri, Map("benefitId" -> benefitId.get), OK, desJsonWithNoDateIgnored)
+        }
+
+        val response: WSResponse = await(request(benefitId).get())
+        response.status shouldBe OK
+        response.json shouldBe responseBodyWithoutDateIgnored
+        response.header("Content-Type") shouldBe Some("application/json")
+      }
+    }
+
     "return error according to spec" when {
 
       "validation error" when {

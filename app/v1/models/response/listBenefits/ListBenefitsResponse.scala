@@ -40,15 +40,22 @@ object ListBenefitsResponse extends HateoasLinks with JsonUtils {
       val deleteLink = deleteBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
       val updateLink = updateBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
       val ignoreLink = ignoreBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+      val unignoreLink = unIgnoreBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
 
       val commonLinks = Seq(retrieveLink, updateAmountsLink)
+
+      val hmrcLinks = if(stateBenefit.dateIgnored.isEmpty){
+        commonLinks :+ ignoreLink
+      }else{
+        commonLinks :+ unignoreLink
+      }
 
       // Pattern matching based on benefit amounts, duplicate/common benefit on both HMRC and CUSTOM
       val links = (stateBenefit.hasAmounts, stateBenefit.isCommon) match {
         case (true, true) if stateBenefit.createdBy == "CUSTOM" => commonLinks :+ deleteAmountsLink
         case (true, false) if stateBenefit.createdBy == "CUSTOM" => commonLinks ++ Seq(deleteAmountsLink, deleteLink, updateLink)
         case (false, false) if stateBenefit.createdBy == "CUSTOM" => commonLinks ++ Seq(deleteLink, updateLink)
-        case (_, _) if stateBenefit.createdBy == "HMRC" => commonLinks :+ ignoreLink
+        case (_, _) if stateBenefit.createdBy == "HMRC" => hmrcLinks
       }
 
       // Differentiate the links based on the call list/single by benefitId passed in the request

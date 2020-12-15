@@ -288,6 +288,39 @@ object ListBenefitsFixture {
       |			"method": "PUT",
       |			"rel": "amend-state-benefit-amounts"
       |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/unignore",
+      |			"method": "POST",
+      |			"rel": "unignore-state-benefit"
+      |		}]
+      |	}],
+      |	"links": [{
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
+      |		"method": "POST",
+      |		"rel": "create-state-benefit"
+      |	}, {
+      |		"href": "/individuals/state-benefits/AA123456A/2020-21",
+      |		"method": "GET",
+      |		"rel": "self"
+      |	}]
+      |}""".stripMargin)
+
+  val responseBodyWithoutDateIgnored: JsValue = Json.parse(
+    """
+      |{
+      |	"stateBenefits": [{
+      |		"benefitType": "incapacityBenefit",
+      |		"benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |		"startDate": "2020-01-01",
+      |		"endDate": "2020-04-01",
+      |		"links": [{
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21?benefitId=f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |			"method": "GET",
+      |			"rel": "self"
+      |		}, {
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/amounts",
+      |			"method": "PUT",
+      |			"rel": "amend-state-benefit-amounts"
+      |		}, {
       |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore",
       |			"method": "POST",
       |			"rel": "ignore-state-benefit"
@@ -352,9 +385,9 @@ object ListBenefitsFixture {
       |			"method": "PUT",
       |			"rel": "amend-state-benefit-amounts"
       |		}, {
-      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/ignore",
+      |			"href": "/individuals/state-benefits/AA123456A/2020-21/f0d83ac0-a10a-4d57-9e41-6d033832779f/unignore",
       |			"method": "POST",
-      |			"rel": "ignore-state-benefit"
+      |			"rel": "unignore-state-benefit"
       |		}]
       |	}],
       |	"customerAddedStateBenefits": [{
@@ -457,6 +490,19 @@ object ListBenefitsFixture {
       |    "incapacityBenefit": [
       |    {
       |      "dateIgnored": "2019-04-04T01:01:01Z",
+      |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
+      |      "startDate": "2020-01-01",
+      |      "endDate": "2020-04-01"
+      |     }]
+      |   }
+      |}""".stripMargin)
+
+  val desJsonWithNoDateIgnored: JsValue = Json.parse(
+    """
+      |{
+      |  "stateBenefits": {
+      |    "incapacityBenefit": [
+      |    {
       |      "benefitId": "f0d83ac0-a10a-4d57-9e41-6d033832779f",
       |      "startDate": "2020-01-01",
       |      "endDate": "2020-04-01"
