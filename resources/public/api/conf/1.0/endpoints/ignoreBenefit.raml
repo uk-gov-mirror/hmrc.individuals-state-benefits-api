@@ -12,7 +12,7 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Ignore State Benefit [test only]
-description: 'This endpoint allows a customer to mark a State Benefit as ignored, customer added benefits can’t be ignored they can only be deleted. A National Insurance number, tax year and benefit ID must be provided.'
+description: 'This endpoint allows a customer to mark a state benefit as ignored, customer added state benefits can’t be ignored they can only be deleted.<br><br>Ignoring a HMRC state benefit will also ignore a duplicate benefit containing amended amounts, if one exists.<br><br>A National Insurance number, tax year and benefit ID must be provided.<br><br>This endpoint can only be used for a tax year that has ended.'
 (annotations.sandboxData): !include ../scenarios/ignoreBenefit.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]

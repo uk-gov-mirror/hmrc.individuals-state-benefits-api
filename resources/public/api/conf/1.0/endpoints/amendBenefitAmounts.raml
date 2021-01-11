@@ -13,7 +13,7 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
 displayName: Create and Amend State Benefit Amounts
-description: 'This endpoint allows a developer to create and amend benefits financial data. A National Insurance number, tax year and benefit ID must be provided.'
+description: 'This endpoint allows a developer to create or amend state benefit amounts.<br><br>Where the benefit ID relates to a customer created state benefit, the amount values will updated.<br><br>Where the benefit ID relates a HMRC held benefit, this will result in a duplicate benefit being created within the `customerAddedStateBenefits` array with the updated amount values. It will have the same benefit ID.<br><br>Where a duplicate benefit exists the benefit with the most recent `submittedOndate` will be used - older values will be ignored.<br><br>A National Insurance number, a tax year, a benefit type and start date must be provided.<br><br>This endpoint can only be used within the current tax year for `employmentSupportAllowance` and `jobSeekersAllowance` benefit types.'
 (annotations.sandboxData): !include ../scenarios/amendBenefitAmounts.md
 (annotations.scope): "write:self-assessment"
 securedBy: [ sec.oauth_2_0: { scopes: [ "write:self-assessment" ] } ]
