@@ -56,6 +56,7 @@ class DeleteBenefitAmountsController @Inject()(val authService: EnrolmentsAuthSe
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
+
       val rawData: DeleteBenefitRawData = DeleteBenefitRawData(
         nino = nino,
         taxYear = taxYear,
@@ -87,7 +88,7 @@ class DeleteBenefitAmountsController @Inject()(val authService: EnrolmentsAuthSe
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-        logger.info(
+        logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 

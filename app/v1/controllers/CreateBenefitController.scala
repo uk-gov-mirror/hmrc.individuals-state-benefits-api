@@ -59,6 +59,7 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
       implicit val correlationId: String = idGenerator.getCorrelationId
       logger.info(message = s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
         s"with correlationId : $correlationId")
+
       val rawData: CreateBenefitRawData = CreateBenefitRawData(
         nino = nino,
         taxYear = taxYear,
@@ -79,6 +80,7 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
+
           auditSubmission(
             GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear), Some(request.body),
               serviceResponse.correlationId, AuditResponse(httpStatus = OK, response = Right(Some(Json.toJson(hateoasResponse))))
@@ -88,10 +90,11 @@ class CreateBenefitController @Inject()(val authService: EnrolmentsAuthService,
             .withApiHeaders(serviceResponse.correlationId)
             .as(MimeTypes.JSON)
         }
+
       result.leftMap { errorWrapper =>
         val resCorrelationId = errorWrapper.correlationId
         val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
-        logger.info(
+        logger.warn(
           s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: $resCorrelationId")
 
