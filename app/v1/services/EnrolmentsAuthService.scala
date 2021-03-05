@@ -52,7 +52,7 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
     } else predicate
 
   def authorised(predicate: Predicate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuthOutcome] = {
-    authFunction.authorised(predicate).retrieve(affinityGroup and authorisedEnrolments) {
+    authFunction.authorised(buildPredicate(predicate)).retrieve(affinityGroup and authorisedEnrolments) {
       case Some(Individual) ~ _   =>
         val user = UserDetails("", "Individual", None)
         Future.successful(Right(user))
