@@ -19,7 +19,7 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DesOutcome, AmendBenefitConnector}
+import v1.connectors.{DownstreamOutcome, AmendBenefitConnector}
 import v1.models.request.AmendBenefit.AmendBenefitRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ trait MockAmendBenefitConnector extends MockFactory {
 
   object MockUpdateBenefitConnector {
 
-    def updateBenefit(requestData: AmendBenefitRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+    def updateBenefit(requestData: AmendBenefitRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockUpdateBenefitConnector
         .amendBenefit(_: AmendBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)

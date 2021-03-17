@@ -37,9 +37,9 @@ class UnIgnoreBenefitConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockedAppConfig.desBaseUrl returns baseUrl
-    MockedAppConfig.desToken returns "des-token"
-    MockedAppConfig.desEnvironment returns "des-environment"
+    MockedAppConfig.ifsBaseUrl returns baseUrl
+    MockedAppConfig.ifsToken returns "ifs-token"
+    MockedAppConfig.ifsEnvironment returns "ifs-environment"
   }
 
   "UnIgnoreBenefitConnector" when {
@@ -49,7 +49,7 @@ class UnIgnoreBenefitConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient.delete(
           url = s"$baseUrl/income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId",
-          requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
+          requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
         ).returns(Future.successful(outcome))
 
         await(connector.unIgnoreBenefit(request)) shouldBe outcome

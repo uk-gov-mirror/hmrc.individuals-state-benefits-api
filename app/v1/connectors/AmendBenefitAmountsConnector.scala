@@ -17,8 +17,10 @@
 package v1.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v1.connectors.DownstreamUri.DesUri
 import v1.models.request.AmendBenefitAmounts.AmendBenefitAmountsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +32,7 @@ class AmendBenefitAmountsConnector @Inject()(val http: HttpClient,
   def amendBenefitAmounts(request: AmendBenefitAmountsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[Unit]] = {
+    correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
 

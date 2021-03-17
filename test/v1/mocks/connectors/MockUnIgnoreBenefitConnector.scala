@@ -19,7 +19,7 @@ package v1.mocks.connectors
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.{DesOutcome, UnIgnoreBenefitConnector}
+import v1.connectors.{DownstreamOutcome, UnIgnoreBenefitConnector}
 import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ trait MockUnIgnoreBenefitConnector extends MockFactory {
 
   object MockUnIgnoreBenefitConnector {
 
-    def unIgnoreBenefit(request: IgnoreBenefitRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+    def unIgnoreBenefit(request: IgnoreBenefitRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockUnIgnoreBenefitConnector
         .unIgnoreBenefit(_: IgnoreBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(request, *, *, *)

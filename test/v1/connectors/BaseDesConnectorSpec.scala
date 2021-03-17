@@ -19,6 +19,7 @@ package v1.connectors
 import config.AppConfig
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.{HttpClient, HttpReads}
+import v1.connectors.DownstreamUri.{DesUri, IfsUri}
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 
@@ -37,9 +38,9 @@ class BaseDesConnectorSpec extends ConnectorSpec {
   val url = "some/url?param=value"
   val absoluteUrl = s"$baseUrl/$url"
 
-  implicit val httpReads: HttpReads[DesOutcome[Result]] = mock[HttpReads[DesOutcome[Result]]]
+  implicit val httpReads: HttpReads[DownstreamOutcome[Result]] = mock[HttpReads[DownstreamOutcome[Result]]]
 
-  class Test extends MockHttpClient with MockAppConfig {
+  class DesTest extends MockHttpClient with MockAppConfig {
     val connector: BaseDesConnector = new BaseDesConnector {
       val http: HttpClient = mockHttpClient
       val appConfig: AppConfig = mockAppConfig
@@ -49,42 +50,115 @@ class BaseDesConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desEnvironment returns "des-environment"
   }
 
-  "post" must {
-    "posts with the required des headers and returns the result" in new Test {
-      MockedHttpClient
-        .post(absoluteUrl, body, "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-        .returns(Future.successful(outcome))
+  class IfsTest extends MockHttpClient with MockAppConfig {
+    val connector: BaseDesConnector = new BaseDesConnector {
+      val http: HttpClient = mockHttpClient
+      val appConfig: AppConfig = mockAppConfig
+    }
+    MockedAppConfig.ifsBaseUrl returns baseUrl
+    MockedAppConfig.ifsToken returns "ifs-token"
+    MockedAppConfig.ifsEnvironment returns "ifs-environment"
+  }
 
-      await(connector.post(body, DesUri[Result](url))) shouldBe outcome
+  "for DES" when {
+    "post" must {
+      "posts with the required des headers and returns the result" in new DesTest {
+        MockedHttpClient
+          .post(absoluteUrl, body, requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+          .returns(Future.successful(outcome))
+
+        await(connector.post(body, DesUri[Result](url))) shouldBe outcome
+      }
+    }
+
+    "get" must {
+      "get with the required des headers and return the result" in new DesTest {
+        MockedHttpClient
+          .get(absoluteUrl, requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+          .returns(Future.successful(outcome))
+
+        await(connector.get(DesUri[Result](url))) shouldBe outcome
+      }
+    }
+
+    "getWithQueryParams" must {
+      "get with the required des headers and return the result" in new DesTest {
+        MockedHttpClient
+          .parameterGet(absoluteUrl, Seq(("key", "value")), requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+          .returns(Future.successful(outcome))
+
+        await(connector.getWithQueryParams(DesUri[Result](url), Map(("key", "value")))) shouldBe outcome
+      }
+    }
+
+    "delete" must {
+      "delete with the required des headers and return the result" in new DesTest {
+        MockedHttpClient
+          .delete(absoluteUrl, requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+          .returns(Future.successful(outcome))
+
+        await(connector.delete(DesUri[Result](url))) shouldBe outcome
+      }
+    }
+
+    "put" must {
+      "put with the required des headers and return result" in new DesTest {
+        MockedHttpClient.put(absoluteUrl, body, requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
+          .returns(Future.successful(outcome))
+
+        await(connector.put(body, DesUri[Result](url))) shouldBe outcome
+      }
     }
   }
 
-  "get" must {
-    "get with the required des headers and return the result" in new Test {
-      MockedHttpClient
-        .get(absoluteUrl, "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-        .returns(Future.successful(outcome))
+  "for IFS" when {
+    "post" must {
+      "posts with the required des headers and returns the result" in new IfsTest {
+        MockedHttpClient
+          .post(absoluteUrl, body, requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token")
+          .returns(Future.successful(outcome))
 
-      await(connector.get(DesUri[Result](url))) shouldBe outcome
+        await(connector.post(body, IfsUri[Result](url))) shouldBe outcome
+      }
     }
-  }
 
-  "delete" must {
-    "delete with the required des headers and return the result" in new Test {
-      MockedHttpClient
-        .delete(absoluteUrl, "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-        .returns(Future.successful(outcome))
+    "get" must {
+      "get with the required ifs headers and return the result" in new IfsTest {
+        MockedHttpClient
+          .get(absoluteUrl, requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token")
+          .returns(Future.successful(outcome))
 
-      await(connector.delete(DesUri[Result](url))) shouldBe outcome
+        await(connector.get(IfsUri[Result](url))) shouldBe outcome
+      }
     }
-  }
 
-  "put" must {
-    "put with the required des headers and return result" in new Test {
-      MockedHttpClient.put(absoluteUrl, body, "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token")
-        .returns(Future.successful(outcome))
+    "getWithQueryParams" must {
+      "get with the required ifs headers and return the result" in new IfsTest {
+        MockedHttpClient
+          .parameterGet(absoluteUrl, Seq(("key", "value")), requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token")
+          .returns(Future.successful(outcome))
 
-      await(connector.put(body, DesUri[Result](url))) shouldBe outcome
+        await(connector.getWithQueryParams(IfsUri[Result](url), Map(("key", "value")))) shouldBe outcome
+      }
+    }
+
+    "delete" must {
+      "delete with the required ifs headers and return the result" in new IfsTest {
+        MockedHttpClient
+          .delete(absoluteUrl, requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token")
+          .returns(Future.successful(outcome))
+
+        await(connector.delete(IfsUri[Result](url))) shouldBe outcome
+      }
+    }
+
+    "put" must {
+      "put with the required ifs headers and return result" in new IfsTest {
+        MockedHttpClient.put(absoluteUrl, body, requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token")
+          .returns(Future.successful(outcome))
+
+        await(connector.put(body, IfsUri[Result](url))) shouldBe outcome
+      }
     }
   }
 }

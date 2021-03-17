@@ -17,9 +17,11 @@
 package v1.connectors
 
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import play.api.http.Status
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import v1.connectors.DownstreamUri.DesUri
 import v1.models.request.listBenefits.ListBenefitsRequest
 import v1.models.response.listBenefits.{ListBenefitsResponse, StateBenefit}
 
@@ -32,7 +34,7 @@ class ListBenefitsConnector @Inject()(val http: HttpClient,
   def listBenefits(request: ListBenefitsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DesOutcome[ListBenefitsResponse[StateBenefit]]] = {
+    correlationId: String): Future[DownstreamOutcome[ListBenefitsResponse[StateBenefit]]] = {
 
     import v1.connectors.httpparsers.StandardDesHttpParser._
     implicit val successCode: SuccessCode = SuccessCode(Status.OK)
