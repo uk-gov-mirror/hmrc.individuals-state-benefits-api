@@ -25,13 +25,13 @@ trait IgnoreHateoasBody extends HateoasLinks {
 
     val links = Seq(
       retrieveSingleBenefit(appConfig, nino, taxYear, benefitId),
-      unIgnoreBenefit(appConfig, nino, taxYear, benefitId)
+      unignoreBenefit(appConfig, nino, taxYear, benefitId)
     )
 
     Json.obj("links" -> links)
   }
 
-  def unIgnoreBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
+  def unignoreBenefitHateoasBody(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): JsValue = {
 
     val links = Seq(
       retrieveSingleBenefit(appConfig, nino, taxYear, benefitId),

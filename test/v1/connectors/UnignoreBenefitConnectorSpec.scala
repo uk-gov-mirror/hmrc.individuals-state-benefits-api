@@ -24,7 +24,7 @@ import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
 
 import scala.concurrent.Future
 
-class UnIgnoreBenefitConnectorSpec extends ConnectorSpec {
+class UnignoreBenefitConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA111111A"
   val taxYear: String = "2019-20"
@@ -32,7 +32,7 @@ class UnIgnoreBenefitConnectorSpec extends ConnectorSpec {
   val request: IgnoreBenefitRequest = IgnoreBenefitRequest(Nino(nino), taxYear, benefitId)
 
   class Test extends MockHttpClient with MockAppConfig {
-    val connector: UnIgnoreBenefitConnector = new UnIgnoreBenefitConnector(
+    val connector: UnignoreBenefitConnector = new UnignoreBenefitConnector(
       http = mockHttpClient,
       appConfig = mockAppConfig
     )
@@ -42,17 +42,17 @@ class UnIgnoreBenefitConnectorSpec extends ConnectorSpec {
     MockedAppConfig.ifsEnvironment returns "ifs-environment"
   }
 
-  "UnIgnoreBenefitConnector" when {
-    "unIgnore request received" should {
+  "UnignoreBenefitConnector" when {
+    "unignore request received" should {
       "return a successful response" in new Test {
         private val outcome = Right(ResponseWrapper(correlationId, ()))
 
         MockedHttpClient.delete(
-          url = s"$baseUrl/income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId",
+          url = s"$baseUrl/income-tax/state-benefits/$nino/$taxYear/ignore/$benefitId",
           requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
         ).returns(Future.successful(outcome))
 
-        await(connector.unIgnoreBenefit(request)) shouldBe outcome
+        await(connector.unignoreBenefit(request)) shouldBe outcome
       }
     }
   }

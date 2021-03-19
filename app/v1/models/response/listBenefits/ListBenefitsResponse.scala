@@ -40,7 +40,7 @@ object ListBenefitsResponse extends HateoasLinks with JsonUtils {
       val deleteLink = deleteBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
       val updateLink = updateBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
       val ignoreLink = ignoreBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
-      val unignoreLink = unIgnoreBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
+      val unignoreLink = unignoreBenefit(appConfig, nino, taxYear, stateBenefit.benefitId)
 
       val commonLinks = Seq(retrieveLink, updateAmountsLink)
 

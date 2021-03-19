@@ -93,7 +93,7 @@ trait HateoasLinks {
       rel = IGNORE_STATE_BENEFIT
     )
 
-  def unIgnoreBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
+  def unignoreBenefit(appConfig: AppConfig, nino: String, taxYear: String, benefitId: String): Link =
     Link(
       href = s"${uriWithId(appConfig, nino, taxYear, benefitId)}/unignore",
       method = POST,

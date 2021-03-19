@@ -31,16 +31,16 @@ import v1.hateoas.IgnoreHateoasBody
 import v1.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.request.ignoreBenefit.IgnoreBenefitRawData
-import v1.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService, UnIgnoreBenefitService}
+import v1.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService, UnignoreBenefitService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UnIgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
+class UnignoreBenefitController @Inject()(val authService: EnrolmentsAuthService,
                                           val lookupService: MtdIdLookupService,
                                           appConfig: AppConfig,
                                           requestParser: IgnoreBenefitRequestParser,
-                                          service: UnIgnoreBenefitService,
+                                          service: UnignoreBenefitService,
                                           auditService: AuditService,
                                           cc: ControllerComponents,
                                           idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -48,11 +48,11 @@ class UnIgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
-      controllerName = "UnIgnoreBenefitController",
-      endpointName = "unIgnoreBenefit"
+      controllerName = "UnignoreBenefitController",
+      endpointName = "unignoreBenefit"
     )
 
-  def unIgnoreBenefit(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
+  def unignoreBenefit(nino: String, taxYear: String, benefitId: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
 
       implicit val correlationId: String = idGenerator.getCorrelationId
@@ -67,13 +67,13 @@ class UnIgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](requestParser.parseRequest(rawData))
-          serviceResponse <- EitherT(service.unIgnoreBenefit(parsedRequest))
+          serviceResponse <- EitherT(service.unignoreBenefit(parsedRequest))
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
-          val hateoasResponse = unIgnoreBenefitHateoasBody(appConfig, nino, taxYear, benefitId)
+          val hateoasResponse = unignoreBenefitHateoasBody(appConfig, nino, taxYear, benefitId)
 
           auditSubmission(
             GenericAuditDetail(request.userDetails, Map("nino" -> nino, "taxYear" -> taxYear, "benefitId" -> benefitId), None,
@@ -107,7 +107,7 @@ class UnIgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService
       case BadRequestError | NinoFormatError | TaxYearFormatError | BenefitIdFormatError |
            RuleTaxYearNotSupportedError | RuleTaxYearRangeInvalidError | RuleTaxYearNotEndedError
       => BadRequest(Json.toJson(errorWrapper))
-      case RuleUnIgnoreForbiddenError => Forbidden(Json.toJson(errorWrapper))
+      case RuleUnignoreForbiddenError => Forbidden(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
     }
@@ -116,7 +116,7 @@ class UnIgnoreBenefitController @Inject()(val authService: EnrolmentsAuthService
   private def auditSubmission(details: GenericAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("UnIgnoreStateBenefit", "unignore-state-benefit", details)
+    val event = AuditEvent("UnignoreStateBenefit", "unignore-state-benefit", details)
     auditService.auditEvent(event)
   }
 

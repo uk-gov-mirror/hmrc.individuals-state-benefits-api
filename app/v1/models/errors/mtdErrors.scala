@@ -65,7 +65,7 @@ object RuleUpdateForbiddenError extends MtdError("RULE_UPDATE_FORBIDDEN", "An up
 
 object RuleIgnoreForbiddenError extends MtdError("RULE_IGNORE_FORBIDDEN", "A customer added state benefit cannot be ignored")
 
-object RuleUnIgnoreForbiddenError extends MtdError("RULE_UNIGNORE_FORBIDDEN", "A customer added state benefit cannot be unignored")
+object RuleUnignoreForbiddenError extends MtdError("RULE_UNIGNORE_FORBIDDEN", "A customer added state benefit cannot be unignored")
 
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")

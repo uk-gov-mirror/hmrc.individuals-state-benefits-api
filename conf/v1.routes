@@ -2,7 +2,7 @@ DELETE     /:nino/:taxYear/:benefitId/amounts       v1.controllers.DeleteBenefit
 PUT        /:nino/:taxYear/:benefitId/amounts       v1.controllers.AmendBenefitAmountsController.amendBenefitAmounts(nino: String, taxYear: String, benefitId: String)
 
 POST        /:nino/:taxYear/:benefitId/ignore       v1.controllers.IgnoreBenefitController.ignoreBenefit(nino: String, taxYear: String, benefitId: String)
-POST        /:nino/:taxYear/:benefitId/unignore     v1.controllers.UnIgnoreBenefitController.unIgnoreBenefit(nino: String, taxYear: String, benefitId: String)
+POST        /:nino/:taxYear/:benefitId/unignore     v1.controllers.UnignoreBenefitController.unignoreBenefit(nino: String, taxYear: String, benefitId: String)
 DELETE     /:nino/:taxYear/:benefitId               v1.controllers.DeleteBenefitController.deleteBenefit(nino: String, taxYear: String, benefitId: String)
 
 PUT        /:nino/:taxYear/:benefitId               v1.controllers.AmendBenefitController.amend(nino: String, taxYear: String, benefitId: String)

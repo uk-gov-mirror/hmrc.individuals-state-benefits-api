@@ -23,7 +23,7 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockIgnoreBenefitRequestParser
-import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockUnIgnoreBenefitService}
+import v1.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockUnignoreBenefitService}
 import v1.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
@@ -32,12 +32,12 @@ import v1.models.request.ignoreBenefit.{IgnoreBenefitRawData, IgnoreBenefitReque
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UnIgnoreBenefitControllerSpec
+class UnignoreBenefitControllerSpec
   extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockAppConfig
-    with MockUnIgnoreBenefitService
+    with MockUnignoreBenefitService
     with MockIgnoreBenefitRequestParser
     with MockAuditService
     with MockIdGenerator {
@@ -50,12 +50,12 @@ class UnIgnoreBenefitControllerSpec
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
 
-    val controller = new UnIgnoreBenefitController(
+    val controller = new UnignoreBenefitController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       appConfig = mockAppConfig,
       requestParser = mockIgnoreBenefitRequestParser,
-      service = mockUnIgnoreBenefitService,
+      service = mockUnignoreBenefitService,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -100,7 +100,7 @@ class UnIgnoreBenefitControllerSpec
 
   def event(auditResponse: AuditResponse): AuditEvent[GenericAuditDetail] =
     AuditEvent(
-      auditType = "UnIgnoreStateBenefit",
+      auditType = "UnignoreStateBenefit",
       transactionName = "unignore-state-benefit",
       detail = GenericAuditDetail(
         userType = "Individual",
@@ -112,7 +112,7 @@ class UnIgnoreBenefitControllerSpec
       )
     )
 
-  "UnIgnoreBenefitController" should {
+  "UnignoreBenefitController" should {
     "return OK" when {
       "happy path" in new Test {
 
@@ -120,11 +120,11 @@ class UnIgnoreBenefitControllerSpec
           .parse(rawData)
           .returns(Right(requestData))
 
-        MockUnIgnoreBenefitService
-          .unIgnoreBenefit(requestData)
+        MockUnignoreBenefitService
+          .unignoreBenefit(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        val result: Future[Result] = controller.unIgnoreBenefit(nino, taxYear, benefitId)(fakeRequest)
+        val result: Future[Result] = controller.unignoreBenefit(nino, taxYear, benefitId)(fakeRequest)
 
         status(result) shouldBe OK
         contentAsJson(result) shouldBe hateoasResponse
@@ -144,7 +144,7 @@ class UnIgnoreBenefitControllerSpec
               .parse(rawData)
               .returns(Left(ErrorWrapper(correlationId, error, None)))
 
-            val result: Future[Result] = controller.unIgnoreBenefit(nino, taxYear, benefitId)(fakeRequest)
+            val result: Future[Result] = controller.unignoreBenefit(nino, taxYear, benefitId)(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(error)
@@ -176,11 +176,11 @@ class UnIgnoreBenefitControllerSpec
               .parse(rawData)
               .returns(Right(requestData))
 
-            MockUnIgnoreBenefitService
-              .unIgnoreBenefit(requestData)
+            MockUnignoreBenefitService
+              .unignoreBenefit(requestData)
               .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
-            val result: Future[Result] = controller.unIgnoreBenefit(nino, taxYear, benefitId)(fakeRequest)
+            val result: Future[Result] = controller.unignoreBenefit(nino, taxYear, benefitId)(fakeRequest)
 
             status(result) shouldBe expectedStatus
             contentAsJson(result) shouldBe Json.toJson(mtdError)
@@ -194,8 +194,9 @@ class UnIgnoreBenefitControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (BenefitIdFormatError, BAD_REQUEST),
           (RuleTaxYearNotEndedError, BAD_REQUEST),
-          (RuleUnIgnoreForbiddenError, FORBIDDEN),
+          (RuleUnignoreForbiddenError, FORBIDDEN),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )

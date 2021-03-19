@@ -27,7 +27,7 @@ import support.IntegrationBaseSpec
 import v1.models.errors._
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
-class UnIgnoreBenefitControllerISpec extends IntegrationBaseSpec {
+class UnignoreBenefitControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
@@ -57,7 +57,7 @@ class UnIgnoreBenefitControllerISpec extends IntegrationBaseSpec {
 
     def uri: String = s"/$nino/$taxYear/$benefitId/unignore"
 
-    def desUri: String = s"/income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId"
+    def desUri: String = s"/income-tax/state-benefits/$nino/$taxYear/ignore/$benefitId"
 
     def setupStubs(): StubMapping
 
@@ -168,10 +168,11 @@ class UnIgnoreBenefitControllerISpec extends IntegrationBaseSpec {
         val input = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "INVALID_BENEFIT_ID", NOT_FOUND, NotFoundError),
+          (BAD_REQUEST, "INVALID_BENEFIT_ID", BAD_REQUEST, BenefitIdFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
-          (FORBIDDEN, "UNIGNORE_FORBIDDEN", FORBIDDEN, RuleUnIgnoreForbiddenError),
-          (UNPROCESSABLE_ENTITY, "NOT_SUPPORTED_TAX_YEAR", BAD_REQUEST, RuleTaxYearNotEndedError),
+          (FORBIDDEN, "CUSTOMER_ADDED", FORBIDDEN, RuleUnignoreForbiddenError),
+          (UNPROCESSABLE_ENTITY, "BEFORE_TAX_YEAR_ENDED", BAD_REQUEST, RuleTaxYearNotEndedError),
+          (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError))
 

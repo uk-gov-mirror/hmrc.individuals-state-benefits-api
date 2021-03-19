@@ -23,19 +23,19 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors.ErrorWrapper
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
-import v1.services.UnIgnoreBenefitService
+import v1.services.UnignoreBenefitService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockUnIgnoreBenefitService extends MockFactory {
+trait MockUnignoreBenefitService extends MockFactory {
 
-  val mockUnIgnoreBenefitService: UnIgnoreBenefitService = mock[UnIgnoreBenefitService]
+  val mockUnignoreBenefitService: UnignoreBenefitService = mock[UnignoreBenefitService]
 
-  object MockUnIgnoreBenefitService {
+  object MockUnignoreBenefitService {
 
-    def unIgnoreBenefit(request: IgnoreBenefitRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
-      (mockUnIgnoreBenefitService
-        .unIgnoreBenefit(_: IgnoreBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+    def unignoreBenefit(request: IgnoreBenefitRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[Unit]]]] = {
+      (mockUnignoreBenefitService
+        .unignoreBenefit(_: IgnoreBenefitRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
         .expects(request, *, *, *, *)
     }
   }

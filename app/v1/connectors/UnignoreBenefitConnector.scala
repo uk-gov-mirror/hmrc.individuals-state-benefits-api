@@ -27,10 +27,10 @@ import v1.models.request.ignoreBenefit.IgnoreBenefitRequest
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UnIgnoreBenefitConnector @Inject()(val http: HttpClient,
+class UnignoreBenefitConnector @Inject()(val http: HttpClient,
                                          val appConfig: AppConfig) extends BaseDesConnector {
 
-  def unIgnoreBenefit(request: IgnoreBenefitRequest)(
+  def unignoreBenefit(request: IgnoreBenefitRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
     correlationId: String): Future[DownstreamOutcome[Unit]] = {
@@ -43,6 +43,6 @@ class UnIgnoreBenefitConnector @Inject()(val http: HttpClient,
     val taxYear = request.taxYear
     val benefitId = request.benefitId
 
-    delete(IfsUri[Unit](s"income-tax/income/state-benefits/$nino/$taxYear/ignore/$benefitId"))
+    delete(IfsUri[Unit](s"income-tax/state-benefits/$nino/$taxYear/ignore/$benefitId"))
   }
 }
