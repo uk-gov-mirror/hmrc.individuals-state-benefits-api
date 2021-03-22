@@ -70,6 +70,7 @@ class IgnoreBenefitServiceSpec extends ServiceSpec {
           ("INVALID_CORRELATIONID", DownstreamError),
           ("IGNORE_FORBIDDEN", RuleIgnoreForbiddenError),
           ("NOT_SUPPORTED_TAX_YEAR", RuleTaxYearNotEndedError),
+          ("NO_DATA_FOUND", NotFoundError),
           ("SERVER_ERROR", DownstreamError),
           ("SERVICE_UNAVAILABLE", DownstreamError)
         )
