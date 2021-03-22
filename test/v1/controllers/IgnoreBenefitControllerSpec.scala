@@ -194,6 +194,7 @@ class IgnoreBenefitControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
+          (BenefitIdFormatError, BAD_REQUEST),
           (RuleTaxYearNotEndedError, BAD_REQUEST),
           (RuleIgnoreForbiddenError, FORBIDDEN),
           (NotFoundError, NOT_FOUND),

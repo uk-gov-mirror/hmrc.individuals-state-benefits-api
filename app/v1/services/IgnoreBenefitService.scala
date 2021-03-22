@@ -50,10 +50,11 @@ class IgnoreBenefitService @Inject()(connector: IgnoreBenefitConnector)
   private def desErrorMap: Map[String, MtdError] = Map(
     ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
     ("INVALID_TAX_YEAR", TaxYearFormatError),
-    ("INVALID_BENEFIT_ID", NotFoundError),
+    ("INVALID_BENEFIT_ID", BenefitIdFormatError),
     ("INVALID_CORRELATIONID", DownstreamError),
     ("IGNORE_FORBIDDEN", RuleIgnoreForbiddenError),
     ("NOT_SUPPORTED_TAX_YEAR", RuleTaxYearNotEndedError),
+    ("NO_DATA_FOUND", NotFoundError),
     ("SERVICE_ERROR", DownstreamError),
     ("SERVICE_UNAVAILABLE", DownstreamError)
   )
