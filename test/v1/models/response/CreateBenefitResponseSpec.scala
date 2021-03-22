@@ -21,7 +21,7 @@ import support.UnitSpec
 
 class CreateBenefitResponseSpec extends UnitSpec {
 
-  val model: AddBenefitResponse = AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c253")
+  val model: AddBenefitResponse = AddBenefitResponse("b1e8057e-fbbc-47a8-a8b4-78d9f015c258")
 
   "AddBenefitResponse" when {
     "read from valid JSON" should {
@@ -29,7 +29,7 @@ class CreateBenefitResponseSpec extends UnitSpec {
         val json: JsValue = Json.parse(
           """
             |{
-            |  "benefitId": "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+            |  "benefitId": "b1e8057e-fbbc-47a8-a8b4-78d9f015c258"
             |}
           """.stripMargin
         )
@@ -42,7 +42,7 @@ class CreateBenefitResponseSpec extends UnitSpec {
       "produce the expected JsObject" in {
         val json: JsValue = Json.parse("""
             |{
-            |  "benefitId": "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+            |  "benefitId": "b1e8057e-fbbc-47a8-a8b4-78d9f015c258"
             |}
           """.stripMargin
         )
