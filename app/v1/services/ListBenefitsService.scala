@@ -49,6 +49,8 @@ class ListBenefitsService @Inject()(connector: ListBenefitsConnector) extends De
   private def mappingDesToMtdError: Map[String, MtdError] = Map(
     "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
     "INVALID_TAX_YEAR" -> TaxYearFormatError,
+    "INVALID_BENEFIT_ID" -> BenefitIdFormatError,
+    "INVALID_VIEW" -> DownstreamError,
     "INVALID_CORRELATIONID" -> DownstreamError,
     "NO_DATA_FOUND" -> NotFoundError,
     "INVALID_DATE_RANGE" -> RuleTaxYearNotSupportedError,

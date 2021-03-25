@@ -99,7 +99,8 @@ class ListBenefitsServiceSpec extends ServiceSpec {
         val input = Seq(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
-          ("INVALID_BENEFIT_ID", DownstreamError),
+          ("INVALID_BENEFIT_ID", BenefitIdFormatError),
+          ("INVALID_VIEW", DownstreamError),
           ("INVALID_CORRELATIONID", DownstreamError),
           ("NO_DATA_FOUND", NotFoundError),
           ("INVALID_DATE_RANGE", RuleTaxYearNotSupportedError),
