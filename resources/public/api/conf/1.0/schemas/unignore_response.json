@@ -13,7 +13,7 @@
           "href": {
             "description": "The relative url of the endpoint.",
             "type": "string",
-            "example": "/individuals/state-benefits/{nino}/{taxYear}"
+            "example": "/individuals/state-benefits/TC663795B/2020-21/a1e8057e-fbbc-47a8-a8b4-78d9f015c253/ignore"
           },
           "rel": {
             "description": "A label for the endpoint, which describes how it is related to the current resource. The rel will be self where the action is retrieval of the same resource.",

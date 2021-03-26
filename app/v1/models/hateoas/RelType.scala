@@ -17,10 +17,6 @@
 package v1.models.hateoas
 
 object RelType {
-  val AMEND_SAMPLE_REL = "amend-sample-rel"
-  val RETRIEVE_SAMPLE_REL = "retrieve-sample-rel"
-  val DELETE_SAMPLE_REL = "delete-sample-rel"
-
   val CREATE_STATE_BENEFIT = "create-state-benefit"
   val LIST_STATE_BENEFITS = "list-state-benefits"
   val AMEND_STATE_BENEFIT = "amend-state-benefit"
