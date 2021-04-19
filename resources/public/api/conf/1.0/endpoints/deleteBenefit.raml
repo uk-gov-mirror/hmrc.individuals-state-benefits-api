@@ -9,7 +9,7 @@ is:
   - errors.clientOrAgentNotAuthorised
   - errors.notFound
   - errors.ruleDeleteForbidden
-displayName: Delete State Benefit [test only]
+displayName: Delete State Benefit
 description: 'This endpoint allows a developer to delete customer submitted state benefits. If the customer attempts to delete a HMRC held state benefit then the operation will fail with a forbidden response. A National Insurance number, tax year and benefit ID must be provided.<br><br>This endpoint can only be used for a tax year that has ended.'
 (annotations.sandboxData): !include ../scenarios/deleteBenefit.md
 (annotations.scope): "write:self-assessment"
