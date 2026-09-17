@@ -1,6 +1,6 @@
 summary: Amend State Benefit
 description: |
-  This endpoint allows a developer to amend the dates of a previously created state benefit.
+  This endpoint enables developers to amend the dates of customer-created state benefits, but not the dates originally held by HMRC.
   
   A National Insurance number, tax year and benefit ID must be provided.
   
