@@ -13,9 +13,6 @@ description: |
   |----------------------------------|------------------------------------------------------------------------------------------------|
   | N/A - DEFAULT                    | Simulates a list of all state benefit types.                                                   |
   | BENEFIT_TYPE_EXISTS              | Simulates the scenario where a benefit of this type already exists.                            |
-  | END_DATE_BEFORE_TAX_YEAR_START   | Simulates the scenario where the end date provided is before the start date.                   |
-  | START_DATE_AFTER_TAX_YEAR_END    | Simulates the scenario where the start date provided is after the tax year ended.              |
-  | TAX_YEAR_NOT_ENDED               | Simulates the scenario where the tax year provided has not ended.                              |
   | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.|
   | STATEFUL                         | Performs a stateful create.                                                                    |
 
@@ -26,6 +23,7 @@ parameters:
   - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
   - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+  - $ref: './common/headers.yaml#/components/parameters/suspendTemporalValidationsHeader'
 
 security:
   - User-Restricted:
