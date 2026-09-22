@@ -35,8 +35,10 @@ class Def1_AmendBenefitValidatorSpec extends UnitSpec with JsonErrorValidators w
   private val validTaxYear   = "2023-24"
   private val validBenefitId = "b1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  private val startDate = "2020-04-06"
-  private val endDate   = "2021-01-01"
+  private val startDate    = "2020-04-06"
+  private val endDate      = "2021-01-01"
+  private val tooEarlyDate = "1809-02-01"
+  private val tooLateDate  = "2149-02-21"
 
   private def validBody(startDate: String = startDate, endDate: String = endDate) = Json.parse(
     s"""
@@ -126,20 +128,32 @@ class Def1_AmendBenefitValidatorSpec extends UnitSpec with JsonErrorValidators w
 
       "passed a body with a start date that precedes the minimum" in new AppConfigTest {
         val result: Either[ErrorWrapper, AmendBenefitRequestData] =
-          validator(validNino, validTaxYear, validBenefitId, validBody(startDate = "1809-02-01")).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBenefitId, validBody(startDate = tooEarlyDate)).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, StartDateFormatError))
       }
 
       "passed a body with a start date that precedes the minimum and no endDate" in new AppConfigTest {
         val result: Either[ErrorWrapper, AmendBenefitRequestData] =
-          validator(validNino, validTaxYear, validBenefitId, validBody(startDate = "1809-02-01").removeProperty("/endDate")).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBenefitId, validBody(startDate = tooEarlyDate).removeProperty("/endDate")).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, StartDateFormatError))
       }
 
       "passed a body with a start date that proceeds the maximum" in new AppConfigTest {
         val result: Either[ErrorWrapper, AmendBenefitRequestData] =
-          validator(validNino, validTaxYear, validBenefitId, validBody(endDate = "2149-02-21")).validateAndWrapResult()
+          validator(validNino, validTaxYear, validBenefitId, validBody(endDate = tooLateDate)).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, EndDateFormatError))
+      }
+
+      "passed a start date that is after the tax year end" in new AppConfigTest {
+        val result: Either[ErrorWrapper, AmendBenefitRequestData] =
+          validator(validNino, validTaxYear, validBenefitId, validBody(startDate = tooLateDate)).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleStartDateAfterTaxYearEnd))
+      }
+
+      "passed an end date that is before the tax year starts" in new AppConfigTest {
+        val result: Either[ErrorWrapper, AmendBenefitRequestData] =
+          validator(validNino, validTaxYear, validBenefitId, validBody(endDate = tooEarlyDate)).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleEndDateBeforeTaxYearStart))
       }
     }
 
