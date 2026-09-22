@@ -6,8 +6,6 @@ description: |
   Where the benefit ID relates to a HMRC held state benefit, any duplicate benefit with amended amounts will be removed from the `customerAddedStateBenefits` array.
   
   Where the benefit ID relates to a customer created state benefit, the amount values will be cleared, but the benefit will remain.
-  
-  This endpoint can only be used within the current tax year for `employmentSupportAllowance` and `jobSeekersAllowance` benefit types.
 
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
