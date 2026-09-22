@@ -11,11 +11,15 @@ description: |
   |-----------------------------------|-----------------------------------------------------------------------------------------------------|
   | N/A - DEFAULT                     | Simulate success response.                                                                          |
   | HMRC_HELD                         | Simulates the scenario in which a benefit is HMRC held and therefore cannot be modified or deleted. |
-  | START_DATE_AFTER_TAX_YEAR_END     | Simulates the scenario where the start date provided is after the tax year ended.                   |
-  | END_DATE_BEFORE_TAX_YEAR_START    | Simulates the scenario where the end date provided is before the start date.                        |
   | NOT_FOUND                         | Simulates the scenario where no data is found.                                                      |
   | OUTSIDE_AMENDMENT_WINDOW          | Simulates the scenario where request cannot be completed as it is outside the amendment window.     |
   | STATEFUL                          | Performs a stateful update.                                                                         |
+
+### suspend-temporal-validations header
+
+  Only in the sandbox environment. When supplied and set to `true`, this header relaxes tax year validation rules to allow in‑year submissions for endpoints configured for end‑of‑year submissions.
+  Not supplying the header or setting it to `false` results in a `RULE_TAX_YEAR_NOT_ENDED` error for in‑year submissions.
+  In Production, the header is ignored and normal validations apply.
 
 
 parameters:
