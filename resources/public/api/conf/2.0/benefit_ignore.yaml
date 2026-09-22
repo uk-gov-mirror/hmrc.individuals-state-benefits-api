@@ -13,7 +13,6 @@ description: |
   | IGNORE_FORBIDDEN                 | Simulates the scenario in which a benefit is customer added and therefore cannot be ignored.   |
   | NOT_FOUND                        | Simulates the scenario where no data is found.                                                 |
   | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.|
-  | TAX_YEAR_NOT_ENDED               | Simulates the scenario where the tax year provided has not ended.                              |
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
@@ -22,6 +21,7 @@ parameters:
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+  - $ref: './common/headers.yaml#/components/parameters/suspendTemporalValidationsHeader'
 
 security:
   - User-Restricted:
