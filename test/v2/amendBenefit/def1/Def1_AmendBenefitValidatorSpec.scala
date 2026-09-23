@@ -20,7 +20,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.errors.BenefitIdFormatError
+import common.errors.{BenefitIdFormatError, RuleEndDateBeforeTaxYearStartError, RuleStartDateAfterTaxYearEndError}
 import config.MockStateBenefitsAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import v2.amendBenefit.def1.model.request.{Def1_AmendBenefitRequestBody, Def1_AmendBenefitRequestData}
@@ -147,13 +147,13 @@ class Def1_AmendBenefitValidatorSpec extends UnitSpec with JsonErrorValidators w
       "passed a start date that is after the tax year end" in new AppConfigTest {
         val result: Either[ErrorWrapper, AmendBenefitRequestData] =
           validator(validNino, validTaxYear, validBenefitId, validBody(startDate = tooLateDate)).validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleStartDateAfterTaxYearEnd))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleStartDateAfterTaxYearEndError))
       }
 
       "passed an end date that is before the tax year starts" in new AppConfigTest {
         val result: Either[ErrorWrapper, AmendBenefitRequestData] =
           validator(validNino, validTaxYear, validBenefitId, validBody(endDate = tooEarlyDate)).validateAndWrapResult()
-        result shouldBe Left(ErrorWrapper(correlationId, RuleEndDateBeforeTaxYearStart))
+        result shouldBe Left(ErrorWrapper(correlationId, RuleEndDateBeforeTaxYearStartError))
       }
     }
 
