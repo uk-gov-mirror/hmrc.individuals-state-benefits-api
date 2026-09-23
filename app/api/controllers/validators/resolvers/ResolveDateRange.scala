@@ -21,6 +21,7 @@ import api.models.errors.{EndDateFormatError, MtdError, RuleEndBeforeStartDateEr
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
+import common.errors.RuleStartDateAfterTaxYearEndError
 
 import java.time.LocalDate
 import scala.math.Ordering.Implicits.infixOrderingOps
@@ -46,6 +47,18 @@ case class ResolveDateRange(startDateFormatError: MtdError = StartDateFormatErro
   def withYearsLimitedTo(minYear: Int, maxYear: Int): Resolver[(String, String), DateRange] =
     resolver.thenValidate(yearsLimitedTo(minYear, startDateFormatError, maxYear, endDateFormatError))
 
+  def startDateAfterEndOfTaxYear(taxYear: Int, startDate: String): Resolver[(String, String), DateRange] = {
+    val taxYearEndDate: LocalDate = LocalDate.of(taxYear + 1, 4, 5)
+    val startDateValue: LocalDate = LocalDate.parse(startDate)
+    resolver.thenValidate(startDateRuleValidation(taxYearEndDate, startDateValue))
+  }
+
+  def endDateBeforestartOfTaxYear(taxYear: Int, endDate: String): Resolver[(String, String), DateRange] = {
+    val taxYearStartDate: LocalDate = LocalDate.of(taxYear, 4, 6)
+    val endDateValue: LocalDate     = LocalDate.parse(endDate)
+    resolver.thenValidate(startDateRuleValidation(taxYearStartDate, endDateValue))
+  }
+
   private def resolveDateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate): Validated[Seq[MtdError], DateRange] =
     if (parsedEndDate < parsedStartDate)
       Invalid(List(endBeforeStartDateError))
@@ -69,6 +82,14 @@ object ResolveDateRange extends ResolverSupport {
     def yearEndDate(year: Int)   = yearStartDate(year + 1).minusDays(1)
 
     datesLimitedTo(yearStartDate(minYear), minError, yearEndDate(maxYear), maxError)
+  }
+
+  def startDateRuleValidation(taxYearEndDate: LocalDate, startDate: LocalDate): Validator[DateRange] = {
+    satisfies(RuleStartDateAfterTaxYearEndError)(_.startDate <= taxYearEndDate)
+  }
+
+  def endDateRuleValidation(taxYearStartDate: LocalDate, endDate: LocalDate): Validator[DateRange] = {
+    satisfies(RuleStartDateAfterTaxYearEndError)(_.endDate >= taxYearStartDate)
   }
 
 }

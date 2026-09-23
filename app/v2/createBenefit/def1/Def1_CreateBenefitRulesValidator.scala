@@ -40,19 +40,26 @@ object Def1_CreateBenefitRulesValidator extends RulesValidator[Def1_CreateBenefi
     incapacityBenefit
   ).map(_.toString)
 
-  def validateBusinessRules(parsed: Def1_CreateBenefitRequestData): Validated[Seq[MtdError], Def1_CreateBenefitRequestData] =
+  def validateBusinessRules(taxYear: String, parsed: Def1_CreateBenefitRequestData): Validated[Seq[MtdError], Def1_CreateBenefitRequestData] =
     combine(
       validateBenefitType(parsed.body.benefitType),
-      validateDates(parsed.body.startDate, parsed.body.endDate)
+      validateDates(taxYear.toInt, parsed.body.startDate, parsed.body.endDate)
     ).onSuccess(parsed)
 
   private def validateBenefitType(benefitType: String): Validated[Seq[MtdError], Unit] =
     if (availableBenefitTypes.contains(benefitType)) valid else Invalid(List(BenefitTypeFormatError))
 
-  private def validateDates(startDate: String, endDate: Option[String]): Validated[Seq[MtdError], Unit] =
+  private def validateDates(taxYear: Int, startDate: String, endDate: Option[String]): Validated[Seq[MtdError], Unit] =
     endDate match {
-      case Some(endDate) => ResolveDateRange().withYearsLimitedTo(minYear, maxYear)(startDate -> endDate).toUnit
-      case None          => ResolveIsoDate.withMinMaxCheck(startDate, StartDateFormatError, StartDateFormatError).toUnit
+      case Some(endDate) => {
+        ResolveDateRange().withYearsLimitedTo(minYear, maxYear)(startDate -> endDate).toUnit
+        ResolveDateRange().startDateAfterEndOfTaxYear(taxYear, startDate).toUnit
+        ResolveDateRange().endDateBeforestartOfTaxYear(taxYear, endDate).toUnit
+      }
+      case None => {
+        ResolveIsoDate.withMinMaxCheck(startDate, StartDateFormatError, StartDateFormatError).toUnit
+        ResolveDateRange().startDateAfterEndOfTaxYear(taxYear, startDate).toUnit
+      }
     }
 
 }

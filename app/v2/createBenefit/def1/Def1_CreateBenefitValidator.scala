@@ -36,7 +36,8 @@ class Def1_CreateBenefitValidator(nino: String, taxYear: String, body: JsValue)(
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateBenefitRequestBody]()
 
-  private val resolveTaxYear: ResolveTaxYearMinimum = ResolveTaxYearMinimum(TaxYear.ending(stateBenefitsAppConfig.minimumPermittedTaxYear))
+  private val resolveTaxYear: ResolveTaxYearMinimum =
+    ResolveTaxYearMinimum(TaxYear.ending(stateBenefitsAppConfig.minimumPermittedTaxYear), allowIncompleteTaxYear = false)
 
   def validate: Validated[Seq[MtdError], Def1_CreateBenefitRequestData] =
     (

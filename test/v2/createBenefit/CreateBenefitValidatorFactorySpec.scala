@@ -20,7 +20,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.errors.BenefitTypeFormatError
+import common.errors.{BenefitTypeFormatError, RuleStartDateAfterTaxYearEndError, RuleEndDateBeforeTaxYearStartError}
 import config.MockStateBenefitsAppConfig
 import play.api.libs.json.*
 import v2.createBenefit.def1.model.request.{Def1_CreateBenefitRequestBody, Def1_CreateBenefitRequestData}
@@ -83,6 +83,11 @@ class CreateBenefitValidatorFactorySpec extends UnitSpec with JsonErrorValidator
       "passed a tax year that precedes the minimum" in new AppConfigTest {
         val result: Either[ErrorWrapper, CreateBenefitRequestData] = validator(validNino, "2018-19", requestBody).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+
+      "passed a tax year that Has not finished" in new AppConfigTest {
+        val result: Either[ErrorWrapper, CreateBenefitRequestData] = validator(validNino, "2026-27", requestBody).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotEndedError))
       }
 
       "passed an empty JSON body" in new AppConfigTest {
@@ -153,6 +158,38 @@ class CreateBenefitValidatorFactorySpec extends UnitSpec with JsonErrorValidator
 
         val result: Either[ErrorWrapper, CreateBenefitRequestData] = validator(validNino, validTaxYear, body).validateAndWrapResult()
         result shouldBe Left(ErrorWrapper(correlationId, EndDateFormatError))
+      }
+
+      "passed an end date that is before Tax year start date" in new AppConfigTest {
+        val body: JsValue =
+          Json.parse(
+            s"""
+               |{
+               |  "benefitType": "otherStateBenefits",
+               |  "startDate": "2019-01-01",
+               |  "endDate": "2019-04-05"
+               |}
+            """.stripMargin
+          )
+
+        val result: Either[ErrorWrapper, CreateBenefitRequestData] = validator(validNino, validTaxYear, body).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleEndDateBeforeTaxYearStartError))
+      }
+
+      "passed a start date that is after Tax year end date" in new AppConfigTest {
+        val body: JsValue =
+          Json.parse(
+            s"""
+               |{
+               |  "benefitType": "otherStateBenefits",
+               |  "startDate": "2020-04-06",
+               |  "endDate": "2020-06-06"
+               |}
+            """.stripMargin
+          )
+
+        val result: Either[ErrorWrapper, CreateBenefitRequestData] = validator(validNino, validTaxYear, body).validateAndWrapResult()
+        result shouldBe Left(ErrorWrapper(correlationId, RuleStartDateAfterTaxYearEndError))
       }
     }
 
