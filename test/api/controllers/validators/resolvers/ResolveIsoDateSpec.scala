@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.errors.{DateFormatError, MtdError, RuleDateRangeInvalidError, StartDateFormatError}
+import api.models.errors.*
 import api.utils.UnitSpec
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
@@ -56,7 +56,7 @@ class ResolveIsoDateSpec extends UnitSpec {
         val expected = Valid(LocalDate.parse(validDate))
 
         val result: Validated[Seq[MtdError], LocalDate] =
-          ResolveIsoDate.withMinMaxCheck(validDate, DateFormatError, RuleDateRangeInvalidError)
+          ResolveIsoDate.withMinMaxCheck(validDate, StartDateFormatError, RuleStartDateAfterTaxYearEndError)
         result shouldBe expected
       }
 
@@ -64,7 +64,7 @@ class ResolveIsoDateSpec extends UnitSpec {
         val expected = Valid(Some(LocalDate.parse(validDate)))
 
         val result: Validated[Seq[MtdError], Option[LocalDate]] =
-          ResolveIsoDate.withMinMaxCheck(Some(validDate), DateFormatError, RuleDateRangeInvalidError)
+          ResolveIsoDate.withMinMaxCheck(Some(validDate), StartDateFormatError, RuleStartDateAfterTaxYearEndError)
         result shouldBe expected
       }
     }
@@ -77,18 +77,18 @@ class ResolveIsoDateSpec extends UnitSpec {
       }
 
       "given a date string out of range" in {
-        val expected = Invalid(Seq(RuleDateRangeInvalidError))
+        val expected = Invalid(Seq(RuleStartDateAfterTaxYearEndError))
 
         val result: Validated[Seq[MtdError], LocalDate] =
-          ResolveIsoDate.withMinMaxCheck(outOfRangeDate, DateFormatError, RuleDateRangeInvalidError)
+          ResolveIsoDate.withMinMaxCheck(outOfRangeDate, StartDateFormatError, RuleStartDateAfterTaxYearEndError)
         result shouldBe expected
       }
 
       "given a Option date string out of range" in {
-        val expected = Invalid(Seq(RuleDateRangeInvalidError))
+        val expected = Invalid(Seq(RuleStartDateAfterTaxYearEndError))
 
         val result: Validated[Seq[MtdError], Option[LocalDate]] =
-          ResolveIsoDate.withMinMaxCheck(Some(outOfRangeDate), DateFormatError, RuleDateRangeInvalidError)
+          ResolveIsoDate.withMinMaxCheck(Some(outOfRangeDate), StartDateFormatError, RuleStartDateAfterTaxYearEndError)
         result shouldBe expected
       }
     }
@@ -98,7 +98,7 @@ class ResolveIsoDateSpec extends UnitSpec {
         val expected = Valid(None)
 
         val result: Validated[Seq[MtdError], Option[LocalDate]] =
-          ResolveIsoDate.withMinMaxCheck(None, DateFormatError, RuleDateRangeInvalidError)
+          ResolveIsoDate.withMinMaxCheck(None, StartDateFormatError, RuleStartDateAfterTaxYearEndError)
         result shouldBe expected
       }
     }

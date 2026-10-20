@@ -19,10 +19,9 @@ package v2.amendBenefit.def1
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
-import api.models.errors.{MtdError, StartDateFormatError}
+import api.models.errors.*
 import cats.data.Validated
 import cats.implicits.catsSyntaxTuple4Semigroupal
-import common.errors.{RuleEndDateBeforeTaxYearStartError, RuleStartDateAfterTaxYearEndError}
 import config.StateBenefitsAppConfig
 import play.api.libs.json.JsValue
 import v2.amendBenefit.def1.model.request.{Def1_AmendBenefitRequestBody, Def1_AmendBenefitRequestData}

@@ -19,7 +19,6 @@ package v2.unignoreBenefit.def1
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.utils.UnitSpec
-import common.errors.BenefitIdFormatError
 import config.MockStateBenefitsAppConfig
 import v2.models.domain.BenefitId
 import v2.unignoreBenefit.def1.model.request.Def1_UnignoreBenefitRequestData

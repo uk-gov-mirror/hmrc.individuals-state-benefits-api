@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ package v2.createBenefit.def1
 import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.{ResolveDateRange, ResolveIsoDate}
 import api.models.domain.TaxYear
-import api.models.errors.{MtdError, StartDateFormatError}
+import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.Invalid
-import common.errors.{BenefitTypeFormatError, RuleEndDateBeforeTaxYearStartError, RuleStartDateAfterTaxYearEndError}
 import v2.createBenefit.def1.model.request.Def1_CreateBenefitRequestData
 import v2.models.domain.BenefitType.*
+
 import scala.math.Ordered.orderingToOrdered
 
 object Def1_CreateBenefitRulesValidator extends RulesValidator[Def1_CreateBenefitRequestData] {

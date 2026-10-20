@@ -17,8 +17,8 @@
 package v2.ignoreBenefit
 
 import api.controllers.validators.Validator
-import api.utils.UnitSpec
 import api.models.errors.*
+import api.utils.UnitSpec
 import config.MockStateBenefitsAppConfig
 import v2.ignoreBenefit.def1.Def1_IgnoreBenefitValidator
 import v2.ignoreBenefit.model.request.IgnoreBenefitRequestData

@@ -20,7 +20,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import common.errors.{BenefitIdFormatError, RuleEndDateBeforeTaxYearStartError, RuleStartDateAfterTaxYearEndError}
 import config.MockStateBenefitsAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import v2.amendBenefit.def1.model.request.{Def1_AmendBenefitRequestBody, Def1_AmendBenefitRequestData}

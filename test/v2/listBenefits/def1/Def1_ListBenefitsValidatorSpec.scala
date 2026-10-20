@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package v2.listBenefits.def1
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.utils.UnitSpec
-import common.errors.BenefitIdFormatError
 import config.MockStateBenefitsAppConfig
 import v2.listBenefits.model.request.ListBenefitsRequestData
 import v2.models.domain.BenefitId

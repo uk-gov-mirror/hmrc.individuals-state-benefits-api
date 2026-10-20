@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package v2.controllers.resolvers
 
 import api.controllers.validators.resolvers.ResolveBenefitId
+import api.models.errors.BenefitIdFormatError
 import api.utils.UnitSpec
 import cats.data.Validated.{Invalid, Valid}
-import common.errors.BenefitIdFormatError
 import v2.models.domain.BenefitId
 
 class ResolveBenefitIdSpec extends UnitSpec {

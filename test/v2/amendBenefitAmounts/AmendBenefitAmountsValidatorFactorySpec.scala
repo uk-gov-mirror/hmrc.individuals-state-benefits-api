@@ -17,9 +17,9 @@
 package v2.amendBenefitAmounts
 
 import api.controllers.validators.Validator
+import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import api.models.errors.*
 import config.MockStateBenefitsAppConfig
 import play.api.libs.json.Json
 import v2.amendBenefitAmounts.def1.Def1_AmendBenefitAmountsValidator

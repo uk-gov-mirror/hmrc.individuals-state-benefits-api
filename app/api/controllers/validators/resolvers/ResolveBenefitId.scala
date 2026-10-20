@@ -16,9 +16,8 @@
 
 package api.controllers.validators.resolvers
 
-import api.models.errors.MtdError
+import api.models.errors.{BenefitIdFormatError, MtdError}
 import cats.data.Validated
-import common.errors.BenefitIdFormatError
 import v2.models.domain.BenefitId
 
 object ResolveBenefitId extends ResolverSupport {

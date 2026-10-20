@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package routing
+package api.routing
 
-import api.config.AppConfig
-import api.routing.Version2
 import api.utils.UnitSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.routing.Router
 
-class StateBenefitsVersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite {
-  val appConfig: AppConfig  = mock[AppConfig]
+class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite {
+
   val defaultRouter: Router = mock[Router]
   val v2Routes: v2.Routes   = app.injector.instanceOf[v2.Routes]
 
-  "StateBenefitsVersionRoutingMap" when {
-    "map is accessed" should {
-      "route to v2 when Version2 is requested" in {
-        val versionRoutingMap: StateBenefitsVersionRoutingMap = StateBenefitsVersionRoutingMap(
-          appConfig = appConfig,
+  "VersionRoutingMap" when {
+    "routing to v2" should {
+      s"route to ${v2Routes.toString}" in {
+
+        val versionRoutingMap: VersionRoutingMapImpl = VersionRoutingMapImpl(
           defaultRouter = defaultRouter,
           v2Router = v2Routes
         )
+
         versionRoutingMap.map(Version2) shouldBe v2Routes
       }
     }
